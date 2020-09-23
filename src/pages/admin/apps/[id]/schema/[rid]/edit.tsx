@@ -20,7 +20,25 @@ const AdminSchemaEditPage: React.FC = () => {
   const toast = useToast()
 
   return (
-    <AdminTemplate sidebar={<Sidebar />}>
+    <AdminTemplate
+      sidebar={<Sidebar />}
+      breadcrumbs={[
+        {
+          title: 'ホーム',
+          href: `/admin/apps/${id}`
+        },
+        {
+          title: 'スキーマ管理'
+        },
+        {
+          title: schema?.name || '',
+          href: `/admin/apps/${id}/schema/${rid}`
+        },
+        {
+          title: '編集'
+        }
+      ]}
+    >
       <Section
         title={<Skeleton isLoaded={!appLoading}>{schema?.name}</Skeleton>}
       >

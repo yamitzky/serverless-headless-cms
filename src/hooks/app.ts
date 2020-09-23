@@ -5,7 +5,6 @@ import {
   useDocumentData
 } from 'react-firebase-hooks/firestore'
 import { firebase } from '~/firebase'
-import { useAuth } from '~/hooks/auth'
 
 // TODO: richtext, number, date, datetime, select, boolean, etc...
 export const fieldTypes = ['text', 'longtext'] as const
@@ -22,7 +21,6 @@ export type Field = {
 
 export type ResourceSchema = {
   name: string
-  labelField?: string
   fieldOrder: string[]
   fields: Record<string, Field>
 }
@@ -172,9 +170,7 @@ export function useAppActions(): AppActions {
   }
 }
 
-export function useApps(): Context & { apps: App[] } {
-  const { user, loading: uloading, error: uerror } = useAuth()
-  const uid = user?.uid
+export function useApps(uid?: string): Context & { apps: App[] } {
   const [myApps, myloading, myerror] = useCollection(
     uid
       ? firebase
@@ -200,8 +196,8 @@ export function useApps(): Context & { apps: App[] } {
 
   return {
     apps: apps || [],
-    loading: loading || uloading || myloading,
-    error: uerror || myerror || error
+    loading: loading || myloading,
+    error: myerror || error
   }
 }
 
@@ -215,103 +211,5 @@ export function useApp(id: string): Context & { app?: App } {
     app,
     loading,
     error
-  }
-}
-
-export const visibilities = ['private', 'public'] as const
-export type Visibility = typeof visibilities[number]
-export const visibilityLabel: Record<Visibility, string> = {
-  public: '公開',
-  private: '非公開'
-}
-
-export type Resource = {
-  id: string
-  visibility: Visibility
-} & Record<string, any>
-
-export function useResources(
-  id: string,
-  rid: string
-): Context & { resources: Resource[] } {
-  const [resources, loading, error] = useCollectionData<Resource>(
-    id && rid
-      ? firebase.firestore().collection('applications').doc(id).collection(rid)
-      : null,
-    {
-      idField: 'id'
-    }
-  )
-  return {
-    resources: resources || [],
-    loading,
-    error
-  }
-}
-
-export function useResource(
-  id: string,
-  rid: string,
-  iid: string
-): Context & { resource?: Resource } {
-  const [resource, loading, error] = useDocumentData<Resource>(
-    id && rid && iid
-      ? firebase
-          .firestore()
-          .collection('applications')
-          .doc(id)
-          .collection(rid)
-          .doc(iid)
-      : null,
-    {
-      idField: 'id'
-    }
-  )
-  return {
-    resource,
-    loading,
-    error
-  }
-}
-
-type ResourceActions = {
-  add: (id: string, rid: string, res: Resource) => Promise<void>
-  update: (id: string, rid: string, iid: string, res: Resource) => Promise<void>
-}
-
-export function useResourceActions(): ResourceActions {
-  const add = useCallback(async (id: string, rid: string, res: Resource) => {
-    await firebase
-      .firestore()
-      .collection('applications')
-      .doc(id)
-      .collection(rid)
-      .doc()
-      .set({
-        ...res,
-        created: firebase.firestore.FieldValue.serverTimestamp(),
-        published: firebase.firestore.FieldValue.serverTimestamp(), // FIXME
-        updated: firebase.firestore.FieldValue.serverTimestamp()
-      })
-  }, [])
-  const update = useCallback(
-    async (id: string, rid: string, iid: string, res: Resource) => {
-      await firebase
-        .firestore()
-        .collection('applications')
-        .doc(id)
-        .collection(rid)
-        .doc(iid)
-        .update({
-          ...res,
-          updated: firebase.firestore.FieldValue.serverTimestamp()
-        })
-    },
-    []
-  )
-
-  return {
-    add,
-    update
   }
 }

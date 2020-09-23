@@ -8,9 +8,17 @@ import { Skeleton } from '@chakra-ui/core'
 
 const AdminAppPage: React.FC = () => {
   const router = useRouter()
-  const { app, loading, error } = useApp(router.query.id as string)
+  const id = router.query.id as string
+  const { app, loading, error } = useApp(id)
   return (
-    <AdminTemplate sidebar={<Sidebar />}>
+    <AdminTemplate
+      sidebar={<Sidebar />}
+      breadcrumbs={[
+        {
+          title: 'ホーム'
+        }
+      ]}
+    >
       <Section
         title={<Skeleton isLoaded={!loading}>{app?.name || '　'}</Skeleton>}
       >

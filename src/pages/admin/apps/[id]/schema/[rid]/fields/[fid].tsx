@@ -21,7 +21,25 @@ const AdminFieldEditPage: React.FC = () => {
   const toast = useToast()
 
   return (
-    <AdminTemplate sidebar={<Sidebar />}>
+    <AdminTemplate
+      sidebar={<Sidebar />}
+      breadcrumbs={[
+        {
+          title: 'ホーム',
+          href: `/admin/apps/${id}`
+        },
+        {
+          title: 'スキーマ管理'
+        },
+        {
+          title: schema?.name || '',
+          href: `/admin/apps/${id}/schema/${rid}`
+        },
+        {
+          title: schema?.fields[fid].name || ''
+        }
+      ]}
+    >
       <Section title={<Skeleton isLoaded={!appLoading}>{fid}</Skeleton>}>
         {schema && (
           <FieldForm

@@ -20,8 +20,26 @@ const AdminFieldNewPage: React.FC = () => {
   const toast = useToast()
 
   return (
-    <AdminTemplate sidebar={<Sidebar />}>
-      <Section title="フィールドを追加">
+    <AdminTemplate
+      sidebar={<Sidebar />}
+      breadcrumbs={[
+        {
+          title: 'ホーム',
+          href: `/admin/apps/${id}`
+        },
+        {
+          title: 'スキーマ管理'
+        },
+        {
+          title: schema?.name || '',
+          href: `/admin/apps/${id}/schema/${rid}`
+        },
+        {
+          title: 'フィールド作成'
+        }
+      ]}
+    >
+      <Section title="フィールドを作成">
         {schema && (
           <FieldForm
             isNew

@@ -18,7 +18,21 @@ const AdminSchemaNewPage: React.FC = () => {
   const toast = useToast()
 
   return (
-    <AdminTemplate sidebar={<Sidebar />}>
+    <AdminTemplate
+      sidebar={<Sidebar />}
+      breadcrumbs={[
+        {
+          title: 'ホーム',
+          href: `/admin/apps/${id}`
+        },
+        {
+          title: 'スキーマ管理'
+        },
+        {
+          title: '作成'
+        }
+      ]}
+    >
       <Section title={<Skeleton isLoaded={!appLoading}>スキーマ作成</Skeleton>}>
         {app && (
           <SchemaForm

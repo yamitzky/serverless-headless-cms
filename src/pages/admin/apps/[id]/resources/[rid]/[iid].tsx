@@ -1,6 +1,7 @@
 import React from 'react'
 import { AdminTemplate } from '~/components/templates/AdminTemplate'
-import { useApp, useResource, useResourceActions } from '~/hooks/app'
+import { useApp } from '~/hooks/app'
+import { useResource, useResourceActions } from '~/hooks/resource'
 import { useRouter } from 'next/router'
 import { Sidebar } from '~/components/organisms/Sidebar'
 import { Section } from '~/components/molecules/Section'
@@ -22,14 +23,23 @@ const AdminResourceEditPage: React.FC = () => {
   const toast = useToast()
 
   return (
-    <AdminTemplate sidebar={<Sidebar />}>
-      <Section
-        title={
-          <Skeleton isLoaded={!appLoading}>
-            {schema?.name}: {iid}
-          </Skeleton>
+    <AdminTemplate
+      sidebar={<Sidebar />}
+      breadcrumbs={[
+        {
+          title: 'ホーム',
+          href: `/admin/apps/${id}`
+        },
+        {
+          title: schema?.name || '',
+          href: `/admin/apps/${id}/resources/${rid}`
+        },
+        {
+          title: '編集'
         }
-      >
+      ]}
+    >
+      <Section title={<Skeleton isLoaded={!appLoading}>{iid}</Skeleton>}>
         {schema && resource && (
           <ResourceForm
             values={resource}

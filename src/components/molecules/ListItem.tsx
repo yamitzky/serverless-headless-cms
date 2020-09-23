@@ -1,6 +1,6 @@
-import { Box, Heading, Link, Stack } from '@chakra-ui/core'
+import { Box, Heading, Stack } from '@chakra-ui/core'
 import React from 'react'
-import NextLink from 'next/link'
+import { Link } from '~/components/atoms/Link'
 
 type Props = {
   title: React.ReactNode
@@ -16,18 +16,23 @@ export const ListItem: React.FC<Props> = ({
   ...props
 }) => {
   return (
-    <Stack {...props}>
+    <Stack
+      {...props}
+      shadow="sm"
+      p={4}
+      borderWidth={1}
+      borderRadius={4}
+      spacing={4}
+    >
       <Heading size="lg">
-        <NextLink href={href} passHref>
-          <Link>
-            {title}
-            {subtitle && (
-              <Box as="span" ml={4} fontSize="80%" color="gray.500">
-                {subtitle}
-              </Box>
-            )}
-          </Link>
-        </NextLink>
+        <Link href={href} textDecor="none">
+          {title}
+          {subtitle && (
+            <Box as="span" ml={4} fontSize="80%" color="gray.500">
+              {subtitle}
+            </Box>
+          )}
+        </Link>
       </Heading>
       <Stack>{children}</Stack>
     </Stack>

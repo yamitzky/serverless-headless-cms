@@ -1,17 +1,24 @@
-import { Box, Link } from '@chakra-ui/core'
-import NextLink from 'next/link'
+import { Stack } from '@chakra-ui/core'
 import React from 'react'
+import { Link } from '~/components/atoms/Link'
 
 type Props = {
   href: string
+  action?: React.ReactNode
 }
 
-export const SidebarItem: React.FC<Props> = ({ href, children, ...props }) => {
+export const SidebarItem: React.FC<Props> = ({
+  href,
+  children,
+  action,
+  ...props
+}) => {
   return (
-    <Box {...props}>
-      <NextLink href={href} passHref>
-        <Link>{children}</Link>
-      </NextLink>
-    </Box>
+    <Stack {...props} direction="row" justifyContent="space-between">
+      <Link href={href} textDecor="none">
+        {children}
+      </Link>
+      {action}
+    </Stack>
   )
 }

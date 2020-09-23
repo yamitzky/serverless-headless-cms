@@ -1,16 +1,16 @@
-import { Avatar, Box, Flex, FlexProps, Link, Skeleton } from '@chakra-ui/core'
+import { Avatar, Box, Flex, FlexProps, Skeleton } from '@chakra-ui/core'
 import React from 'react'
 import { useAuth } from '~/hooks/auth'
-import NextLink from 'next/link'
+import { Link } from '~/components/atoms/Link'
 
 export const Header: React.FC<FlexProps> = ({ ...props }) => {
   const { user, loading } = useAuth()
   return (
     <Flex bg="gray.50" alignItems="center" py={2} px={4} {...props}>
       <Box flex="1" fontWeight="bold">
-        <NextLink href="/admin" passHref>
-          <Link>Serverless Headless CMS</Link>
-        </NextLink>
+        <Link href="/admin" textDecor="none">
+          Serverless Headless CMS
+        </Link>
       </Box>
       <Skeleton isLoaded={!loading}>
         <Avatar

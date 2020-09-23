@@ -8,7 +8,7 @@ import {
   Stack,
   Input
 } from '@chakra-ui/core'
-import { ResourceSchema } from '~/hooks/app'
+import { Field, ResourceSchema } from '~/hooks/app'
 
 type Values = ResourceSchema & { id?: string }
 
@@ -34,7 +34,7 @@ export const SchemaForm: React.FC<Props> = ({
     <Stack onSubmit={handleSubmit(onSubmit)} as="form" spacing={8} {...props}>
       <Stack spacing={4}>
         {isNew && (
-          <FormControl isInvalid={!!errors.id}>
+          <FormControl isInvalid={!!errors.id} isRequired>
             <FormLabel htmlFor="id">ID</FormLabel>
             <Input
               name="id"
@@ -62,7 +62,7 @@ export const SchemaForm: React.FC<Props> = ({
       </Stack>
       <Stack direction="row">
         <Button
-          variantColor="teal"
+          variantColor="cyan"
           isLoading={formState.isSubmitting}
           type="submit"
         >

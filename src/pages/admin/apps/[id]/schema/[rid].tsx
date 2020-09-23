@@ -4,9 +4,10 @@ import { fieldTypeLabel, useApp } from '~/hooks/app'
 import { useRouter } from 'next/router'
 import { Sidebar } from '~/components/organisms/Sidebar'
 import { Section } from '~/components/molecules/Section'
-import { Box, Button, Flex, Link, Skeleton, Stack } from '@chakra-ui/core'
+import { Box, Button, Heading, Skeleton, Stack } from '@chakra-ui/core'
 import { ListItem } from '~/components/molecules/ListItem'
-import NextLink from 'next/link'
+import { EmptyCard } from '~/components/atoms/EmptyCard'
+import { Link } from '~/components/atoms/Link'
 
 const AdminSchemaEditPage: React.FC = () => {
   const router = useRouter()
@@ -18,41 +19,82 @@ const AdminSchemaEditPage: React.FC = () => {
   const schema = app?.schema[rid]
 
   return (
-    <AdminTemplate sidebar={<Sidebar />}>
+    <AdminTemplate
+      sidebar={<Sidebar />}
+      breadcrumbs={[
+        {
+          title: 'ホーム',
+          href: `/admin/apps/${id}`
+        },
+        {
+          title: 'スキーマ管理'
+        },
+        {
+          title: schema?.name || ''
+        }
+      ]}
+    >
       <Section
         title={
           <Stack direction="row" justifyContent="space-between">
             <Skeleton isLoaded={!appLoading} flex={1}>
-              <NextLink href={`/admin/apps/${id}/schema/${rid}/edit`} passHref>
-                <Link>{schema?.name || '　'}</Link>
-              </NextLink>
+              {schema?.name || '　'}
             </Skeleton>
             <Button
               variant="outline"
+              variantColor="cyan"
               onClick={() =>
-                router.push(`/admin/apps/${id}/schema/${rid}/fields/new`)
+                router.push(`/admin/apps/${id}/schema/${rid}/edit`)
               }
             >
-              フィールドを追加
+              編集
             </Button>
           </Stack>
         }
       >
-        <Stack spacing={4}>
-          {schema &&
-            schema.fieldOrder.map((fid) => (
-              <ListItem
-                title={schema.fields[fid].name}
-                subtitle={`ID: ${fid}`}
-                href={`/admin/apps/${id}/schema/resources/${rid}/${fid}`}
-                key={fid}
+        <Stack spacing={2}>
+          <Stack spacing={4}>
+            <Stack direction="row" justifyContent="space-between">
+              <Heading size="lg">フィールド</Heading>
+              <Button
+                variant="outline"
+                variantColor="cyan"
+                size="sm"
+                onClick={() =>
+                  router.push(`/admin/apps/${id}/schema/${rid}/fields/new`)
+                }
               >
-                <Stack direction="row">
-                  <Box w={40}>種類</Box>
-                  <Box flex={1}>{fieldTypeLabel[schema.fields[fid].type]}</Box>
-                </Stack>
-              </ListItem>
-            ))}
+                追加
+              </Button>
+            </Stack>
+            {schema &&
+              (schema.fieldOrder.length ? (
+                schema.fieldOrder.map((fid) => (
+                  <ListItem
+                    title={schema.fields[fid].name}
+                    subtitle={`ID: ${fid}`}
+                    href={`/admin/apps/${id}/schema/${rid}/fields/${fid}`}
+                    key={fid}
+                  >
+                    <Stack direction="row">
+                      <Box w={40}>種類</Box>
+                      <Box flex={1}>
+                        {fieldTypeLabel[schema.fields[fid].type]}
+                      </Box>
+                    </Stack>
+                  </ListItem>
+                ))
+              ) : (
+                <EmptyCard>
+                  「{schema.name}
+                  」にはまだフィールドがありません。「タイトル」や「本文」などの
+                  <Link href={`/admin/apps/${id}/schema/${rid}/fields/new`}>
+                    フィールドを作成
+                  </Link>
+                  してみましょう。
+                </EmptyCard>
+              ))}
+          </Stack>
         </Stack>
       </Section>
     </AdminTemplate>

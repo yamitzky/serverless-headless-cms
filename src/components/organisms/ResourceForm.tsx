@@ -75,7 +75,7 @@ export const ResourceForm: React.FC<Props> = ({
       </Stack>
       <Stack direction="row">
         <Button
-          variantColor="teal"
+          variantColor="cyan"
           isLoading={formState.isSubmitting}
           type="submit"
         >

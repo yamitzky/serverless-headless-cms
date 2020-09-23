@@ -1,10 +1,10 @@
 import React from 'react'
-import { Box, IconButton, Select, Stack } from '@chakra-ui/core'
+import { IconButton, Select, Stack } from '@chakra-ui/core'
 import { useRouter } from 'next/router'
 import { useApp } from '~/hooks/app'
 import { SidebarGroup } from '~/components/molecules/SidebarGroup'
 import { SidebarItem } from '~/components/molecules/SidebarItem'
-import { FaEdit, FaPlus, FaTable } from 'react-icons/fa'
+import { FaEdit, FaTable } from 'react-icons/fa'
 
 export const Sidebar: React.FC = ({ ...props }) => {
   const router = useRouter()
@@ -20,6 +20,17 @@ export const Sidebar: React.FC = ({ ...props }) => {
               <SidebarItem
                 key={id}
                 href={`/admin/apps/${app.id}/resources/${id}`}
+                action={
+                  <IconButton
+                    icon="add"
+                    aria-label="作成"
+                    size="xs"
+                    isRound
+                    onClick={() =>
+                      router.push(`/admin/apps/${app?.id}/resources/${id}/new`)
+                    }
+                  />
+                }
               >
                 {app.schema[id].name}
               </SidebarItem>
@@ -32,7 +43,7 @@ export const Sidebar: React.FC = ({ ...props }) => {
         action={
           <IconButton
             icon="add"
-            aria-label="追加"
+            aria-label="作成"
             size="xs"
             isRound
             onClick={() => router.push(`/admin/apps/${app?.id}/schema/new`)}

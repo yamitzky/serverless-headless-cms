@@ -1,23 +1,10 @@
 // TODO: Remove dependency to Firebase
 
 import React from 'react'
-import { useForm } from 'react-hook-form'
-import {
-  FormControl,
-  Button,
-  Input,
-  FormLabel,
-  FormErrorMessage,
-  Stack
-} from '@chakra-ui/core'
+import { Stack } from '@chakra-ui/core'
 import { auth as firebaseui } from 'firebaseui'
 import { firebase } from '~/firebase'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
-
-type Values = {
-  email: string
-  password: string
-}
 
 const uiConfig = {
   signInFlow: 'popup',
