@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import React, { useCallback, useContext } from 'react'
 import {
   useCollection,
   useCollectionData,
@@ -38,7 +38,7 @@ type Error = {
 
 type Context = {
   loading: boolean
-  error: Error | undefined
+  error?: Error
 }
 
 type AppActions = {
@@ -212,4 +212,11 @@ export function useApp(id: string): Context & { app?: App } {
     loading,
     error
   }
+}
+
+export const AppContext = React.createContext<Context & { app?: App }>({
+  loading: true
+})
+export function useAppContext(): Context & { app?: App } {
+  return useContext(AppContext)
 }

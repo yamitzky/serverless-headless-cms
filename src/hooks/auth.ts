@@ -1,3 +1,4 @@
+import React, { useContext } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { firebase } from '~/firebase'
 
@@ -14,9 +15,9 @@ type User = {
 }
 
 type AuthContext = {
-  user: User | undefined
+  user?: User
   loading: boolean
-  error: Error | undefined
+  error?: Error
 }
 
 export function useAuth(): AuthContext {
@@ -27,4 +28,11 @@ export function useAuth(): AuthContext {
     loading,
     error
   }
+}
+
+export const AuthContext = React.createContext<AuthContext>({
+  loading: true
+})
+export function useAuthContext(): AuthContext {
+  return useContext(AuthContext)
 }

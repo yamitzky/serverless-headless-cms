@@ -10,7 +10,8 @@ import {
   Select,
   Textarea
 } from '@chakra-ui/core'
-import { Field, Resource, visibilities, visibilityLabel } from '~/hooks/app'
+import { Field } from '~/hooks/app'
+import { Resource, visibilities, visibilityLabel } from '~/hooks/resource'
 
 type Values = Resource
 

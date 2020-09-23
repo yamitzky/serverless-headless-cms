@@ -1,18 +1,16 @@
 import React from 'react'
 import { AdminTemplate } from '~/components/templates/AdminTemplate'
-import { useApp } from '~/hooks/app'
+import { useAppContext } from '~/hooks/app'
 import { useResource, useResourceActions } from '~/hooks/resource'
 import { useRouter } from 'next/router'
 import { Sidebar } from '~/components/organisms/Sidebar'
 import { Section } from '~/components/molecules/Section'
-import { Skeleton, useToast } from '@chakra-ui/core'
+import { useToast } from '@chakra-ui/core'
 import { ResourceForm } from '~/components/organisms/ResourceForm'
 
 const AdminResourceEditPage: React.FC = () => {
   const router = useRouter()
-  const { app, loading: appLoading, error: appError } = useApp(
-    router.query.id as string
-  )
+  const { app, loading: appLoading, error: appError } = useAppContext()
   const rid = router.query.rid as string
   const iid = router.query.iid as string
   const id = router.query.id as string
@@ -39,7 +37,7 @@ const AdminResourceEditPage: React.FC = () => {
         }
       ]}
     >
-      <Section title={<Skeleton isLoaded={!appLoading}>{iid}</Skeleton>}>
+      <Section title={iid}>
         {schema && resource && (
           <ResourceForm
             values={resource}

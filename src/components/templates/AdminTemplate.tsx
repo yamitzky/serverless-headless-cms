@@ -4,6 +4,7 @@ import React from 'react'
 import { Header } from '~/components/organisms/Header'
 import { useAuth } from '~/hooks/auth'
 import { Breadcrumbs, Breadcrumb } from '~/components/molecules/Breadcrumbs'
+import { useApp } from '~/hooks/app'
 
 type Props = {
   sidebar?: React.ReactNode

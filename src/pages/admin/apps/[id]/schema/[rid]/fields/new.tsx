@@ -1,6 +1,6 @@
 import React from 'react'
 import { AdminTemplate } from '~/components/templates/AdminTemplate'
-import { useApp, useAppActions } from '~/hooks/app'
+import { useAppContext, useAppActions } from '~/hooks/app'
 import { useRouter } from 'next/router'
 import { Sidebar } from '~/components/organisms/Sidebar'
 import { Section } from '~/components/molecules/Section'
@@ -9,9 +9,7 @@ import { FieldForm } from '~/components/organisms/FieldForm'
 
 const AdminFieldNewPage: React.FC = () => {
   const router = useRouter()
-  const { app, loading: appLoading, error: appError } = useApp(
-    router.query.id as string
-  )
+  const { app, loading: appLoading, error: appError } = useAppContext()
   const rid = router.query.rid as string
   const id = router.query.id as string
   const schema = app?.schema[rid]

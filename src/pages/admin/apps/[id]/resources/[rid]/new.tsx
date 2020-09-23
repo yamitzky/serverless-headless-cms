@@ -1,18 +1,16 @@
 import React from 'react'
 import { AdminTemplate } from '~/components/templates/AdminTemplate'
-import { useApp } from '~/hooks/app'
+import { useAppContext } from '~/hooks/app'
 import { useResourceActions } from '~/hooks/resource'
 import { useRouter } from 'next/router'
 import { Sidebar } from '~/components/organisms/Sidebar'
 import { Section } from '~/components/molecules/Section'
-import { Skeleton, useToast } from '@chakra-ui/core'
+import { useToast } from '@chakra-ui/core'
 import { ResourceForm } from '~/components/organisms/ResourceForm'
 
 const AdminResourceNewPage: React.FC = () => {
   const router = useRouter()
-  const { app, loading: appLoading, error: appError } = useApp(
-    router.query.id as string
-  )
+  const { app, loading: appLoading, error: appError } = useAppContext()
   const rid = router.query.rid as string
   const id = router.query.id as string
   const schema = app?.schema[rid]
@@ -37,9 +35,7 @@ const AdminResourceNewPage: React.FC = () => {
         }
       ]}
     >
-      <Section
-        title={<Skeleton isLoaded={!appLoading}>{schema?.name}を作成</Skeleton>}
-      >
+      <Section title={`${schema?.name}を作成`}>
         {schema && (
           <ResourceForm
             isNew
