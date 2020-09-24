@@ -26,7 +26,7 @@ export const AdminTemplate: React.FC<Props> = ({
   return (
     <Flex h="100vh" direction="column">
       <Header boxShadow="md" zIndex={'sticky' as any} />
-      <Flex flex={1} direction="row" {...props}>
+      <Flex flex={1} direction="row" overflow="hidden" {...props}>
         {sidebar && (
           <Box
             w={240}

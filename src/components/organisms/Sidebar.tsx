@@ -9,7 +9,6 @@ import {
   MenuItem,
   MenuList,
   Skeleton,
-  Spinner,
   Stack
 } from '@chakra-ui/core'
 import { useRouter } from 'next/router'
