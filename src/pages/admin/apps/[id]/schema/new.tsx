@@ -40,7 +40,7 @@ const AdminSchemaNewPage: React.FC = () => {
               const { id: rid, ...schema } = _schema
               await addResource(id, rid!, schema)
               toast({
-                title: '保存しました',
+                title: '作成しました',
                 status: 'success',
                 duration: 2000
               })

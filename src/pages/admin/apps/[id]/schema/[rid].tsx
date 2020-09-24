@@ -1,10 +1,10 @@
 import React from 'react'
 import { AdminTemplate } from '~/components/templates/AdminTemplate'
-import { fieldTypeLabel, useAppContext } from '~/hooks/app'
+import { fieldTypeLabel, useAppActions, useAppContext } from '~/hooks/app'
 import { useRouter } from 'next/router'
 import { Sidebar } from '~/components/organisms/Sidebar'
 import { Section } from '~/components/molecules/Section'
-import { Box, Button, Heading, Stack } from '@chakra-ui/core'
+import { Box, Button, Heading, Stack, useToast } from '@chakra-ui/core'
 import { ListItem } from '~/components/molecules/ListItem'
 import { EmptyCard } from '~/components/atoms/EmptyCard'
 import { Link } from '~/components/atoms/Link'
@@ -12,6 +12,8 @@ import { Link } from '~/components/atoms/Link'
 const AdminSchemaEditPage: React.FC = () => {
   const router = useRouter()
   const { app, loading: appLoading, error: appError } = useAppContext()
+  const { removeField } = useAppActions()
+  const toast = useToast()
   const rid = router.query.rid as string
   const id = router.query.id as string
   const schema = app?.schema[rid]
@@ -71,6 +73,14 @@ const AdminSchemaEditPage: React.FC = () => {
                     subtitle={`ID: ${fid}`}
                     href={`/admin/apps/${id}/schema/${rid}/fields/${fid}`}
                     key={fid}
+                    onRemove={async () => {
+                      await removeField(id, rid, fid)
+                      toast({
+                        title: '削除しました',
+                        status: 'success',
+                        duration: 2000
+                      })
+                    }}
                   >
                     <Stack direction="row">
                       <Box w={40}>種類</Box>

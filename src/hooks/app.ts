@@ -183,7 +183,7 @@ export function useAppActions(): AppActions {
       .collection('applications')
       .doc(id)
       .update({
-        [`schema.${rid}`]: undefined,
+        [`schema.${rid}`]: null,
         [`schemaOrder`]: firebase.firestore.FieldValue.arrayRemove(rid)
       })
   }, [])
@@ -194,7 +194,7 @@ export function useAppActions(): AppActions {
         .collection('applications')
         .doc(id)
         .update({
-          [`schema.${rid}.fields.${fid}`]: undefined,
+          [`schema.${rid}.fields.${fid}`]: null,
           [`schema.${rid}.fieldOrder`]: firebase.firestore.FieldValue.arrayRemove(
             fid
           )

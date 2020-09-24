@@ -46,7 +46,7 @@ const AdminFieldNewPage: React.FC = () => {
               const { id: fid, ...f } = _f
               await addField(id, rid, fid!, f)
               toast({
-                title: '保存しました',
+                title: 'フィールドを作成しました',
                 status: 'success',
                 duration: 2000
               })

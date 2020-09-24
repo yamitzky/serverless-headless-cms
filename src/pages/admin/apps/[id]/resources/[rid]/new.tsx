@@ -42,7 +42,7 @@ const AdminResourceNewPage: React.FC = () => {
             onSubmit={async (res) => {
               await add(id, rid, res)
               toast({
-                title: '保存しました',
+                title: '作成しました',
                 status: 'success',
                 duration: 2000
               })

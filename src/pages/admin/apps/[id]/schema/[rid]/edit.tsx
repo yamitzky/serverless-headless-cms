@@ -14,7 +14,7 @@ const AdminSchemaEditPage: React.FC = () => {
   const id = router.query.id as string
   const schema = app?.schema[rid]
 
-  const { updateResource } = useAppActions()
+  const { updateResource, removeResource } = useAppActions()
   const toast = useToast()
 
   return (
@@ -37,10 +37,18 @@ const AdminSchemaEditPage: React.FC = () => {
         }
       ]}
     >
-      <Section title={schema?.name}>
+      <Section title={rid}>
         {schema && (
           <SchemaForm
             values={schema}
+            onRemove={async () => {
+              await removeResource(id, rid)
+              toast({
+                title: '削除しました',
+                status: 'success'
+              })
+              router.push(`/admin/apps/${id}`)
+            }}
             onSubmit={async (schema) => {
               await updateResource(id, rid, schema)
               toast({
@@ -48,6 +56,7 @@ const AdminSchemaEditPage: React.FC = () => {
                 status: 'success',
                 duration: 2000
               })
+              router.push(`/admin/apps/${id}/schema/${rid}`)
             }}
           />
         )}
