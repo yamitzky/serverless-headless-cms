@@ -1,4 +1,12 @@
-import { Box, Button, Grid, PseudoBox, Skeleton, Stack } from '@chakra-ui/core'
+import {
+  Box,
+  Button,
+  Code,
+  Grid,
+  PseudoBox,
+  Skeleton,
+  Stack
+} from '@chakra-ui/core'
 import React from 'react'
 import { AdminTemplate } from '~/components/templates/AdminTemplate'
 import { useApps } from '~/hooks/app'
@@ -12,6 +20,7 @@ const AdminHomePage: React.FC = () => {
   const router = useRouter()
   const { user, loading: uloading } = useAuthContext()
   const { apps, loading, error } = useApps(user?.uid)
+  console.log(error)
   return (
     <AdminTemplate
       breadcrumbs={[
@@ -77,6 +86,13 @@ const AdminHomePage: React.FC = () => {
             してみましょう。
           </EmptyCard>
         )}
+        <EmptyCard mt={8}>
+          他のアプリケーションに参加するには、あなたのユーザーID
+          <Code mx={2} fontWeight="bold">
+            {user?.uid}
+          </Code>
+          を伝えてください
+        </EmptyCard>
       </Section>
     </AdminTemplate>
   )

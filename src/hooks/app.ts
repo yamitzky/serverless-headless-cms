@@ -66,8 +66,8 @@ type AppActions = {
     fid: string,
     field: Field
   ) => Promise<void>
-  deleteResource: (id: string, rid: string) => Promise<void>
-  deleteField: (id: string, rid: string, fid: string) => Promise<void>
+  removeResource: (id: string, rid: string) => Promise<void>
+  removeField: (id: string, rid: string, fid: string) => Promise<void>
 }
 
 export function useAppActions(): AppActions {
@@ -105,7 +105,9 @@ export function useAppActions(): AppActions {
         .doc(user?.uid)
         .collection('applications')
         .doc(id)
-        .set({})
+        .set({
+          created: firebase.firestore.FieldValue.serverTimestamp()
+        })
       return id
     },
     [user]
@@ -175,7 +177,7 @@ export function useAppActions(): AppActions {
     },
     []
   )
-  const deleteResource = useCallback(async (id: string, rid: string) => {
+  const removeResource = useCallback(async (id: string, rid: string) => {
     await firebase
       .firestore()
       .collection('applications')
@@ -185,7 +187,7 @@ export function useAppActions(): AppActions {
         [`schemaOrder`]: firebase.firestore.FieldValue.arrayRemove(rid)
       })
   }, [])
-  const deleteField = useCallback(
+  const removeField = useCallback(
     async (id: string, rid: string, fid: string) => {
       await firebase
         .firestore()
@@ -207,8 +209,8 @@ export function useAppActions(): AppActions {
     addField,
     updateResource,
     updateField,
-    deleteResource,
-    deleteField
+    removeResource,
+    removeField
   }
 }
 

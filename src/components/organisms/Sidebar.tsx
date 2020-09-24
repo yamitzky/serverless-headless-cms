@@ -16,7 +16,7 @@ import { useRouter } from 'next/router'
 import { useApps, useAppContext } from '~/hooks/app'
 import { SidebarGroup } from '~/components/molecules/SidebarGroup'
 import { SidebarItem } from '~/components/molecules/SidebarItem'
-import { FaEdit, FaTable } from 'react-icons/fa'
+import { FaEdit, FaLock, FaTable } from 'react-icons/fa'
 import { useAuthContext } from '~/hooks/auth'
 
 export const Sidebar: React.FC = ({ ...props }) => {
@@ -111,6 +111,22 @@ export const Sidebar: React.FC = ({ ...props }) => {
               </SidebarItem>
             ))
           : [0, 1, 2].map((i) => <Skeleton key={i} h="1.5em" w="100%" />)}
+      </SidebarGroup>
+      <SidebarGroup title="セキュリティ" icon={FaLock}>
+        <SidebarItem
+          href={`/admin/apps/${app?.id}/members`}
+          action={
+            <IconButton
+              icon="add"
+              aria-label="招待"
+              size="xs"
+              isRound
+              onClick={() => router.push(`/admin/apps/${app?.id}/members/new`)}
+            />
+          }
+        >
+          ユーザー管理
+        </SidebarItem>
       </SidebarGroup>
     </Stack>
   )

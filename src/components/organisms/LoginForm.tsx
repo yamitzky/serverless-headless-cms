@@ -8,7 +8,7 @@ import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 
 const uiConfig = {
   signInFlow: 'popup',
-  signInSuccessUrl: '/admin/',
+  signInSuccessUrl: '/admin',
   signInOptions: [
     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
     firebase.auth.FacebookAuthProvider.PROVIDER_ID,

@@ -7,11 +7,12 @@ import {
   FormErrorMessage,
   Stack,
   Input,
-  Select
+  FormHelperText
 } from '@chakra-ui/core'
-import { Field, fieldTypeLabel, fieldTypes } from '~/hooks/app'
+import { Member } from '~/hooks/member'
+import { Link } from '~/components/atoms/Link'
 
-type Values = Field & { id?: string }
+type Values = Member
 
 type Props = {
   isNew?: boolean
@@ -20,7 +21,7 @@ type Props = {
   onSubmit: (values: Values) => void
 }
 
-export const FieldForm: React.FC<Props> = ({
+export const MemberForm: React.FC<Props> = ({
   values,
   onSubmit,
   isNew,
@@ -36,7 +37,7 @@ export const FieldForm: React.FC<Props> = ({
       <Stack spacing={4}>
         {isNew && (
           <FormControl isInvalid={!!errors.id} isRequired>
-            <FormLabel htmlFor="id">ID</FormLabel>
+            <FormLabel htmlFor="id">ユーザーID</FormLabel>
             <Input
               name="id"
               id="id"
@@ -47,36 +48,22 @@ export const FieldForm: React.FC<Props> = ({
               })}
               defaultValue={values?.id}
             />
+            <FormHelperText>
+              ユーザー ID は招待するユーザーに教えてもらってください。ユーザー
+              ID は<Link href="/admin">トップページ</Link>に記載されています。
+            </FormHelperText>
             <FormErrorMessage>{errors.id?.message}</FormErrorMessage>
           </FormControl>
         )}
-        <FormControl isInvalid={!!errors.name}>
-          <FormLabel htmlFor="name">表示名</FormLabel>
+        <FormControl isInvalid={!!errors.name} isRequired>
+          <FormLabel htmlFor="name">名前</FormLabel>
           <Input
             name="name"
             id="name"
-            ref={register()}
+            ref={register({ required: true })}
             defaultValue={values?.name}
           />
           <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
-        </FormControl>
-        <FormControl isInvalid={!!errors.type} isRequired>
-          <FormLabel htmlFor="type">種類</FormLabel>
-          <Select
-            name="type"
-            id="type"
-            ref={register({
-              required: true
-            })}
-            defaultValue={values?.type || 'text'}
-          >
-            {fieldTypes.map((f) => (
-              <option key={f} value={f}>
-                {fieldTypeLabel[f]}
-              </option>
-            ))}
-          </Select>
-          <FormErrorMessage>{errors.type?.message}</FormErrorMessage>
         </FormControl>
       </Stack>
       <Stack direction="row">
@@ -85,7 +72,7 @@ export const FieldForm: React.FC<Props> = ({
           isLoading={formState.isSubmitting}
           type="submit"
         >
-          {isNew ? '作成' : '保存'}
+          {isNew ? '招待' : '更新'}
         </Button>
       </Stack>
     </Stack>

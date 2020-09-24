@@ -12,9 +12,6 @@ function App({ Component, pageProps }: AppProps): React.ReactNode {
 
   const authCtx = useAuth()
   const appCtx = useApp(id)
-  useEffect(() => {
-    console.log('effect')
-  }, [])
 
   return (
     <AuthContext.Provider value={authCtx}>
