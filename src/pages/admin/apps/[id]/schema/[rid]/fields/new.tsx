@@ -38,10 +38,14 @@ const AdminFieldNewPage: React.FC = () => {
       ]}
     >
       <Section title="フィールドを作成">
-        {schema && (
+        {schema && app && (
           <FieldForm
             isNew
             currentIds={schema?.fieldOrder}
+            allSchema={app.schemaOrder.map((s) => ({
+              ...app.schema[s],
+              id: s
+            }))}
             onSubmit={async (_f) => {
               const { id: fid, ...f } = _f
               await addField(id, rid, fid!, f)

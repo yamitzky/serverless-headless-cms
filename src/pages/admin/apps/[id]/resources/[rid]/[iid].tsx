@@ -17,7 +17,7 @@ const AdminResourceEditPage: React.FC = () => {
   const schema = app?.schema[rid]
   const { resource, loading, error } = useResource(id, rid, iid)
 
-  const { update } = useResourceActions()
+  const { update, fetchAll } = useResourceActions()
   const toast = useToast()
 
   return (
@@ -38,8 +38,10 @@ const AdminResourceEditPage: React.FC = () => {
       ]}
     >
       <Section title={iid}>
-        {schema && resource && (
+        {app && schema && resource && (
           <ResourceForm
+            allSchema={app.schema}
+            fetchReference={(rid) => fetchAll(id, rid)}
             values={resource}
             onSubmit={async (res) => {
               await update(id, rid, iid, res)

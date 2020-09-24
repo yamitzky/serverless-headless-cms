@@ -42,11 +42,33 @@ export function useResource(
 }
 
 type ResourceActions = {
+  fetch: (id: string, rid: string, iid: string) => Promise<Resource>
+  fetchAll: (id: string, rid: string) => Promise<Resource[]>
   add: (id: string, rid: string, res: Resource) => Promise<void>
   update: (id: string, rid: string, iid: string, res: Resource) => Promise<void>
 }
 
 export function useResourceActions(): ResourceActions {
+  const fetch = useCallback(async (id: string, rid: string, iid: string) => {
+    const doc = await firebase
+      .firestore()
+      .collection('applications')
+      .doc(id)
+      .collection(rid)
+      .doc(iid)
+      .get()
+    return { ...doc.data(), id: doc.id } as Resource
+  }, [])
+  const fetchAll = useCallback(async (id: string, rid: string) => {
+    const ref = await firebase
+      .firestore()
+      .collection('applications')
+      .doc(id)
+      .collection(rid)
+      .orderBy('published', 'desc')
+      .get()
+    return ref.docs.map((doc) => ({ ...doc.data(), id: doc.id } as Resource))
+  }, [])
   const add = useCallback(async (id: string, rid: string, res: Resource) => {
     await firebase
       .firestore()
@@ -78,6 +100,8 @@ export function useResourceActions(): ResourceActions {
   )
 
   return {
+    fetch,
+    fetchAll,
     add,
     update
   }

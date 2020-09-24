@@ -15,7 +15,7 @@ const AdminResourceNewPage: React.FC = () => {
   const id = router.query.id as string
   const schema = app?.schema[rid]
 
-  const { add } = useResourceActions()
+  const { add, fetchAll } = useResourceActions()
   const toast = useToast()
 
   return (
@@ -36,9 +36,11 @@ const AdminResourceNewPage: React.FC = () => {
       ]}
     >
       <Section title={`${schema?.name}を作成`}>
-        {schema && (
+        {app && schema && (
           <ResourceForm
             isNew
+            allSchema={app.schema}
+            fetchReference={(rid) => fetchAll(id, rid)}
             onSubmit={async (res) => {
               await add(id, rid, res)
               toast({

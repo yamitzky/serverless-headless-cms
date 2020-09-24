@@ -85,6 +85,10 @@ const AdminSchemaEditPage: React.FC = () => {
                     <Stack direction="row">
                       <Box w={40}>種類</Box>
                       <Box flex={1}>
+                        {schema.fields[fid].type === 'reference' &&
+                          `「${
+                            app?.schema[schema.fields[fid].referTo]?.name
+                          }」への`}
                         {fieldTypeLabel[schema.fields[fid].type]}
                       </Box>
                     </Stack>

@@ -39,8 +39,12 @@ const AdminFieldEditPage: React.FC = () => {
       ]}
     >
       <Section title={fid}>
-        {schema && (
+        {app && schema && (
           <FieldForm
+            allSchema={app.schemaOrder.map((s) => ({
+              ...app.schema[s],
+              id: s
+            }))}
             values={schema.fields[fid]}
             onSubmit={async (f) => {
               await updateField(id, rid, fid, f)

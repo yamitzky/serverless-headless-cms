@@ -9,12 +9,13 @@ import {
   Input,
   Select
 } from '@chakra-ui/core'
-import { Field, fieldTypeLabel, fieldTypes } from '~/hooks/app'
+import { Field, fieldTypeLabel, fieldTypes, ResourceSchema } from '~/hooks/app'
 
 type Values = Field & { id?: string }
 
 type Props = {
   isNew?: boolean
+  allSchema: (ResourceSchema & { id: string })[]
   currentIds?: string[]
   values?: Partial<Values>
   onSubmit: (values: Values) => void
@@ -24,12 +25,14 @@ export const FieldForm: React.FC<Props> = ({
   values,
   onSubmit,
   isNew,
+  allSchema,
   currentIds,
   ...props
 }) => {
-  const { handleSubmit, errors, formState, register } = useForm<Values>({
+  const { handleSubmit, errors, formState, register, watch } = useForm<Values>({
     defaultValues: values
   })
+  const { type } = watch()
 
   return (
     <Stack onSubmit={handleSubmit(onSubmit)} as="form" spacing={8} {...props}>
@@ -78,6 +81,27 @@ export const FieldForm: React.FC<Props> = ({
           </Select>
           <FormErrorMessage>{errors.type?.message}</FormErrorMessage>
         </FormControl>
+        {type === 'reference' && (
+          <FormControl isInvalid={!!errors.referTo} isRequired>
+            <FormLabel htmlFor="referTo">参照項目</FormLabel>
+            <Select
+              name="referTo"
+              id="referTo"
+              ref={register({
+                required: true
+              })}
+              defaultValue={values?.referTo}
+            >
+              <option disabled>選択してください</option>
+              {allSchema.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.name}
+                </option>
+              ))}
+            </Select>
+            <FormErrorMessage>{errors.referTo?.message}</FormErrorMessage>
+          </FormControl>
+        )}
       </Stack>
       <Stack direction="row">
         <Button

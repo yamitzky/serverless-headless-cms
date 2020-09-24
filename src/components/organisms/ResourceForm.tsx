@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import {
   FormControl,
@@ -10,7 +10,7 @@ import {
   Select,
   Textarea
 } from '@chakra-ui/core'
-import { Field } from '~/hooks/app'
+import { Field, ResourceSchema } from '~/hooks/app'
 import { Resource, visibilities, visibilityLabel } from '~/hooks/resource'
 import dynamic from 'next/dynamic'
 const ReactQuill = dynamic(import('react-quill'), {
@@ -22,14 +22,18 @@ type Values = Resource
 type Props = {
   isNew?: boolean
   values?: Partial<Values>
+  allSchema: Record<string, ResourceSchema>
   fields: (Field & { id: string })[]
   onSubmit: (values: Values) => void
+  fetchReference: (rid: string) => Promise<Resource[]>
 }
 
 export const ResourceForm: React.FC<Props> = ({
   isNew,
   values,
   onSubmit,
+  fetchReference,
+  allSchema,
   fields,
   ...props
 }) => {
@@ -38,6 +42,20 @@ export const ResourceForm: React.FC<Props> = ({
   >({
     defaultValues: values
   })
+
+  const [reference, setReference] = useState<Record<string, Resource[]>>({})
+  const handleFetch = useCallback(
+    async (rid: string) => {
+      if (reference[rid] == null) {
+        const refs = await fetchReference(rid)
+        setReference((curr) => ({
+          ...curr,
+          [rid]: refs
+        }))
+      }
+    },
+    [fetchReference, reference]
+  )
 
   return (
     <Stack onSubmit={handleSubmit(onSubmit)} as="form" spacing={8} {...props}>
@@ -77,12 +95,28 @@ export const ResourceForm: React.FC<Props> = ({
                     ['clean']
                   ]
                 }}
-                // ref={register()}
                 defaultValue={values?.[field.id]}
               />
+            ) : field.type === 'reference' ? (
+              <Select
+                name={field.id}
+                id={field.id}
+                ref={register()}
+                defaultValue={values?.[field.id]}
+                onClick={() => handleFetch(field.referTo)}
+              >
+                <option value="">選択してください</option>
+                {reference[field.referTo]?.map((res) => (
+                  <option value={res.id} key={res.id}>
+                    {res[allSchema[field.referTo]?.fieldOrder[0]] || res.id}
+                  </option>
+                )) || (
+                  <option value={values?.[field.id]}>
+                    {values?.[field.id]}
+                  </option>
+                )}
+              </Select>
             ) : (
-              // <ReactQuill
-              // />
               <Input
                 name={field.id}
                 id={field.id}

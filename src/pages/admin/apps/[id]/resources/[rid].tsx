@@ -1,7 +1,12 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { AdminTemplate } from '~/components/templates/AdminTemplate'
 import { useAppContext } from '~/hooks/app'
-import { useResources, visibilityLabel } from '~/hooks/resource'
+import {
+  Resource,
+  useResourceActions,
+  useResources,
+  visibilityLabel
+} from '~/hooks/resource'
 import { useRouter } from 'next/router'
 import { Sidebar } from '~/components/organisms/Sidebar'
 import { Section } from '~/components/molecules/Section'
@@ -17,6 +22,29 @@ const AdminResourcesPage: React.FC = () => {
   const id = router.query.id as string
   const schema = app?.schema[rid]
   const { resources, loading, error } = useResources(id, rid)
+  const { fetch } = useResourceActions()
+  const [reference, setReference] = useState<Record<string, Resource>>({})
+
+  useEffect(() => {
+    ;(async () => {
+      for (const res of resources) {
+        if (app && schema) {
+          for (const fid of schema.fieldOrder) {
+            const field = schema.fields[fid]
+            const rid = field.referTo
+            const iid = res[fid]
+            if (rid && iid && reference[iid] == null) {
+              const ref = await fetch(id, rid, iid)
+              setReference((curr) => ({
+                ...curr,
+                [iid]: ref[app.schema[rid].fieldOrder[0]] || iid
+              }))
+            }
+          }
+        }
+      }
+    })()
+  }, [id, fetch, schema, reference, resources, app])
 
   return (
     <AdminTemplate
@@ -63,7 +91,9 @@ const AdminResourcesPage: React.FC = () => {
                           <Box w={40}>{schema.fields[fid].name}</Box>
                           <Box flex={1} maxH={150} overflow="scroll">
                             {schema.fields[fid].type === 'richtext'
-                              ? (res[fid] as string).replace(/<[^>]+>/g, ' ')
+                              ? (res[fid] as string)?.replace(/<[^>]+>/g, ' ')
+                              : schema.fields[fid].type === 'reference'
+                              ? reference[res[fid]] || res[fid]
                               : res[fid]}
                           </Box>
                         </Stack>
