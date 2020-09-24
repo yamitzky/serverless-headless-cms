@@ -43,7 +43,7 @@
     "no-restricted-imports": ["warn", { "patterns": ["../*"] }],
     "eqeqeq": ["error", "smart"],
     "react/jsx-no-target-blank": "off",
-    "no-console": "off",
+    "no-console": "warn",
     "@typescript-eslint/camelcase": "off",
     "@typescript-eslint/no-explicit-any": "off"
   },

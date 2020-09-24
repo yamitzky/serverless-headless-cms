@@ -20,7 +20,6 @@ const AdminHomePage: React.FC = () => {
   const router = useRouter()
   const { user, loading: uloading } = useAuthContext()
   const { apps, loading, error } = useApps(user?.uid)
-  console.log(error)
   return (
     <AdminTemplate
       breadcrumbs={[
