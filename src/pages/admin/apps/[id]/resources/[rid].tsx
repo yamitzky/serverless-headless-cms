@@ -61,7 +61,11 @@ const AdminResourcesPage: React.FC = () => {
                     ? schema.fieldOrder.map((fid) => (
                         <Stack key={fid} direction="row">
                           <Box w={40}>{schema.fields[fid].name}</Box>
-                          <Box flex={1}>{res[fid]}</Box>
+                          <Box flex={1} maxH={150} overflow="scroll">
+                            {schema.fields[fid].type === 'richtext'
+                              ? (res[fid] as string).replace(/<[^>]+>/g, ' ')
+                              : res[fid]}
+                          </Box>
                         </Stack>
                       ))
                     : null}

@@ -1,5 +1,5 @@
 import React from 'react'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import {
   FormControl,
   Button,
@@ -12,6 +12,10 @@ import {
 } from '@chakra-ui/core'
 import { Field } from '~/hooks/app'
 import { Resource, visibilities, visibilityLabel } from '~/hooks/resource'
+import dynamic from 'next/dynamic'
+const ReactQuill = dynamic(import('react-quill'), {
+  ssr: false
+})
 
 type Values = Resource
 
@@ -29,7 +33,9 @@ export const ResourceForm: React.FC<Props> = ({
   fields,
   ...props
 }) => {
-  const { handleSubmit, errors, formState, register } = useForm<Values>({
+  const { handleSubmit, errors, formState, register, control } = useForm<
+    Values
+  >({
     defaultValues: values
   })
 
@@ -46,7 +52,37 @@ export const ResourceForm: React.FC<Props> = ({
                 ref={register()}
                 defaultValue={values?.[field.id]}
               />
+            ) : field.type === 'richtext' ? (
+              <Controller
+                control={control}
+                as={ReactQuill}
+                theme="snow"
+                name={field.id}
+                id={field.id}
+                modules={{
+                  toolbar: [
+                    [{ header: [1, 2, 3, 4, 5, 6, false] }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{ color: [] }, { background: [] }],
+                    [{ script: 'super' }, { script: 'sub' }],
+                    ['blockquote', 'code-block'],
+                    [
+                      { list: 'ordered' },
+                      { list: 'bullet' },
+                      { indent: '-1' },
+                      { indent: '+1' }
+                    ],
+                    ['link', 'image', 'video'],
+                    [{ align: [] }, 'direction'],
+                    ['clean']
+                  ]
+                }}
+                // ref={register()}
+                defaultValue={values?.[field.id]}
+              />
             ) : (
+              // <ReactQuill
+              // />
               <Input
                 name={field.id}
                 id={field.id}

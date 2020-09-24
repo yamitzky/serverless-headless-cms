@@ -5,6 +5,7 @@ import { theme } from '~/theme'
 import { AppContext, useApp } from '~/hooks/app'
 import { AuthContext, useAuth } from '~/hooks/auth'
 import { useRouter } from 'next/router'
+import 'react-quill/dist/quill.snow.css'
 
 function App({ Component, pageProps }: AppProps): React.ReactNode {
   const router = useRouter()

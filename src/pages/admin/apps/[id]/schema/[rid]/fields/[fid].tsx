@@ -49,6 +49,7 @@ const AdminFieldEditPage: React.FC = () => {
                 status: 'success',
                 duration: 2000
               })
+              router.push(`/admin/apps/${id}/schema/${rid}`)
             }}
           />
         )}
