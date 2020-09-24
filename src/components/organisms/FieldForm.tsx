@@ -7,7 +7,11 @@ import {
   FormErrorMessage,
   Stack,
   Input,
-  Select
+  Select,
+  Checkbox,
+  InputGroup,
+  InputLeftElement,
+  InputRightElement
 } from '@chakra-ui/core'
 import { Field, fieldTypeLabel, fieldTypes, ResourceSchema } from '~/hooks/app'
 
@@ -100,6 +104,28 @@ export const FieldForm: React.FC<Props> = ({
               ))}
             </Select>
             <FormErrorMessage>{errors.referTo?.message}</FormErrorMessage>
+          </FormControl>
+        )}
+        <FormControl isInvalid={!!errors.required}>
+          <Checkbox name="required" id="required" ref={register()}>
+            必須
+          </Checkbox>
+          <FormErrorMessage>{errors.type?.message}</FormErrorMessage>
+        </FormControl>
+        {type === 'text' && (
+          <FormControl isInvalid={!!errors.pattern}>
+            <FormLabel htmlFor="pattern">パターン(正規表現)</FormLabel>
+            <InputGroup>
+              <InputLeftElement>/</InputLeftElement>
+              <Input
+                name="pattern"
+                id="pattern"
+                ref={register()}
+                defaultValue={values?.pattern}
+              />
+              <InputRightElement>/</InputRightElement>
+            </InputGroup>
+            <FormErrorMessage>{errors.pattern?.message}</FormErrorMessage>
           </FormControl>
         )}
       </Stack>

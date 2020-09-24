@@ -21,11 +21,11 @@ export type Field = {
   name: string
   type: FieldType
 
-  required: boolean
-  pattern: string
+  required?: boolean
+  pattern?: string
 
   // for reference
-  referTo: string
+  referTo?: string
 }
 
 export type ResourceSchema = {
@@ -96,7 +96,8 @@ export function useAppActions(): AppActions {
               fields: {
                 title: {
                   name: 'タイトル',
-                  type: 'text'
+                  type: 'text',
+                  required: true
                 },
                 body: {
                   name: '本文',

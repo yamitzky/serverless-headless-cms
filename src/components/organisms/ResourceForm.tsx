@@ -61,14 +61,20 @@ export const ResourceForm: React.FC<Props> = ({
     <Stack onSubmit={handleSubmit(onSubmit)} as="form" spacing={8} {...props}>
       <Stack spacing={4}>
         {fields.map((field) => (
-          <FormControl key={field.id} isInvalid={!!errors[field.id]}>
+          <FormControl
+            key={field.id}
+            isInvalid={!!errors[field.id]}
+            isRequired={field.required}
+          >
             <FormLabel htmlFor={field.id}>{field.name}</FormLabel>
             {field.type === 'longtext' ? (
               <Textarea
                 name={field.id}
                 id={field.id}
-                ref={register()}
-                defaultValue={values?.[field.id]}
+                ref={register({
+                  required: field.required
+                })}
+                defaultValue={values?.[field.id] || ''}
               />
             ) : field.type === 'richtext' ? (
               <Controller
@@ -95,20 +101,22 @@ export const ResourceForm: React.FC<Props> = ({
                     ['clean']
                   ]
                 }}
-                defaultValue={values?.[field.id]}
+                defaultValue={values?.[field.id] || ''}
               />
             ) : field.type === 'reference' ? (
               <Select
                 name={field.id}
                 id={field.id}
-                ref={register()}
+                ref={register({
+                  required: field.required
+                })}
                 defaultValue={values?.[field.id]}
-                onClick={() => handleFetch(field.referTo)}
+                onClick={() => handleFetch(field.referTo!)}
               >
                 <option value="">選択してください</option>
-                {reference[field.referTo]?.map((res) => (
+                {reference[field.referTo!]?.map((res) => (
                   <option value={res.id} key={res.id}>
-                    {res[allSchema[field.referTo]?.fieldOrder[0]] || res.id}
+                    {res[allSchema[field.referTo!]?.fieldOrder[0]] || res.id}
                   </option>
                 )) || (
                   <option value={values?.[field.id]}>
@@ -120,8 +128,11 @@ export const ResourceForm: React.FC<Props> = ({
               <Input
                 name={field.id}
                 id={field.id}
-                ref={register()}
-                defaultValue={values?.[field.id]}
+                ref={register({
+                  required: field.required,
+                  pattern: field.pattern ? new RegExp(field.pattern) : undefined
+                })}
+                defaultValue={values?.[field.id] || ''}
               />
             )}
             <FormErrorMessage>{errors[field.id]?.message}</FormErrorMessage>

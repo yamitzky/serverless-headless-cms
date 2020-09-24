@@ -87,10 +87,19 @@ const AdminSchemaEditPage: React.FC = () => {
                       <Box flex={1}>
                         {schema.fields[fid].type === 'reference' &&
                           `「${
-                            app?.schema[schema.fields[fid].referTo]?.name
+                            app?.schema[schema.fields[fid].referTo!]?.name
                           }」への`}
                         {fieldTypeLabel[schema.fields[fid].type]}
                       </Box>
+                    </Stack>
+                    <Stack direction="row">
+                      <Box w={40}>バリデーション</Box>
+                      <Stack flex={1}>
+                        {schema.fields[fid].required && <Box>必須</Box>}
+                        {schema.fields[fid].pattern && (
+                          <Box>パターン: /{schema.fields[fid].pattern}/</Box>
+                        )}
+                      </Stack>
                     </Stack>
                   </ListItem>
                 ))
