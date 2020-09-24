@@ -113,7 +113,7 @@ export function useAppActions(): AppActions {
                 },
                 body: {
                   name: '本文',
-                  type: 'longtext'
+                  type: 'richtext'
                 }
               }
             }
