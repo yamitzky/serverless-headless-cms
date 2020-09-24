@@ -1,0 +1,61 @@
+{
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "hosting": {
+    "public": "out",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      {
+        "source": "/admin/apps/*/members/new",
+        "destination": "/admin/apps/[id]/members/new.html"
+      },
+      {
+        "source": "/admin/apps/*/members/*",
+        "destination": "/admin/apps/[id]/members/[uid].html"
+      },
+      {
+        "source": "/admin/apps/*/schema/*/fields/new",
+        "destination": "/admin/apps/[id]/schema/[rid]/fields/new.html"
+      },
+      {
+        "source": "/admin/apps/*/schema/*/fields/*",
+        "destination": "/admin/apps/[id]/schema/[rid]/fields/[fid].html"
+      },
+      {
+        "source": "/admin/apps/*/schema/*/edit",
+        "destination": "/admin/apps/[id]/schema/[rid]/edit.html"
+      },
+      {
+        "source": "/admin/apps/*/schema/new",
+        "destination": "/admin/apps/[id]/schema/new.html"
+      },
+      {
+        "source": "/admin/apps/*/schema/*",
+        "destination": "/admin/apps/[id]/schema/[rid].html"
+      },
+      {
+        "source": "/admin/apps/*/resources/*/new",
+        "destination": "/admin/apps/[id]/resources/[rid]/new.html"
+      },
+      {
+        "source": "/admin/apps/*/resources/*/*",
+        "destination": "/admin/apps/[id]/resources/[rid]/[iid].html"
+      },
+      {
+        "source": "/admin/apps/*/resources/*",
+        "destination": "/admin/apps/[id]/resources/[rid].html"
+      },
+      {
+        "source": "/admin/apps/*/members",
+        "destination": "/admin/apps/[id]/members.html"
+      },
+      { "source": "/admin/apps/*", "destination": "/admin/apps/[id].html" }
+    ],
+    "cleanUrls": true
+  },
+  "storage": {
+    "rules": "storage.rules"
+  }
+}

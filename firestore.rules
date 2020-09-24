@@ -1,0 +1,37 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+		function isMember(id) {
+      return exists(/databases/$(database)/documents/memberships/$(id)/users/$(request.auth.uid));
+    }
+    function isOwner(id) {
+      return get(/databases/$(database)/documents/applications/$(id)).data.owner == request.auth.uid;
+    }
+
+    match /applications/{id} {
+      allow create: if request.auth.uid != null;
+      allow read, update: if request.auth.uid == resource.data.owner || isMember(id);
+      
+      match /{resource}/{rid} {
+        allow read, create, update: if isOwner(id) || isMember(id);
+      }
+    }
+    match /users/{uid} {
+      allow create, update, delete: if request.auth.uid == uid;
+      // allow read: if true;
+      
+      match /applications/{id} {
+        allow create, delete: if isOwner(id) || isMember(id);
+        allow read: if request.auth.uid == uid;
+      }
+    }
+      
+    match /memberships/{id}/users/{uid} {
+    	allow read: if uid == request.auth.uid || isOwner(id) || isMember(id);
+      allow create, update, delete: if isOwner(id) || isMember(id);
+    }
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
