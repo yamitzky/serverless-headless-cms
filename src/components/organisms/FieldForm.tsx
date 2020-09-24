@@ -1,5 +1,5 @@
 import React from 'react'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import {
   FormControl,
   Button,
@@ -14,6 +14,7 @@ import {
   InputRightElement
 } from '@chakra-ui/core'
 import { Field, fieldTypeLabel, fieldTypes, ResourceSchema } from '~/hooks/app'
+import { InputNumber } from '~/components/atoms/InputNumber'
 
 type Values = Field & { id?: string }
 
@@ -33,7 +34,9 @@ export const FieldForm: React.FC<Props> = ({
   currentIds,
   ...props
 }) => {
-  const { handleSubmit, errors, formState, register, watch } = useForm<Values>({
+  const { handleSubmit, errors, formState, register, watch, control } = useForm<
+    Values
+  >({
     defaultValues: values
   })
   const { type } = watch()
@@ -128,6 +131,40 @@ export const FieldForm: React.FC<Props> = ({
             <FormErrorMessage>{errors.pattern?.message}</FormErrorMessage>
           </FormControl>
         )}
+        {type === 'number' && (
+          <FormControl isInvalid={!!errors.min}>
+            <FormLabel htmlFor="min">最小値</FormLabel>
+            <InputNumber
+              control={control}
+              name="min"
+              id="min"
+              defaultValue={values?.min}
+            />
+            <FormErrorMessage>{errors.min?.message}</FormErrorMessage>
+          </FormControl>
+        )}
+        {type === 'number' && (
+          <FormControl isInvalid={!!errors.max}>
+            <FormLabel htmlFor="max">最大値</FormLabel>
+            <InputNumber
+              control={control}
+              name="max"
+              id="max"
+              defaultValue={values?.max}
+            />
+            <FormErrorMessage>{errors.max?.message}</FormErrorMessage>
+          </FormControl>
+        )}
+        <FormControl isInvalid={!!errors.description}>
+          <FormLabel htmlFor="description">注釈</FormLabel>
+          <Input
+            name="description"
+            id="description"
+            ref={register()}
+            defaultValue={values?.description}
+          />
+          <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
+        </FormControl>
       </Stack>
       <Stack direction="row">
         <Button

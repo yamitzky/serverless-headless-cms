@@ -8,11 +8,13 @@ import {
   Stack,
   Input,
   Select,
-  Textarea
+  Textarea,
+  FormHelperText
 } from '@chakra-ui/core'
 import { Field, ResourceSchema } from '~/hooks/app'
 import { Resource, visibilities, visibilityLabel } from '~/hooks/resource'
 import dynamic from 'next/dynamic'
+import { InputNumber } from '~/components/atoms/InputNumber'
 const ReactQuill = dynamic(import('react-quill'), {
   ssr: false
 })
@@ -124,6 +126,18 @@ export const ResourceForm: React.FC<Props> = ({
                   </option>
                 )}
               </Select>
+            ) : field.type === 'number' ? (
+              <InputNumber
+                name={field.id}
+                id={field.id}
+                control={control}
+                defaultValue={values?.[field.id] || ''}
+                rules={{
+                  required: field.required,
+                  min: field.min,
+                  max: field.max
+                }}
+              />
             ) : (
               <Input
                 name={field.id}
@@ -134,6 +148,9 @@ export const ResourceForm: React.FC<Props> = ({
                 })}
                 defaultValue={values?.[field.id] || ''}
               />
+            )}
+            {field.description && (
+              <FormHelperText>{field.description}</FormHelperText>
             )}
             <FormErrorMessage>{errors[field.id]?.message}</FormErrorMessage>
           </FormControl>

@@ -4,7 +4,7 @@ import { fieldTypeLabel, useAppActions, useAppContext } from '~/hooks/app'
 import { useRouter } from 'next/router'
 import { Sidebar } from '~/components/organisms/Sidebar'
 import { Section } from '~/components/molecules/Section'
-import { Box, Button, Heading, Stack, useToast } from '@chakra-ui/core'
+import { Box, Button, Heading, Stack, Tag, useToast } from '@chakra-ui/core'
 import { ListItem } from '~/components/molecules/ListItem'
 import { EmptyCard } from '~/components/atoms/EmptyCard'
 import { Link } from '~/components/atoms/Link'
@@ -94,13 +94,25 @@ const AdminSchemaEditPage: React.FC = () => {
                     </Stack>
                     <Stack direction="row">
                       <Box w={40}>バリデーション</Box>
-                      <Stack flex={1}>
-                        {schema.fields[fid].required && <Box>必須</Box>}
+                      <Stack direction="row" spacing={4}>
+                        {schema.fields[fid].required && <Tag>必須</Tag>}
                         {schema.fields[fid].pattern && (
-                          <Box>パターン: /{schema.fields[fid].pattern}/</Box>
+                          <Tag>パターン: /{schema.fields[fid].pattern}/</Tag>
+                        )}
+                        {schema.fields[fid].min != null && (
+                          <Tag>最小値: {schema.fields[fid].min}</Tag>
+                        )}
+                        {schema.fields[fid].max != null && (
+                          <Tag>最大値: {schema.fields[fid].max}</Tag>
                         )}
                       </Stack>
                     </Stack>
+                    {schema.fields[fid].description && (
+                      <Stack direction="row">
+                        <Box w={40}>注釈</Box>
+                        <Box>{schema.fields[fid].description}</Box>
+                      </Stack>
+                    )}
                   </ListItem>
                 ))
               ) : (

@@ -8,24 +8,36 @@ import { firebase } from '~/firebase'
 import { useAuthContext } from '~/hooks/auth'
 
 // TODO: richtext, number, date, datetime, select, boolean, etc...
-export const fieldTypes = ['text', 'longtext', 'richtext', 'reference'] as const
+export const fieldTypes = [
+  'text',
+  'longtext',
+  'richtext',
+  'reference',
+  'number'
+] as const
 export type FieldType = typeof fieldTypes[number]
 export const fieldTypeLabel: Record<FieldType, string> = {
   text: 'テキスト',
   longtext: 'テキスト(長文)',
   richtext: 'リッチテキスト',
-  reference: '参照'
+  reference: '参照',
+  number: '数字'
 }
 
 export type Field = {
   name: string
   type: FieldType
 
+  description?: string
   required?: boolean
   pattern?: string
 
   // for reference
   referTo?: string
+
+  // for number
+  max?: number
+  min?: number
 }
 
 export type ResourceSchema = {
