@@ -29,11 +29,11 @@ const AdminMemberEditPage: React.FC = () => {
           href: `/admin/apps/${id}/members`
         },
         {
-          title: '招待'
+          title: '編集'
         }
       ]}
     >
-      <Section title="編集">
+      <Section title={uid}>
         {!loading && (
           <MemberForm
             values={member}

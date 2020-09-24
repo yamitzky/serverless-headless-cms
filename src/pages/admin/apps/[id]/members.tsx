@@ -4,17 +4,19 @@ import { fieldTypeLabel, useAppContext } from '~/hooks/app'
 import { useRouter } from 'next/router'
 import { Sidebar } from '~/components/organisms/Sidebar'
 import { Section } from '~/components/molecules/Section'
-import { Box, Button, Heading, Stack } from '@chakra-ui/core'
+import { Box, Button, Heading, Stack, useToast } from '@chakra-ui/core'
 import { ListItem } from '~/components/molecules/ListItem'
 import { EmptyCard } from '~/components/atoms/EmptyCard'
 import { Link } from '~/components/atoms/Link'
-import { useMembers } from '~/hooks/member'
+import { useMemberActions, useMembers } from '~/hooks/member'
 
 const AdminMembersPage: React.FC = () => {
   const router = useRouter()
   const id = router.query.id as string
   const { app } = useAppContext()
   const { members, loading, error } = useMembers(id)
+  const { remove } = useMemberActions()
+  const toast = useToast()
 
   return (
     <AdminTemplate
@@ -52,6 +54,14 @@ const AdminMembersPage: React.FC = () => {
                   subtitle={`ID: ${mem.id}`}
                   href={`/admin/apps/${id}/members/${mem.id}`}
                   key={mem.id}
+                  onRemove={async () => {
+                    await remove(id, mem.id)
+                    toast({
+                      title: '削除しました',
+                      status: 'success',
+                      duration: 2000
+                    })
+                  }}
                 />
               ))
             ) : (
