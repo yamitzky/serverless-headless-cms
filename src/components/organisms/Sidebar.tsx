@@ -9,6 +9,7 @@ import {
   MenuItem,
   MenuList,
   Skeleton,
+  Spinner,
   Stack
 } from '@chakra-ui/core'
 import { useRouter } from 'next/router'
@@ -23,7 +24,9 @@ export const Sidebar: React.FC = ({ ...props }) => {
   const { app } = useAppContext()
   const { user } = useAuthContext()
   const [fetchApps, setFetchApps] = useState(false)
-  const { apps } = useApps(fetchApps ? user?.uid : undefined)
+  const { apps, loading: appsLoading } = useApps(
+    fetchApps ? user?.uid : undefined
+  )
   return (
     <Stack {...props} p={4} spacing={6}>
       <Menu>
@@ -42,10 +45,26 @@ export const Sidebar: React.FC = ({ ...props }) => {
           <Icon name="chevron-down" />
         </MenuButton>
         <MenuList>
-          {apps.length ? (
-            apps.map((app) => <MenuItem key={app.id}>{app.name}</MenuItem>)
+          {appsLoading ? (
+            <>
+              <MenuItem>{app?.name}</MenuItem>
+              {[0, 1, 2].map((i) => (
+                <MenuItem key={i}>
+                  <Skeleton h="1.5em" w="100%" />
+                </MenuItem>
+              ))}
+            </>
           ) : (
-            <MenuItem>{app?.name}</MenuItem>
+            apps.map((app) => (
+              <MenuItem
+                key={app.id}
+                onClick={() => {
+                  router.push(`/admin/apps/${app.id}`)
+                }}
+              >
+                {app.name}
+              </MenuItem>
+            ))
           )}
         </MenuList>
       </Menu>

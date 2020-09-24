@@ -5,6 +5,7 @@ import {
   useDocumentData
 } from 'react-firebase-hooks/firestore'
 import { firebase } from '~/firebase'
+import { useAuthContext } from '~/hooks/auth'
 
 // TODO: richtext, number, date, datetime, select, boolean, etc...
 export const fieldTypes = ['text', 'longtext'] as const
@@ -25,7 +26,7 @@ export type ResourceSchema = {
   fields: Record<string, Field>
 }
 
-type App = {
+export type App = {
   id: string
   name: string
   schemaOrder: string[]
@@ -42,6 +43,7 @@ type Context = {
 }
 
 type AppActions = {
+  add: (app: App) => Promise<string>
   addResource: (
     id: string,
     rid: string,
@@ -69,6 +71,45 @@ type AppActions = {
 }
 
 export function useAppActions(): AppActions {
+  const { user } = useAuthContext()
+  const add = useCallback(
+    async (app: App) => {
+      const { id } = await firebase
+        .firestore()
+        .collection('applications')
+        .add({
+          ...app,
+          created: firebase.firestore.FieldValue.serverTimestamp(),
+          schemaOrder: ['articles'],
+          schema: {
+            articles: {
+              name: '記事',
+              fieldOrder: ['title', 'body'],
+              fields: {
+                title: {
+                  name: 'タイトル',
+                  type: 'text'
+                },
+                body: {
+                  name: '本文',
+                  type: 'longtext'
+                }
+              }
+            }
+          },
+          owner: user?.uid
+        } as App)
+      await firebase
+        .firestore()
+        .collection('users')
+        .doc(user?.uid)
+        .collection('applications')
+        .doc(id)
+        .set({})
+      return id
+    },
+    [user]
+  )
   const addResource = useCallback(
     async (id: string, rid: string, schema: ResourceSchema) => {
       await firebase
@@ -161,6 +202,7 @@ export function useAppActions(): AppActions {
   )
 
   return {
+    add,
     addResource,
     addField,
     updateResource,
