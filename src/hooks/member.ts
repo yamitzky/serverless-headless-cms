@@ -50,27 +50,30 @@ type MemberActions = {
 }
 
 export function useMemberActions(): MemberActions {
-  const add = useCallback(async (id: string, uid: string, mem: Member) => {
-    await firebase
-      .firestore()
-      .collection('memberships')
-      .doc(id)
-      .collection('users')
-      .doc(uid)
-      .set({
-        ...mem,
-        created: firebase.firestore.FieldValue.serverTimestamp()
-      })
-    await firebase
-      .firestore()
-      .collection('users')
-      .doc(uid)
-      .collection('applications')
-      .doc(id)
-      .set({
-        created: firebase.firestore.FieldValue.serverTimestamp()
-      })
-  }, [])
+  const add = useCallback(
+    async (id: string, uid: string, mem: Omit<Member, 'id'>) => {
+      await firebase
+        .firestore()
+        .collection('memberships')
+        .doc(id)
+        .collection('users')
+        .doc(uid)
+        .set({
+          ...mem,
+          created: firebase.firestore.FieldValue.serverTimestamp()
+        })
+      await firebase
+        .firestore()
+        .collection('users')
+        .doc(uid)
+        .collection('applications')
+        .doc(id)
+        .set({
+          created: firebase.firestore.FieldValue.serverTimestamp()
+        })
+    },
+    []
+  )
   const update = useCallback(async (id: string, uid: string, mem: Member) => {
     await firebase
       .firestore()
