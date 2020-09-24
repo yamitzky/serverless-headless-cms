@@ -29,7 +29,7 @@ export const AdminTemplate: React.FC<Props> = ({
       <Flex flex={1} direction="row" {...props}>
         {sidebar && (
           <Box
-            w={200}
+            w={240}
             h="100%"
             overflow="scroll"
             bg="gray.100"
