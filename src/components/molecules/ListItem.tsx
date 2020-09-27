@@ -8,6 +8,7 @@ import {
 import React from 'react'
 import { Link } from '~/components/atoms/Link'
 import { Confirm } from '~/components/molecules/Confirm'
+import { useI18n } from '~/hooks/i18n'
 
 type Props = {
   title: React.ReactNode
@@ -25,6 +26,7 @@ export const ListItem: React.FC<Props> = ({
   ...props
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const { t } = useI18n()
   return (
     <Stack
       {...props}
@@ -44,7 +46,7 @@ export const ListItem: React.FC<Props> = ({
             onClose()
           }}
         >
-          「{title}」を削除しますか？
+          {t('confirmDelete', title as string)}
         </Confirm>
       )}
       <Stack direction="row" justifyContent="space-between">

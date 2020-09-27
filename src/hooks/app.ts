@@ -6,6 +6,7 @@ import {
 } from 'react-firebase-hooks/firestore'
 import { firebase } from '~/firebase'
 import { useAuthContext } from '~/hooks/auth'
+import { useI18n } from '~/hooks/i18n'
 
 // TODO: richtext, number, date, datetime, select, boolean, etc...
 export const fieldTypes = [
@@ -16,13 +17,6 @@ export const fieldTypes = [
   'number'
 ] as const
 export type FieldType = typeof fieldTypes[number]
-export const fieldTypeLabel: Record<FieldType, string> = {
-  text: 'テキスト',
-  longtext: 'テキスト(長文)',
-  richtext: 'リッチテキスト',
-  reference: '参照',
-  number: '数字'
-}
 
 export type Field = {
   name: string
@@ -91,6 +85,7 @@ type AppActions = {
 }
 
 export function useAppActions(): AppActions {
+  const { t } = useI18n()
   const { user } = useAuthContext()
   const add = useCallback(
     async (app: App) => {
@@ -103,16 +98,16 @@ export function useAppActions(): AppActions {
           schemaOrder: ['articles'],
           schema: {
             articles: {
-              name: '記事',
+              name: t('article'),
               fieldOrder: ['title', 'body'],
               fields: {
                 title: {
-                  name: 'タイトル',
+                  name: t('title'),
                   type: 'text',
                   required: true
                 },
                 body: {
-                  name: '本文',
+                  name: t('body'),
                   type: 'richtext'
                 }
               }
@@ -131,6 +126,7 @@ export function useAppActions(): AppActions {
         })
       return id
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [user]
   )
   const addResource = useCallback(

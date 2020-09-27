@@ -1,6 +1,7 @@
 import React from 'react'
 import dynamic from 'next/dynamic'
 import { LoginTemplate } from '~/components/templates/LoginTemplate'
+import { useI18n } from '~/hooks/i18n'
 
 const LoginForm = dynamic(
   async () => {
@@ -11,8 +12,9 @@ const LoginForm = dynamic(
 )
 
 const LoginPage: React.FC = () => {
+  const { t } = useI18n()
   return (
-    <LoginTemplate title="ログイン">
+    <LoginTemplate title={t('login')}>
       <LoginForm />
     </LoginTemplate>
   )

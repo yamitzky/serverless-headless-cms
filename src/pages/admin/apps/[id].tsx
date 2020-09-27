@@ -6,15 +6,17 @@ import { Section } from '~/components/molecules/Section'
 import { Box, List, ListItem, Stack } from '@chakra-ui/core'
 import { EmptyCard } from '~/components/atoms/EmptyCard'
 import { Link } from '~/components/atoms/Link'
+import { useI18n } from '~/hooks/i18n'
 
 const AdminAppPage: React.FC = () => {
   const { app, loading, error } = useAppContext()
+  const { t } = useI18n()
   return (
     <AdminTemplate
       sidebar={<Sidebar />}
       breadcrumbs={[
         {
-          title: 'ホーム'
+          title: t('home')
         }
       ]}
     >
@@ -22,25 +24,25 @@ const AdminAppPage: React.FC = () => {
         {app &&
           (app.schemaOrder.length ? (
             <Stack spacing={4}>
-              <Box>「{app.name}」の CMS へようこそ！</Box>
+              <Box>{t('welcomeCMS', app.name)}</Box>
               <List styleType="disc" ml={4} spacing={3}>
                 {app.schemaOrder.map((rid) => (
                   <ListItem key={rid}>
-                    「{app.schema[rid].name}」の管理
+                    {t('manage', app.schema[rid].name)}
                     <Link
                       href={`/admin/apps/${app.id}/resources/${rid}/new`}
                       ml={4}
                     >
-                      作成
+                      {t('create')}
                     </Link>
                     <Link
                       href={`/admin/apps/${app.id}/resources/${rid}`}
                       ml={2}
                     >
-                      一覧
+                      {t('list')}
                     </Link>
                     <Link href={`/admin/apps/${app.id}/schema/${rid}`} ml={2}>
-                      スキーマ変更
+                      {t('schemaManagement')}
                     </Link>
                   </ListItem>
                 ))}
@@ -48,11 +50,12 @@ const AdminAppPage: React.FC = () => {
             </Stack>
           ) : (
             <EmptyCard>
-              スキーマが一つもありません。「記事」などの
-              <Link href={`/admin/apps/${app.id}/schema/new`}>
-                スキーマを作成
-              </Link>
-              してみましょう。
+              {t(
+                'emptySchema',
+                <Link href={`/admin/apps/${app.id}/schema/new`}>
+                  {t('createSchema')}
+                </Link>
+              )}
             </EmptyCard>
           ))}
       </Section>

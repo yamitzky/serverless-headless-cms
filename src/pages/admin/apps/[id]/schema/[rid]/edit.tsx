@@ -6,6 +6,7 @@ import { Sidebar } from '~/components/organisms/Sidebar'
 import { Section } from '~/components/molecules/Section'
 import { useToast } from '@chakra-ui/core'
 import { SchemaForm } from '~/components/organisms/SchemaForm'
+import { useI18n } from '~/hooks/i18n'
 
 const AdminSchemaEditPage: React.FC = () => {
   const router = useRouter()
@@ -16,24 +17,25 @@ const AdminSchemaEditPage: React.FC = () => {
 
   const { updateResource, removeResource } = useAppActions()
   const toast = useToast()
+  const { t } = useI18n()
 
   return (
     <AdminTemplate
       sidebar={<Sidebar />}
       breadcrumbs={[
         {
-          title: 'ホーム',
+          title: t('home'),
           href: `/admin/apps/${id}`
         },
         {
-          title: 'スキーマ管理'
+          title: t('schemaManagement')
         },
         {
           title: schema?.name || '',
           href: `/admin/apps/${id}/schema/${rid}`
         },
         {
-          title: '編集'
+          title: t('edit')
         }
       ]}
     >
@@ -44,7 +46,7 @@ const AdminSchemaEditPage: React.FC = () => {
             onRemove={async () => {
               await removeResource(id, rid)
               toast({
-                title: '削除しました',
+                title: t('deleted'),
                 status: 'success'
               })
               router.push(`/admin/apps/${id}`)
@@ -52,7 +54,7 @@ const AdminSchemaEditPage: React.FC = () => {
             onSubmit={async (schema) => {
               await updateResource(id, rid, schema)
               toast({
-                title: '保存しました',
+                title: t('saved'),
                 status: 'success',
                 duration: 2000
               })

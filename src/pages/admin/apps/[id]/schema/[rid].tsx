@@ -1,6 +1,6 @@
 import React from 'react'
 import { AdminTemplate } from '~/components/templates/AdminTemplate'
-import { fieldTypeLabel, useAppActions, useAppContext } from '~/hooks/app'
+import { useAppActions, useAppContext } from '~/hooks/app'
 import { useRouter } from 'next/router'
 import { Sidebar } from '~/components/organisms/Sidebar'
 import { Section } from '~/components/molecules/Section'
@@ -8,12 +8,14 @@ import { Box, Button, Heading, Stack, Tag, useToast } from '@chakra-ui/core'
 import { ListItem } from '~/components/molecules/ListItem'
 import { EmptyCard } from '~/components/atoms/EmptyCard'
 import { Link } from '~/components/atoms/Link'
+import { useI18n } from '~/hooks/i18n'
 
 const AdminSchemaEditPage: React.FC = () => {
   const router = useRouter()
   const { app, loading: appLoading, error: appError } = useAppContext()
   const { removeField } = useAppActions()
   const toast = useToast()
+  const { t } = useI18n()
   const rid = router.query.rid as string
   const id = router.query.id as string
   const schema = app?.schema[rid]
@@ -23,11 +25,11 @@ const AdminSchemaEditPage: React.FC = () => {
       sidebar={<Sidebar />}
       breadcrumbs={[
         {
-          title: 'ホーム',
+          title: t('home'),
           href: `/admin/apps/${id}`
         },
         {
-          title: 'スキーマ管理'
+          title: t('schemaManagement')
         },
         {
           title: schema?.name || ''
@@ -45,7 +47,7 @@ const AdminSchemaEditPage: React.FC = () => {
                 router.push(`/admin/apps/${id}/schema/${rid}/edit`)
               }
             >
-              編集
+              {t('edit')}
             </Button>
           </Stack>
         }
@@ -53,7 +55,7 @@ const AdminSchemaEditPage: React.FC = () => {
         <Stack spacing={2}>
           <Stack spacing={4}>
             <Stack direction="row" justifyContent="space-between">
-              <Heading size="lg">フィールド</Heading>
+              <Heading size="lg">{t('field')}</Heading>
               <Button
                 variant="outline"
                 variantColor="cyan"
@@ -62,7 +64,7 @@ const AdminSchemaEditPage: React.FC = () => {
                   router.push(`/admin/apps/${id}/schema/${rid}/fields/new`)
                 }
               >
-                追加
+                {t('add')}
               </Button>
             </Stack>
             {schema &&
@@ -76,40 +78,48 @@ const AdminSchemaEditPage: React.FC = () => {
                     onRemove={async () => {
                       await removeField(id, rid, fid)
                       toast({
-                        title: '削除しました',
+                        title: t('deleted'),
                         status: 'success',
                         duration: 2000
                       })
                     }}
                   >
                     <Stack direction="row">
-                      <Box w={40}>種類</Box>
+                      <Box w={40}>{t('type')}</Box>
                       <Box flex={1}>
                         {schema.fields[fid].type === 'reference' &&
                           `「${
                             app?.schema[schema.fields[fid].referTo!]?.name
                           }」への`}
-                        {fieldTypeLabel[schema.fields[fid].type]}
+                        {t(schema.fields[fid].type)}
                       </Box>
                     </Stack>
                     <Stack direction="row">
-                      <Box w={40}>バリデーション</Box>
+                      <Box w={40}>{t('validation')}</Box>
                       <Stack direction="row" spacing={4}>
-                        {schema.fields[fid].required && <Tag>必須</Tag>}
+                        {schema.fields[fid].required && (
+                          <Tag>{t('required')}</Tag>
+                        )}
                         {schema.fields[fid].pattern && (
-                          <Tag>パターン: /{schema.fields[fid].pattern}/</Tag>
+                          <Tag>
+                            {t('pattern')}: /{schema.fields[fid].pattern}/
+                          </Tag>
                         )}
                         {schema.fields[fid].min != null && (
-                          <Tag>最小値: {schema.fields[fid].min}</Tag>
+                          <Tag>
+                            {t('min')}: {schema.fields[fid].min}
+                          </Tag>
                         )}
                         {schema.fields[fid].max != null && (
-                          <Tag>最大値: {schema.fields[fid].max}</Tag>
+                          <Tag>
+                            {t('max')}: {schema.fields[fid].max}
+                          </Tag>
                         )}
                       </Stack>
                     </Stack>
                     {schema.fields[fid].description && (
                       <Stack direction="row">
-                        <Box w={40}>注釈</Box>
+                        <Box w={40}>{t('description')}</Box>
                         <Box>{schema.fields[fid].description}</Box>
                       </Stack>
                     )}
@@ -117,12 +127,14 @@ const AdminSchemaEditPage: React.FC = () => {
                 ))
               ) : (
                 <EmptyCard>
-                  「{schema.name}
-                  」にはまだフィールドがありません。「タイトル」や「本文」などの
-                  <Link href={`/admin/apps/${id}/schema/${rid}/fields/new`}>
-                    フィールドを作成
-                  </Link>
-                  してみましょう。
+                  {t('emptyField', {
+                    name: schema.name,
+                    link: (
+                      <Link href={`/admin/apps/${id}/schema/${rid}/fields/new`}>
+                        {t('createField')}
+                      </Link>
+                    )
+                  })}
                 </EmptyCard>
               ))}
           </Stack>

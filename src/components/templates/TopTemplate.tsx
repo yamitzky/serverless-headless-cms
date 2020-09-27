@@ -1,4 +1,4 @@
-import { Box, Flex, FlexProps, Stack } from '@chakra-ui/core'
+import { Box, Flex, FlexProps } from '@chakra-ui/core'
 import React from 'react'
 import { Header } from '~/components/organisms/Header'
 

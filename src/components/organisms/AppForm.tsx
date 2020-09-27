@@ -9,6 +9,7 @@ import {
   Input
 } from '@chakra-ui/core'
 import { App } from '~/hooks/app'
+import { useI18n } from '~/hooks/i18n'
 
 type Values = App
 
@@ -27,12 +28,13 @@ export const AppForm: React.FC<Props> = ({
   const { handleSubmit, errors, formState, register } = useForm<Values>({
     defaultValues: values
   })
+  const { t } = useI18n()
 
   return (
     <Stack onSubmit={handleSubmit(onSubmit)} as="form" spacing={8} {...props}>
       <Stack spacing={4}>
         <FormControl isInvalid={!!errors.name} isRequired>
-          <FormLabel htmlFor="name">表示名</FormLabel>
+          <FormLabel htmlFor="name">{t('displayName')}</FormLabel>
           <Input
             name="name"
             id="name"
@@ -48,7 +50,7 @@ export const AppForm: React.FC<Props> = ({
           isLoading={formState.isSubmitting}
           type="submit"
         >
-          {isNew ? '作成' : '保存'}
+          {isNew ? t('create') : t('save')}
         </Button>
       </Stack>
     </Stack>

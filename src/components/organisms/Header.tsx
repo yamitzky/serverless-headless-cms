@@ -19,8 +19,10 @@ import { Link } from '~/components/atoms/Link'
 import { FaGithub } from 'react-icons/fa'
 import NextLink from 'next/link'
 import { useRouter } from 'next/router'
+import { useI18n } from '~/hooks/i18n'
 
 export const Header: React.FC<FlexProps> = ({ ...props }) => {
+  const { t } = useI18n()
   const router = useRouter()
   const { user, loading } = useAuthContext()
   const { logout } = useAuthActions()
@@ -61,18 +63,18 @@ export const Header: React.FC<FlexProps> = ({ ...props }) => {
               </MenuButton>
               <MenuList>
                 <MenuItem onClick={() => router.push('/admin')}>
-                  プロジェクト一覧
+                  {t('projectList')}
                 </MenuItem>
                 <MenuItem
                   onClick={async () => {
                     await logout()
                     toast({
-                      title: 'ログアウトしました',
+                      title: t('loggedOut'),
                       status: 'success'
                     })
                   }}
                 >
-                  ログアウト
+                  {t('logout')}
                 </MenuItem>
               </MenuList>
             </Menu>
@@ -83,7 +85,7 @@ export const Header: React.FC<FlexProps> = ({ ...props }) => {
               size="sm"
               onClick={() => router.push('/login')}
             >
-              ログイン
+              {t('login')}
             </Button>
           ))}
       </Stack>

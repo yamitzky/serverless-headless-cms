@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { AdminTemplate } from '~/components/templates/AdminTemplate'
 import { useAppContext } from '~/hooks/app'
-import {
-  Resource,
-  useResourceActions,
-  useResources,
-  visibilityLabel
-} from '~/hooks/resource'
+import { Resource, useResourceActions, useResources } from '~/hooks/resource'
 import { useRouter } from 'next/router'
 import { Sidebar } from '~/components/organisms/Sidebar'
 import { Section } from '~/components/molecules/Section'
@@ -14,6 +9,7 @@ import { Box, Button, Stack } from '@chakra-ui/core'
 import { ListItem } from '~/components/molecules/ListItem'
 import { EmptyCard } from '~/components/atoms/EmptyCard'
 import { Link } from '~/components/atoms/Link'
+import { useI18n } from '~/hooks/i18n'
 
 const AdminResourcesPage: React.FC = () => {
   const router = useRouter()
@@ -24,6 +20,7 @@ const AdminResourcesPage: React.FC = () => {
   const { resources, loading, error } = useResources(id, rid)
   const { fetch } = useResourceActions()
   const [reference, setReference] = useState<Record<string, Resource>>({})
+  const { t } = useI18n()
 
   useEffect(() => {
     ;(async () => {
@@ -51,18 +48,18 @@ const AdminResourcesPage: React.FC = () => {
       sidebar={<Sidebar />}
       breadcrumbs={[
         {
-          title: 'ホーム',
+          title: t('home'),
           href: `/admin/apps/${id}`
         },
         {
-          title: `${schema?.name || ''}一覧`
+          title: t('listOf', schema?.name)
         }
       ]}
     >
       <Section
         title={
           <Stack direction="row" justifyContent="space-between">
-            <Box>{schema?.name}一覧</Box>
+            <Box>{t('listOf', schema?.name)}</Box>
             <Button
               variant="outline"
               variantColor="cyan"
@@ -70,7 +67,7 @@ const AdminResourcesPage: React.FC = () => {
                 router.push(`/admin/apps/${id}/resources/${rid}/new`)
               }
             >
-              作成
+              {t('create')}
             </Button>
           </Stack>
         }
@@ -100,19 +97,21 @@ const AdminResourcesPage: React.FC = () => {
                       ))
                     : null}
                   <Stack direction="row">
-                    <Box w={40}>公開設定</Box>
-                    <Box flex={1}>{visibilityLabel[res.visibility]}</Box>
+                    <Box w={40}>{t('visibility')}</Box>
+                    <Box flex={1}>{t(res.visibility)}</Box>
                   </Stack>
                 </ListItem>
               ))
             ) : (
               <EmptyCard>
-                まだ「{schema?.name}」を作成してないようです。
-                <Link href={`/admin/apps/${id}/resources/${rid}/new`}>
-                  新しい「
-                  {schema?.name}」を作成
-                </Link>
-                してみましょう。
+                {t('emptyContent', {
+                  name: schema?.name,
+                  link: (
+                    <Link href={`/admin/apps/${id}/resources/${rid}/new`}>
+                      {t('createNew', schema?.name)}
+                    </Link>
+                  )
+                })}
               </EmptyCard>
             ))}
         </Stack>

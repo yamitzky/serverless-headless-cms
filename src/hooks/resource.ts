@@ -6,10 +6,6 @@ import {
 import { firebase } from '~/firebase'
 export const visibilities = ['private', 'public'] as const
 export type Visibility = typeof visibilities[number]
-export const visibilityLabel: Record<Visibility, string> = {
-  public: '公開',
-  private: '非公開'
-}
 
 type Context = {
   loading: boolean

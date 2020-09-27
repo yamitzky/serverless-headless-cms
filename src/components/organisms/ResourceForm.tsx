@@ -12,9 +12,10 @@ import {
   FormHelperText
 } from '@chakra-ui/core'
 import { Field, ResourceSchema } from '~/hooks/app'
-import { Resource, visibilities, visibilityLabel } from '~/hooks/resource'
+import { Resource, visibilities } from '~/hooks/resource'
 import dynamic from 'next/dynamic'
 import { InputNumber } from '~/components/atoms/InputNumber'
+import { useI18n } from '~/hooks/i18n'
 const ReactQuill = dynamic(import('react-quill'), {
   ssr: false
 })
@@ -39,6 +40,7 @@ export const ResourceForm: React.FC<Props> = ({
   fields,
   ...props
 }) => {
+  const { t } = useI18n()
   const { handleSubmit, errors, formState, register, control } = useForm<
     Values
   >({
@@ -115,7 +117,7 @@ export const ResourceForm: React.FC<Props> = ({
                 defaultValue={values?.[field.id]}
                 onClick={() => handleFetch(field.referTo!)}
               >
-                <option value="">選択してください</option>
+                <option value="">{t('pleaseSelect')}</option>
                 {reference[field.referTo!]?.map((res) => (
                   <option value={res.id} key={res.id}>
                     {res[allSchema[field.referTo!]?.fieldOrder[0]] || res.id}
@@ -156,7 +158,7 @@ export const ResourceForm: React.FC<Props> = ({
           </FormControl>
         ))}
         <FormControl isInvalid={!!errors.visibility}>
-          <FormLabel htmlFor="visibility">公開設定</FormLabel>
+          <FormLabel htmlFor="visibility">{t('visibility')}</FormLabel>
           <Select
             name="visibility"
             id="visibility"
@@ -165,7 +167,7 @@ export const ResourceForm: React.FC<Props> = ({
           >
             {visibilities.map((v) => (
               <option key={v} value={v}>
-                {visibilityLabel[v]}
+                {t(v)}
               </option>
             ))}
           </Select>
@@ -178,7 +180,7 @@ export const ResourceForm: React.FC<Props> = ({
           isLoading={formState.isSubmitting}
           type="submit"
         >
-          {isNew ? '作成' : '保存'}
+          {isNew ? t('create') : t('save')}
         </Button>
       </Stack>
     </Stack>
