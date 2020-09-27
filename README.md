@@ -2,7 +2,7 @@
 
 ![demo](https://user-images.githubusercontent.com/623449/94364347-87372580-0103-11eb-80fd-341231ebe19c.gif)
 
-Demo: [Vercel](https://serverless-headless-cms.vercel.app/admin) / [Firebase Hosting](https://serverless-headless-cms.web.app/admin)
+Demo: [Vercel](https://serverless-headless-cms.vercel.app/) / [Firebase Hosting](https://serverless-headless-cms.web.app/)
 
 ## Development
 
