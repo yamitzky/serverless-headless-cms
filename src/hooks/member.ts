@@ -4,6 +4,7 @@ import {
   useDocumentData
 } from 'react-firebase-hooks/firestore'
 import { firebase } from '~/firebase'
+import { useAppSelectors } from '~/hooks/app-selector'
 
 export type Member = {
   id: string
@@ -19,15 +20,9 @@ export function useMember(
   id: string,
   uid: string
 ): Context & { member?: Member } {
+  const { getMembership } = useAppSelectors()
   const [member, loading, error] = useDocumentData<Member>(
-    id && uid
-      ? firebase
-          .firestore()
-          .collection('memberships')
-          .doc(id)
-          .collection('users')
-          .doc(uid)
-      : null,
+    id && uid ? getMembership(id, uid) : null,
     {
       idField: 'id'
     }
@@ -50,55 +45,32 @@ type MemberActions = {
 }
 
 export function useMemberActions(): MemberActions {
+  const { getUserApp, getMembership } = useAppSelectors()
   const add = useCallback(
     async (id: string, uid: string, mem: Omit<Member, 'id'>) => {
-      await firebase
-        .firestore()
-        .collection('memberships')
-        .doc(id)
-        .collection('users')
-        .doc(uid)
-        .set({
-          ...mem,
-          created: firebase.firestore.FieldValue.serverTimestamp()
-        })
-      await firebase
-        .firestore()
-        .collection('users')
-        .doc(uid)
-        .collection('applications')
-        .doc(id)
-        .set({
-          created: firebase.firestore.FieldValue.serverTimestamp()
-        })
+      await getMembership(id, uid).set({
+        ...mem,
+        created: firebase.firestore.FieldValue.serverTimestamp()
+      })
+      await getUserApp(id, uid).set({
+        created: firebase.firestore.FieldValue.serverTimestamp()
+      })
     },
-    []
+    [getMembership, getUserApp]
   )
-  const update = useCallback(async (id: string, uid: string, mem: Member) => {
-    await firebase
-      .firestore()
-      .collection('memberships')
-      .doc(id)
-      .collection('users')
-      .doc(uid)
-      .update(mem)
-  }, [])
-  const remove = useCallback(async (id: string, uid: string) => {
-    await firebase
-      .firestore()
-      .collection('memberships')
-      .doc(id)
-      .collection('users')
-      .doc(uid)
-      .delete()
-    await firebase
-      .firestore()
-      .collection('users')
-      .doc(uid)
-      .collection('applications')
-      .doc(id)
-      .delete()
-  }, [])
+  const update = useCallback(
+    async (id: string, uid: string, mem: Member) => {
+      await getMembership(id, uid).update(mem)
+    },
+    [getMembership]
+  )
+  const remove = useCallback(
+    async (id: string, uid: string) => {
+      await getMembership(id, uid).delete()
+      await getUserApp(id, uid).delete()
+    },
+    [getMembership, getUserApp]
+  )
 
   return {
     add,
@@ -108,15 +80,9 @@ export function useMemberActions(): MemberActions {
 }
 
 export function useMembers(id: string): Context & { members: Member[] } {
+  const { getMemberships } = useAppSelectors()
   const [members, loading, error] = useCollectionData<Member>(
-    id
-      ? firebase
-          .firestore()
-          .collection('memberships')
-          .doc(id)
-          .collection('users')
-          .orderBy('created', 'desc')
-      : null,
+    id ? getMemberships(id).orderBy('created', 'desc') : null,
     {
       idField: 'id'
     }

@@ -5,6 +5,7 @@ import {
   useDocumentData
 } from 'react-firebase-hooks/firestore'
 import { firebase } from '~/firebase'
+import { useAppSelectors } from '~/hooks/app-selector'
 import { useAuthContext } from '~/hooks/auth'
 import { useI18n } from '~/hooks/i18n'
 
@@ -85,85 +86,69 @@ type AppActions = {
 }
 
 export function useAppActions(): AppActions {
+  const { getApp, getApps, getUserApp } = useAppSelectors()
   const { t } = useI18n()
   const { user } = useAuthContext()
   const add = useCallback(
     async (app: App) => {
-      const { id } = await firebase
-        .firestore()
-        .collection('applications')
-        .add({
-          ...app,
-          created: firebase.firestore.FieldValue.serverTimestamp(),
-          schemaOrder: ['articles'],
-          schema: {
-            articles: {
-              name: t('article'),
-              fieldOrder: ['title', 'body'],
-              fields: {
-                title: {
-                  name: t('title'),
-                  type: 'text',
-                  required: true
-                },
-                body: {
-                  name: t('body'),
-                  type: 'richtext'
-                }
+      const { id } = await getApps().add({
+        ...app,
+        created: firebase.firestore.FieldValue.serverTimestamp(),
+        schemaOrder: ['articles'],
+        schema: {
+          articles: {
+            name: t('article'),
+            fieldOrder: ['title', 'body'],
+            fields: {
+              title: {
+                name: t('title'),
+                type: 'text',
+                required: true
+              },
+              body: {
+                name: t('body'),
+                type: 'richtext'
               }
             }
-          },
-          owner: user?.uid
-        } as App)
-      await firebase
-        .firestore()
-        .collection('users')
-        .doc(user?.uid)
-        .collection('applications')
-        .doc(id)
-        .set({
-          created: firebase.firestore.FieldValue.serverTimestamp()
-        })
+          }
+        },
+        owner: user?.uid
+      } as App)
+      await getUserApp(id, user!.uid).set({
+        created: firebase.firestore.FieldValue.serverTimestamp()
+      })
       return id
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [user]
+    [user, getApps, getUserApp]
   )
   const addResource = useCallback(
     async (id: string, rid: string, schema: ResourceSchema) => {
-      await firebase
-        .firestore()
-        .collection('applications')
-        .doc(id)
-        .update({
-          [`schema.${rid}`]: {
-            ...schema,
-            name: schema.name || rid,
-            fieldOrder: [],
-            fields: {}
-          },
-          [`schemaOrder`]: firebase.firestore.FieldValue.arrayUnion(rid)
-        })
+      await getApp(id).update({
+        [`schema.${rid}`]: {
+          ...schema,
+          name: schema.name || rid,
+          fieldOrder: [],
+          fields: {}
+        },
+        [`schemaOrder`]: firebase.firestore.FieldValue.arrayUnion(rid)
+      })
     },
-    []
+    [getApp]
   )
   const addField = useCallback(
     async (id: string, rid: string, fid: string, field: Field) => {
-      await firebase
-        .firestore()
-        .collection('applications')
-        .doc(id)
-        .update({
-          [`schema.${rid}.fields.${fid}`]: {
-            ...field,
-            name: field.name || fid
-          },
-          [`schema.${rid}.fieldOrder`]: firebase.firestore.FieldValue.arrayUnion(
-            fid
-          )
-        })
+      await getApp(id).update({
+        [`schema.${rid}.fields.${fid}`]: {
+          ...field,
+          name: field.name || fid
+        },
+        [`schema.${rid}.fieldOrder`]: firebase.firestore.FieldValue.arrayUnion(
+          fid
+        )
+      })
     },
-    []
+    [getApp]
   )
   const updateResource = useCallback(
     async (id: string, rid: string, _schema: ResourceSchema) => {
@@ -175,49 +160,40 @@ export function useAppActions(): AppActions {
       for (const key of Object.keys(schema)) {
         upd[`schema.${rid}.${key}`] = schema[key as keyof ResourceSchema]
       }
-      await firebase.firestore().collection('applications').doc(id).update(upd)
+      await getApp(id).update(upd)
     },
-    []
+    [getApp]
   )
   const updateField = useCallback(
     async (id: string, rid: string, fid: string, field: Field) => {
-      await firebase
-        .firestore()
-        .collection('applications')
-        .doc(id)
-        .update({
-          [`schema.${rid}.fields.${fid}`]: {
-            ...field,
-            name: field.name || fid
-          }
-        })
+      await getApp(id).update({
+        [`schema.${rid}.fields.${fid}`]: {
+          ...field,
+          name: field.name || fid
+        }
+      })
     },
-    []
+    [getApp]
   )
-  const removeResource = useCallback(async (id: string, rid: string) => {
-    await firebase
-      .firestore()
-      .collection('applications')
-      .doc(id)
-      .update({
+  const removeResource = useCallback(
+    async (id: string, rid: string) => {
+      await getApp(id).update({
         [`schema.${rid}`]: null,
         [`schemaOrder`]: firebase.firestore.FieldValue.arrayRemove(rid)
       })
-  }, [])
+    },
+    [getApp]
+  )
   const removeField = useCallback(
     async (id: string, rid: string, fid: string) => {
-      await firebase
-        .firestore()
-        .collection('applications')
-        .doc(id)
-        .update({
-          [`schema.${rid}.fields.${fid}`]: null,
-          [`schema.${rid}.fieldOrder`]: firebase.firestore.FieldValue.arrayRemove(
-            fid
-          )
-        })
+      await getApp(id).update({
+        [`schema.${rid}.fields.${fid}`]: null,
+        [`schema.${rid}.fieldOrder`]: firebase.firestore.FieldValue.arrayRemove(
+          fid
+        )
+      })
     },
-    []
+    [getApp]
   )
 
   return {
@@ -232,24 +208,14 @@ export function useAppActions(): AppActions {
 }
 
 export function useApps(uid?: string): Context & { apps: App[] } {
+  const { getUserApps, getAppsByIds } = useAppSelectors()
   const [myApps, myloading, myerror] = useCollection(
-    uid
-      ? firebase
-          .firestore()
-          .collection('users')
-          .doc(uid)
-          .collection('applications')
-      : null
+    uid ? getUserApps(uid) : null
   )
 
   const appIds = myApps?.docs.map((doc) => doc.id) || []
   const [apps, loading, error] = useCollectionData<App>(
-    appIds.length
-      ? firebase
-          .firestore()
-          .collection('applications')
-          .where(firebase.firestore.FieldPath.documentId(), 'in', appIds)
-      : null,
+    appIds.length ? getAppsByIds(appIds) : null,
     {
       idField: 'id'
     }
@@ -263,10 +229,10 @@ export function useApps(uid?: string): Context & { apps: App[] } {
 }
 
 export function useApp(id: string): Context & { app?: App } {
-  const [app, loading, error] = useDocumentData<App>(
-    id ? firebase.firestore().collection('applications').doc(id) : null,
-    { idField: 'id' }
-  )
+  const { getApp } = useAppSelectors()
+  const [app, loading, error] = useDocumentData<App>(id ? getApp(id) : null, {
+    idField: 'id'
+  })
 
   return {
     app,
