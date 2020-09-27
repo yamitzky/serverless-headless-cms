@@ -1,91 +1,16 @@
-import React, { useCallback, useContext } from 'react'
+import { useCallback } from 'react'
 import {
   useCollection,
   useCollectionData,
   useDocumentData
 } from 'react-firebase-hooks/firestore'
 import { firebase } from '~/firebase'
+import { App, AppHooks, Field, ResourceSchema } from '~/hooks/app'
 import { useAppSelectors } from '~/hooks/app-selector'
 import { useAuthContext } from '~/hooks/auth'
 import { useI18n } from '~/hooks/i18n'
 
-// TODO: richtext, number, date, datetime, select, boolean, etc...
-export const fieldTypes = [
-  'text',
-  'longtext',
-  'richtext',
-  'reference',
-  'number'
-] as const
-export type FieldType = typeof fieldTypes[number]
-
-export type Field = {
-  name: string
-  type: FieldType
-
-  description?: string
-  required?: boolean
-  pattern?: string
-
-  // for reference
-  referTo?: string
-
-  // for number
-  max?: number
-  min?: number
-}
-
-export type ResourceSchema = {
-  name: string
-  fieldOrder: string[]
-  fields: Record<string, Field>
-}
-
-export type App = {
-  id: string
-  name: string
-  schemaOrder: string[]
-  schema: Record<string, ResourceSchema>
-}
-
-type Error = {
-  message: string
-}
-
-type Context = {
-  loading: boolean
-  error?: Error
-}
-
-type AppActions = {
-  add: (app: App) => Promise<string>
-  addResource: (
-    id: string,
-    rid: string,
-    schema: ResourceSchema
-  ) => Promise<void>
-  addField: (
-    id: string,
-    rid: string,
-    fid: string,
-    field: Field
-  ) => Promise<void>
-  updateResource: (
-    id: string,
-    rid: string,
-    schema: ResourceSchema
-  ) => Promise<void>
-  updateField: (
-    id: string,
-    rid: string,
-    fid: string,
-    field: Field
-  ) => Promise<void>
-  removeResource: (id: string, rid: string) => Promise<void>
-  removeField: (id: string, rid: string, fid: string) => Promise<void>
-}
-
-export function useAppActions(): AppActions {
+export const useAppActions: AppHooks['useAppActions'] = () => {
   const { getApp, getApps, getUserApp } = useAppSelectors()
   const { t } = useI18n()
   const { user } = useAuthContext()
@@ -207,7 +132,7 @@ export function useAppActions(): AppActions {
   }
 }
 
-export function useApps(uid?: string): Context & { apps: App[] } {
+export const useApps: AppHooks['useApps'] = (uid?: string) => {
   const { getUserApps, getAppsByIds } = useAppSelectors()
   const [myApps, myloading, myerror] = useCollection(
     uid ? getUserApps(uid) : null
@@ -228,7 +153,7 @@ export function useApps(uid?: string): Context & { apps: App[] } {
   }
 }
 
-export function useApp(id: string): Context & { app?: App } {
+export const useApp: AppHooks['useApp'] = (id: string) => {
   const { getApp } = useAppSelectors()
   const [app, loading, error] = useDocumentData<App>(id ? getApp(id) : null, {
     idField: 'id'
@@ -239,11 +164,4 @@ export function useApp(id: string): Context & { app?: App } {
     loading,
     error
   }
-}
-
-export const AppContext = React.createContext<Context & { app?: App }>({
-  loading: true
-})
-export function useAppContext(): Context & { app?: App } {
-  return useContext(AppContext)
 }

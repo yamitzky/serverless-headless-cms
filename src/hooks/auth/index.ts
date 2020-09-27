@@ -1,6 +1,4 @@
-import React, { useCallback, useContext } from 'react'
-import { useAuthState } from 'react-firebase-hooks/auth'
-import { firebase } from '~/firebase'
+import React, { useContext } from 'react'
 
 type Error = {
   code: string
@@ -20,14 +18,14 @@ type AuthContext = {
   error?: Error
 }
 
-export function useAuth(): AuthContext {
-  const [user, loading, error] = useAuthState(firebase.auth())
+export type AuthHooks = {
+  useAuth(): AuthContext
+  useAuthActions(): AuthActions
+}
+export const AuthHooksContext = React.createContext<AuthHooks>(null as any)
 
-  return {
-    user,
-    loading,
-    error
-  }
+export function useAuth(): AuthContext {
+  return useContext(AuthHooksContext).useAuth()
 }
 
 export const AuthContext = React.createContext<AuthContext>({
@@ -42,8 +40,5 @@ type AuthActions = {
 }
 
 export function useAuthActions(): AuthActions {
-  const logout = useCallback(async () => {
-    await firebase.auth().signOut()
-  }, [])
-  return { logout }
+  return useContext(AuthHooksContext).useAuthActions()
 }

@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import React, { useContext } from 'react'
 import { firebase } from '~/firebase'
 
 export type ResourceSelectors = {
@@ -13,18 +13,12 @@ export type ResourceSelectors = {
   ) => firebase.firestore.DocumentReference<firebase.firestore.DocumentData>
 }
 
+export type ResourceSelectorsContext = {
+  useResourceSelectors(): ResourceSelectors
+}
+export const ResourceSelectorsContext = React.createContext<
+  ResourceSelectorsContext
+>(null as any)
 export function useResourceSelectors(): ResourceSelectors {
-  const getResources = useCallback(
-    (id: string, rid: string) =>
-      firebase.firestore().collection('applications').doc(id).collection(rid),
-    []
-  )
-  const getResource = useCallback(
-    (id: string, rid: string, iid: string) => getResources(id, rid).doc(iid),
-    [getResources]
-  )
-  return {
-    getResources,
-    getResource
-  }
+  return useContext(ResourceSelectorsContext).useResourceSelectors()
 }

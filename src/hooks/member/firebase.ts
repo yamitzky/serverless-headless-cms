@@ -5,21 +5,12 @@ import {
 } from 'react-firebase-hooks/firestore'
 import { firebase } from '~/firebase'
 import { useAppSelectors } from '~/hooks/app-selector'
+import { Member, MemberHooks } from '~/hooks/member'
 
-export type Member = {
-  id: string
-  name: string
-}
-
-type Context = {
-  loading: boolean
-  error: Error | undefined
-}
-
-export function useMember(
+export const useMember: MemberHooks['useMember'] = (
   id: string,
   uid: string
-): Context & { member?: Member } {
+) => {
   const { getMembership } = useAppSelectors()
   const [member, loading, error] = useDocumentData<Member>(
     id && uid ? getMembership(id, uid) : null,
@@ -34,17 +25,7 @@ export function useMember(
   }
 }
 
-type MemberActions = {
-  add: (
-    id: string,
-    uid: string,
-    membership: Omit<Member, 'id'>
-  ) => Promise<void>
-  update: (id: string, uid: string, membership: Member) => Promise<void>
-  remove: (id: string, uid: string) => Promise<void>
-}
-
-export function useMemberActions(): MemberActions {
+export const useMemberActions: MemberHooks['useMemberActions'] = () => {
   const { getUserApp, getMembership } = useAppSelectors()
   const add = useCallback(
     async (id: string, uid: string, mem: Omit<Member, 'id'>) => {
@@ -79,7 +60,7 @@ export function useMemberActions(): MemberActions {
   }
 }
 
-export function useMembers(id: string): Context & { members: Member[] } {
+export const useMembers: MemberHooks['useMembers'] = (id: string) => {
   const { getMemberships } = useAppSelectors()
   const [members, loading, error] = useCollectionData<Member>(
     id ? getMemberships(id).orderBy('created', 'desc') : null,

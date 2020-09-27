@@ -4,20 +4,14 @@ import {
   useDocumentData
 } from 'react-firebase-hooks/firestore'
 import { firebase } from '~/firebase'
+import { Resource, ResourceHooks } from '~/hooks/resource'
 import { useResourceSelectors } from '~/hooks/resource-selector'
-export const visibilities = ['private', 'public'] as const
-export type Visibility = typeof visibilities[number]
 
-type Context = {
-  loading: boolean
-  error: Error | undefined
-}
-
-export function useResource(
+export const useResource: ResourceHooks['useResource'] = (
   id: string,
   rid: string,
   iid: string
-): Context & { resource?: Resource } {
+) => {
   const { getResource } = useResourceSelectors()
   const [resource, loading, error] = useDocumentData<Resource>(
     id && rid && iid ? getResource(id, rid, iid) : null,
@@ -32,14 +26,7 @@ export function useResource(
   }
 }
 
-type ResourceActions = {
-  fetch: (id: string, rid: string, iid: string) => Promise<Resource>
-  fetchAll: (id: string, rid: string) => Promise<Resource[]>
-  add: (id: string, rid: string, res: Resource) => Promise<void>
-  update: (id: string, rid: string, iid: string, res: Resource) => Promise<void>
-}
-
-export function useResourceActions(): ResourceActions {
+export const useResourceActions: ResourceHooks['useResourceActions'] = () => {
   const { getResource, getResources } = useResourceSelectors()
   const fetch = useCallback(
     async (id: string, rid: string, iid: string) => {
@@ -86,15 +73,10 @@ export function useResourceActions(): ResourceActions {
   }
 }
 
-export type Resource = {
-  id: string
-  visibility: Visibility
-} & Record<string, any>
-
-export function useResources(
+export const useResources: ResourceHooks['useResources'] = (
   id: string,
   rid: string
-): Context & { resources: Resource[] } {
+) => {
   const { getResources } = useResourceSelectors()
   const [resources, loading, error] = useCollectionData<Resource>(
     id && rid ? getResources(id, rid).orderBy('published', 'desc') : null,
