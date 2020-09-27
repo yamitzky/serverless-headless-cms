@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useCallback, useContext } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { firebase } from '~/firebase'
 
@@ -35,4 +35,15 @@ export const AuthContext = React.createContext<AuthContext>({
 })
 export function useAuthContext(): AuthContext {
   return useContext(AuthContext)
+}
+
+type AuthActions = {
+  logout: () => Promise<void>
+}
+
+export function useAuthActions(): AuthActions {
+  const logout = useCallback(async () => {
+    await firebase.auth().signOut()
+  }, [])
+  return { logout }
 }

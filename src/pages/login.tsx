@@ -1,6 +1,6 @@
 import React from 'react'
 import dynamic from 'next/dynamic'
-import { SimpleTemplate } from '~/components/templates/SimpleTemplate'
+import { LoginTemplate } from '~/components/templates/LoginTemplate'
 
 const LoginForm = dynamic(
   async () => {
@@ -12,9 +12,9 @@ const LoginForm = dynamic(
 
 const LoginPage: React.FC = () => {
   return (
-    <SimpleTemplate title="ログイン">
+    <LoginTemplate title="ログイン">
       <LoginForm />
-    </SimpleTemplate>
+    </LoginTemplate>
   )
 }
 
