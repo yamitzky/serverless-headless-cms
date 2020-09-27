@@ -35,7 +35,7 @@ const AdminResourceEditPage: React.FC = () => {
           href: `/admin/apps/${id}/resources/${rid}`
         },
         {
-          title: '編集'
+          title: t('edit')
         }
       ]}
     >

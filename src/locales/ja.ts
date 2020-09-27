@@ -13,6 +13,7 @@ export default {
   created: '作成しました',
   save: '保存',
   saved: '保存しました',
+  edit: '編集',
   field: 'フィールド',
   fieldCreation: 'フィールド作成',
   projectCreation: 'プロジェクト作成',
@@ -54,6 +55,7 @@ export default {
   public: '公開',
   private: '非公開',
   contents: 'コンテンツ',
+  listOf: (obj: string) => `${obj}一覧`,
   topPage: 'トップページ',
   invitationMessage: (obj: any) => [
     'ユーザー ID は招待するユーザーに教えてもらってください。ユーザー ID は',

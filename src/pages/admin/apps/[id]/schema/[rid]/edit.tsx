@@ -35,7 +35,7 @@ const AdminSchemaEditPage: React.FC = () => {
           href: `/admin/apps/${id}/schema/${rid}`
         },
         {
-          title: '編集'
+          title: t('edit')
         }
       ]}
     >

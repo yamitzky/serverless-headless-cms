@@ -52,14 +52,14 @@ const AdminResourcesPage: React.FC = () => {
           href: `/admin/apps/${id}`
         },
         {
-          title: `${schema?.name || ''}一覧`
+          title: t('listOf', schema?.name)
         }
       ]}
     >
       <Section
         title={
           <Stack direction="row" justifyContent="space-between">
-            <Box>{schema?.name}一覧</Box>
+            <Box>{t('listOf', schema?.name)}</Box>
             <Button
               variant="outline"
               variantColor="cyan"

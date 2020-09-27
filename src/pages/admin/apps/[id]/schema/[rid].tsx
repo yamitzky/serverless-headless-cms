@@ -47,7 +47,7 @@ const AdminSchemaEditPage: React.FC = () => {
                 router.push(`/admin/apps/${id}/schema/${rid}/edit`)
               }
             >
-              編集
+              {t('edit')}
             </Button>
           </Stack>
         }

@@ -31,7 +31,7 @@ const AdminMemberEditPage: React.FC = () => {
           href: `/admin/apps/${id}/members`
         },
         {
-          title: '編集'
+          title: t('edit')
         }
       ]}
     >
