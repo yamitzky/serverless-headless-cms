@@ -18,7 +18,7 @@ const AdminSchemaNewPage: React.FC = () => {
     <AdminTemplate
       breadcrumbs={[
         {
-          title: 'アプリケーション一覧',
+          title: 'プロジェクト一覧',
           href: `/admin`
         },
         {
@@ -26,7 +26,7 @@ const AdminSchemaNewPage: React.FC = () => {
         }
       ]}
     >
-      <Section title="新規アプリケーション">
+      <Section title="新規プロジェクト">
         <AppForm
           isNew
           onSubmit={async (app) => {

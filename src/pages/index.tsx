@@ -1,57 +1,117 @@
 import React from 'react'
 import Head from 'next/head'
+import {
+  Box,
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  Heading,
+  Image,
+  List,
+  ListItem,
+  Stack,
+  Text
+} from '@chakra-ui/core'
+import { TopTemplate } from '~/components/templates/TopTemplate'
+import { Strong } from '~/components/atoms/Strong'
+import NextLink from 'next/link'
+import { FaGithub } from 'react-icons/fa'
+import { ExternalLink } from '~/components/molecules/ExternalLink'
 
 const Home: React.FC = () => {
   return (
     <div>
       <Head>
-        <title>Create Next App</title>
+        <title>Serverless Headless CMS powered by Firebase</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
-        <h1>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p>
-          Get started by editing <code>pages/index.js</code>
-        </p>
-
-        <div>
-          <a href="https://nextjs.org/docs">
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn">
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a href="https://github.com/vercel/next.js/tree/master/examples">
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app">
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by <img src="/vercel.svg" alt="Vercel Logo" />
-        </a>
-      </footer>
+      <TopTemplate>
+        <Box py="80px">
+          <Stack alignItems="center">
+            <Stack direction="row" spacing={10}>
+              <Text fontSize="40px" fontWeight="bold" alignSelf="center">
+                <Strong>Less</Strong> is more.
+                <br />
+                This CMS <Strong>&hearts;</Strong>
+                <br />
+                Headless, Serverless, OSS.
+              </Text>
+              <Box>
+                <Image
+                  boxShadow="sm"
+                  borderWidth={1}
+                  src="https://user-images.githubusercontent.com/623449/94364347-87372580-0103-11eb-80fd-341231ebe19c.gif"
+                />
+              </Box>
+            </Stack>
+            <Flex direction="row" marginTop={10}>
+              <NextLink href="/admin" passHref>
+                <Button size="lg" variantColor="cyan" as="a">
+                  Demo
+                </Button>
+              </NextLink>
+              <Button
+                ml={6}
+                as="a"
+                size="lg"
+                {...{
+                  href: 'https://github.com/yamitzky/serverless-headless-cms',
+                  target: '_blank'
+                }}
+              >
+                <Box as={FaGithub} mr={2} />
+                GitHub
+              </Button>
+            </Flex>
+          </Stack>
+          <Divider my={20} />
+          <Stack alignItems="center" spacing={8}>
+            <Heading color="cyan.600">Concept</Heading>
+            <Grid templateColumns="repeat(2, 1fr)" gap={10} maxW={800}>
+              <Stack minW="320px">
+                <Heading as="h3" size="lg" color="cyan.800">
+                  Serverless
+                </Heading>
+                <Text>
+                  You can deploy to serverles environment at a very low cost.
+                  Currently, only Firebase(Firestore, Auth) is supported and AWS
+                  and other serverless solutions are planned.
+                </Text>
+              </Stack>
+              <Stack minW="320px">
+                <Heading as="h3" size="lg" color="cyan.800">
+                  Customizable
+                </Heading>
+                <Text>
+                  Open source software! Fork and customize it as you like. A
+                  more flexible plugin system will be implemented to fit to
+                  existing operations and databases.
+                </Text>
+              </Stack>
+            </Grid>
+          </Stack>
+          <Divider my={20} />
+          <Stack alignItems="center" spacing={8}>
+            <Heading color="cyan.600">Roadmap</Heading>
+            <Text>
+              The roadmap is maintained on{' '}
+              <ExternalLink href="https://github.com/yamitzky/serverless-headless-cms/projects/2">
+                GitHub
+              </ExternalLink>
+            </Text>
+            <List fontWeight="bold" styleType="disc">
+              <ListItem>Plugin system</ListItem>
+              <ListItem>Internationalization(i18n)</ListItem>
+              <ListItem>AWS support(Cognito, DynamoDB, S3)</ListItem>
+              <ListItem>More field types(date, datetime, file)</ListItem>
+              <ListItem>Flexible permissions</ListItem>
+              <ListItem>Docs to integrate with Gatsby and Next.js</ListItem>
+            </List>
+          </Stack>
+        </Box>
+      </TopTemplate>
     </div>
   )
 }

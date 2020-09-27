@@ -2,9 +2,8 @@ import { Box, Flex, Stack } from '@chakra-ui/core'
 import { useRouter } from 'next/dist/client/router'
 import React from 'react'
 import { Header } from '~/components/organisms/Header'
-import { useAuth } from '~/hooks/auth'
+import { useAuth, useAuthContext } from '~/hooks/auth'
 import { Breadcrumbs, Breadcrumb } from '~/components/molecules/Breadcrumbs'
-import { useApp } from '~/hooks/app'
 
 type Props = {
   sidebar?: React.ReactNode
@@ -17,14 +16,14 @@ export const AdminTemplate: React.FC<Props> = ({
   sidebar,
   ...props
 }) => {
-  const { user, loading, error } = useAuth()
+  const { user, loading, error } = useAuthContext()
   const router = useRouter()
   if (!loading && (!user || error)) {
     router.push('/login')
   }
 
   return (
-    <Flex h="100vh" direction="column">
+    <Flex h="100vh" direction="column" color="gray.700">
       <Header boxShadow="md" zIndex={'sticky' as any} />
       <Flex flex={1} direction="row" overflow="hidden" {...props}>
         {sidebar && (

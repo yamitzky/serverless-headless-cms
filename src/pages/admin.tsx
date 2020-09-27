@@ -31,7 +31,7 @@ const AdminHomePage: React.FC = () => {
       <Section
         title={
           <Stack direction="row">
-            <Box flex={1}>アプリケーション一覧</Box>
+            <Box flex={1}>プロジェクト一覧</Box>
             <Button
               variant="outline"
               variantColor="cyan"
@@ -80,13 +80,13 @@ const AdminHomePage: React.FC = () => {
           </Grid>
         ) : (
           <EmptyCard>
-            まだアプリケーションはありません。
-            <Link href="/admin/apps/new">アプリケーションを作成</Link>
+            まだプロジェクトはありません。
+            <Link href="/admin/apps/new">プロジェクトを作成</Link>
             してみましょう。
           </EmptyCard>
         )}
         <EmptyCard mt={8}>
-          他のアプリケーションに参加するには、あなたのユーザーID
+          他のプロジェクトに参加するには、あなたのユーザーID
           <Code mx={2} fontWeight="bold">
             {user?.uid}
           </Code>
