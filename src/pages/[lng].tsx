@@ -18,7 +18,7 @@ import { Strong } from '~/components/atoms/Strong'
 import NextLink from 'next/link'
 import { FaGithub } from 'react-icons/fa'
 import { ExternalLink } from '~/components/molecules/ExternalLink'
-import { languages, useI18n } from '~/hooks/i18n'
+import { languages, defaultLanguage, useI18n } from '~/hooks/i18n'
 import { GetStaticPaths, GetStaticProps } from 'next'
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
@@ -29,7 +29,9 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
 export const getStaticPaths: GetStaticPaths = async () => {
   return {
-    paths: languages.map((l) => ({ params: { lng: l } })),
+    paths: languages
+      .filter((l) => l !== defaultLanguage)
+      .map((l) => ({ params: { lng: l } })),
     fallback: false
   }
 }
