@@ -11,6 +11,7 @@ import {
 } from '@chakra-ui/core'
 import { Member } from '~/hooks/member'
 import { Link } from '~/components/atoms/Link'
+import { useI18n } from '~/hooks/i18n'
 
 type Values = Member
 
@@ -28,6 +29,7 @@ export const MemberForm: React.FC<Props> = ({
   currentIds,
   ...props
 }) => {
+  const { t } = useI18n()
   const { handleSubmit, errors, formState, register } = useForm<Values>({
     defaultValues: values
   })
@@ -37,7 +39,7 @@ export const MemberForm: React.FC<Props> = ({
       <Stack spacing={4}>
         {isNew && (
           <FormControl isInvalid={!!errors.id} isRequired>
-            <FormLabel htmlFor="id">ユーザーID</FormLabel>
+            <FormLabel htmlFor="id">{t('userId')}</FormLabel>
             <Input
               name="id"
               id="id"
@@ -49,14 +51,16 @@ export const MemberForm: React.FC<Props> = ({
               defaultValue={values?.id}
             />
             <FormHelperText>
-              ユーザー ID は招待するユーザーに教えてもらってください。ユーザー
-              ID は<Link href="/admin">トップページ</Link>に記載されています。
+              {t(
+                'invitationMessage',
+                <Link href="/admin">{t('topPage')}</Link>
+              )}
             </FormHelperText>
             <FormErrorMessage>{errors.id?.message}</FormErrorMessage>
           </FormControl>
         )}
         <FormControl isInvalid={!!errors.name} isRequired>
-          <FormLabel htmlFor="name">名前</FormLabel>
+          <FormLabel htmlFor="name">{t('displayName')}</FormLabel>
           <Input
             name="name"
             id="name"
@@ -72,7 +76,7 @@ export const MemberForm: React.FC<Props> = ({
           isLoading={formState.isSubmitting}
           type="submit"
         >
-          {isNew ? '招待' : '更新'}
+          {isNew ? t('invitation') : t('update')}
         </Button>
       </Stack>
     </Stack>

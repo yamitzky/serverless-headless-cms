@@ -45,7 +45,8 @@
     "react/jsx-no-target-blank": "off",
     "no-console": "warn",
     "@typescript-eslint/camelcase": "off",
-    "@typescript-eslint/no-explicit-any": "off"
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/ban-ts-comment": "off"
   },
   "env": {
     "browser": true,

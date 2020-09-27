@@ -7,6 +7,7 @@ import { Sidebar } from '~/components/organisms/Sidebar'
 import { Section } from '~/components/molecules/Section'
 import { useToast } from '@chakra-ui/core'
 import { ResourceForm } from '~/components/organisms/ResourceForm'
+import { useI18n } from '~/hooks/i18n'
 
 const AdminResourceNewPage: React.FC = () => {
   const router = useRouter()
@@ -17,13 +18,14 @@ const AdminResourceNewPage: React.FC = () => {
 
   const { add, fetchAll } = useResourceActions()
   const toast = useToast()
+  const { t } = useI18n()
 
   return (
     <AdminTemplate
       sidebar={<Sidebar />}
       breadcrumbs={[
         {
-          title: 'ホーム',
+          title: t('home'),
           href: `/admin/apps/${id}`
         },
         {
@@ -31,11 +33,11 @@ const AdminResourceNewPage: React.FC = () => {
           href: `/admin/apps/${id}/resources/${rid}`
         },
         {
-          title: '作成'
+          title: t('create')
         }
       ]}
     >
-      <Section title={`${schema?.name}を作成`}>
+      <Section title={t('create', schema?.name)}>
         {app && schema && (
           <ResourceForm
             isNew
@@ -44,7 +46,7 @@ const AdminResourceNewPage: React.FC = () => {
             onSubmit={async (res) => {
               await add(id, rid, res)
               toast({
-                title: '作成しました',
+                title: t('created'),
                 status: 'success',
                 duration: 2000
               })

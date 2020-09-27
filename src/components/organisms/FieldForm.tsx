@@ -13,8 +13,9 @@ import {
   InputLeftElement,
   InputRightElement
 } from '@chakra-ui/core'
-import { Field, fieldTypeLabel, fieldTypes, ResourceSchema } from '~/hooks/app'
+import { Field, fieldTypes, ResourceSchema } from '~/hooks/app'
 import { InputNumber } from '~/components/atoms/InputNumber'
+import { useI18n } from '~/hooks/i18n'
 
 type Values = Field & { id?: string }
 
@@ -34,6 +35,7 @@ export const FieldForm: React.FC<Props> = ({
   currentIds,
   ...props
 }) => {
+  const { t } = useI18n()
   const { handleSubmit, errors, formState, register, watch, control } = useForm<
     Values
   >({
@@ -61,7 +63,7 @@ export const FieldForm: React.FC<Props> = ({
           </FormControl>
         )}
         <FormControl isInvalid={!!errors.name}>
-          <FormLabel htmlFor="name">表示名</FormLabel>
+          <FormLabel htmlFor="name">{t('displayName')}</FormLabel>
           <Input
             name="name"
             id="name"
@@ -71,7 +73,7 @@ export const FieldForm: React.FC<Props> = ({
           <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
         </FormControl>
         <FormControl isInvalid={!!errors.type} isRequired>
-          <FormLabel htmlFor="type">種類</FormLabel>
+          <FormLabel htmlFor="type">{t('type')}</FormLabel>
           <Select
             name="type"
             id="type"
@@ -82,7 +84,7 @@ export const FieldForm: React.FC<Props> = ({
           >
             {fieldTypes.map((f) => (
               <option key={f} value={f}>
-                {fieldTypeLabel[f]}
+                {t(f)}
               </option>
             ))}
           </Select>
@@ -90,7 +92,7 @@ export const FieldForm: React.FC<Props> = ({
         </FormControl>
         {type === 'reference' && (
           <FormControl isInvalid={!!errors.referTo} isRequired>
-            <FormLabel htmlFor="referTo">参照項目</FormLabel>
+            <FormLabel htmlFor="referTo">{t('referTo')}</FormLabel>
             <Select
               name="referTo"
               id="referTo"
@@ -99,7 +101,7 @@ export const FieldForm: React.FC<Props> = ({
               })}
               defaultValue={values?.referTo}
             >
-              <option disabled>選択してください</option>
+              <option disabled>{t('pleaseSelect')}</option>
               {allSchema.map((s) => (
                 <option key={s.id} value={s.id}>
                   {s.name}
@@ -111,13 +113,13 @@ export const FieldForm: React.FC<Props> = ({
         )}
         <FormControl isInvalid={!!errors.required}>
           <Checkbox name="required" id="required" ref={register()}>
-            必須
+            {t('required')}
           </Checkbox>
           <FormErrorMessage>{errors.type?.message}</FormErrorMessage>
         </FormControl>
         {type === 'text' && (
           <FormControl isInvalid={!!errors.pattern}>
-            <FormLabel htmlFor="pattern">パターン(正規表現)</FormLabel>
+            <FormLabel htmlFor="pattern">{t('pattern')}</FormLabel>
             <InputGroup>
               <InputLeftElement>/</InputLeftElement>
               <Input
@@ -133,7 +135,7 @@ export const FieldForm: React.FC<Props> = ({
         )}
         {type === 'number' && (
           <FormControl isInvalid={!!errors.min}>
-            <FormLabel htmlFor="min">最小値</FormLabel>
+            <FormLabel htmlFor="min">{t('min')}</FormLabel>
             <InputNumber
               control={control}
               name="min"
@@ -145,7 +147,7 @@ export const FieldForm: React.FC<Props> = ({
         )}
         {type === 'number' && (
           <FormControl isInvalid={!!errors.max}>
-            <FormLabel htmlFor="max">最大値</FormLabel>
+            <FormLabel htmlFor="max">{t('max')}</FormLabel>
             <InputNumber
               control={control}
               name="max"
@@ -156,7 +158,7 @@ export const FieldForm: React.FC<Props> = ({
           </FormControl>
         )}
         <FormControl isInvalid={!!errors.description}>
-          <FormLabel htmlFor="description">注釈</FormLabel>
+          <FormLabel htmlFor="description">{t('description')}</FormLabel>
           <Input
             name="description"
             id="description"
@@ -172,7 +174,7 @@ export const FieldForm: React.FC<Props> = ({
           isLoading={formState.isSubmitting}
           type="submit"
         >
-          {isNew ? '作成' : '保存'}
+          {isNew ? t('create') : t('save')}
         </Button>
       </Stack>
     </Stack>

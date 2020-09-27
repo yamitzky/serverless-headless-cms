@@ -6,6 +6,7 @@ import { Section } from '~/components/molecules/Section'
 import { useToast } from '@chakra-ui/core'
 import { useMemberActions, useMembers } from '~/hooks/member'
 import { MemberForm } from '~/components/organisms/MemberForm'
+import { useI18n } from '~/hooks/i18n'
 
 const AdminMemberNewPage: React.FC = () => {
   const router = useRouter()
@@ -14,25 +15,26 @@ const AdminMemberNewPage: React.FC = () => {
   const { add } = useMemberActions()
   const { members } = useMembers(id)
   const toast = useToast()
+  const { t } = useI18n()
 
   return (
     <AdminTemplate
       sidebar={<Sidebar />}
       breadcrumbs={[
         {
-          title: 'ホーム',
+          title: t('home'),
           href: `/admin/apps/${id}`
         },
         {
-          title: 'ユーザー管理',
+          title: t('userManagement'),
           href: `/admin/apps/${id}/members`
         },
         {
-          title: '招待'
+          title: t('invitation')
         }
       ]}
     >
-      <Section title="招待">
+      <Section title={t('invitation')}>
         <MemberForm
           isNew
           currentIds={members.map((m) => m.id)}
@@ -40,7 +42,7 @@ const AdminMemberNewPage: React.FC = () => {
             const { id: uid, ...mem } = _mem
             await add(id, uid, mem)
             toast({
-              title: '招待されました',
+              title: t('invited'),
               status: 'success',
               duration: 2000
             })

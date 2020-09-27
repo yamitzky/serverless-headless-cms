@@ -17,8 +17,10 @@ import { SidebarGroup } from '~/components/molecules/SidebarGroup'
 import { SidebarItem } from '~/components/molecules/SidebarItem'
 import { FaEdit, FaLock, FaTable } from 'react-icons/fa'
 import { useAuthContext } from '~/hooks/auth'
+import { useI18n } from '~/hooks/i18n'
 
 export const Sidebar: React.FC = ({ ...props }) => {
+  const { t } = useI18n()
   const router = useRouter()
   const { app } = useAppContext()
   const { user } = useAuthContext()
@@ -67,7 +69,7 @@ export const Sidebar: React.FC = ({ ...props }) => {
           )}
         </MenuList>
       </Menu>
-      <SidebarGroup title="コンテンツ" icon={FaEdit}>
+      <SidebarGroup title={t('contents')} icon={FaEdit}>
         {app
           ? app.schemaOrder.map((id) => (
               <SidebarItem
@@ -76,7 +78,7 @@ export const Sidebar: React.FC = ({ ...props }) => {
                 action={
                   <IconButton
                     icon="add"
-                    aria-label="作成"
+                    aria-label={t('create')}
                     size="xs"
                     isRound
                     onClick={() =>
@@ -91,12 +93,12 @@ export const Sidebar: React.FC = ({ ...props }) => {
           : [0, 1, 2].map((i) => <Skeleton key={i} h="1.5em" w="100%" />)}
       </SidebarGroup>
       <SidebarGroup
-        title="スキーマ管理"
+        title={t('schemaManagement')}
         icon={FaTable}
         action={
           <IconButton
             icon="add"
-            aria-label="作成"
+            aria-label={t('create')}
             size="xs"
             isRound
             onClick={() => router.push(`/admin/apps/${app?.id}/schema/new`)}
@@ -111,20 +113,20 @@ export const Sidebar: React.FC = ({ ...props }) => {
             ))
           : [0, 1, 2].map((i) => <Skeleton key={i} h="1.5em" w="100%" />)}
       </SidebarGroup>
-      <SidebarGroup title="セキュリティ" icon={FaLock}>
+      <SidebarGroup title={t('security')} icon={FaLock}>
         <SidebarItem
           href={`/admin/apps/${app?.id}/members`}
           action={
             <IconButton
               icon="add"
-              aria-label="招待"
+              aria-label={t('invitation')}
               size="xs"
               isRound
               onClick={() => router.push(`/admin/apps/${app?.id}/members/new`)}
             />
           }
         >
-          ユーザー管理
+          {t('userManagement')}
         </SidebarItem>
       </SidebarGroup>
     </Stack>

@@ -15,29 +15,31 @@ import { Section } from '~/components/molecules/Section'
 import { EmptyCard } from '~/components/atoms/EmptyCard'
 import { useAuthContext } from '~/hooks/auth'
 import { useRouter } from 'next/router'
+import { useI18n } from '~/hooks/i18n'
 
 const AdminHomePage: React.FC = () => {
   const router = useRouter()
   const { user, loading: uloading } = useAuthContext()
   const { apps, loading, error } = useApps(user?.uid)
+  const { t } = useI18n()
   return (
     <AdminTemplate
       breadcrumbs={[
         {
-          title: 'ホーム'
+          title: t('home')
         }
       ]}
     >
       <Section
         title={
           <Stack direction="row">
-            <Box flex={1}>プロジェクト一覧</Box>
+            <Box flex={1}>{t('projectList')}</Box>
             <Button
               variant="outline"
               variantColor="cyan"
               onClick={() => router.push(`/admin/apps/new`)}
             >
-              作成
+              {t('create')}
             </Button>
           </Stack>
         }
@@ -80,17 +82,19 @@ const AdminHomePage: React.FC = () => {
           </Grid>
         ) : (
           <EmptyCard>
-            まだプロジェクトはありません。
-            <Link href="/admin/apps/new">プロジェクトを作成</Link>
-            してみましょう。
+            {t(
+              'emptyProject',
+              <Link href="/admin/apps/new">{t('createProject')}</Link>
+            )}
           </EmptyCard>
         )}
         <EmptyCard mt={8}>
-          他のプロジェクトに参加するには、あなたのユーザーID
-          <Code mx={2} fontWeight="bold">
-            {user?.uid}
-          </Code>
-          を伝えてください
+          {t(
+            'joinProject',
+            <Code mx={2} fontWeight="bold">
+              {user?.uid}
+            </Code>
+          )}
         </EmptyCard>
       </Section>
     </AdminTemplate>

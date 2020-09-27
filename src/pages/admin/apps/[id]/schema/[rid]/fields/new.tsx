@@ -6,6 +6,7 @@ import { Sidebar } from '~/components/organisms/Sidebar'
 import { Section } from '~/components/molecules/Section'
 import { useToast } from '@chakra-ui/core'
 import { FieldForm } from '~/components/organisms/FieldForm'
+import { useI18n } from '~/hooks/i18n'
 
 const AdminFieldNewPage: React.FC = () => {
   const router = useRouter()
@@ -16,28 +17,29 @@ const AdminFieldNewPage: React.FC = () => {
 
   const { addField } = useAppActions()
   const toast = useToast()
+  const { t } = useI18n()
 
   return (
     <AdminTemplate
       sidebar={<Sidebar />}
       breadcrumbs={[
         {
-          title: 'ホーム',
+          title: t('home'),
           href: `/admin/apps/${id}`
         },
         {
-          title: 'スキーマ管理'
+          title: t('schemaManagement')
         },
         {
           title: schema?.name || '',
           href: `/admin/apps/${id}/schema/${rid}`
         },
         {
-          title: 'フィールド作成'
+          title: t('fieldCreation')
         }
       ]}
     >
-      <Section title="フィールドを作成">
+      <Section title={t('fieldCreation')}>
         {schema && app && (
           <FieldForm
             isNew
@@ -50,7 +52,7 @@ const AdminFieldNewPage: React.FC = () => {
               const { id: fid, ...f } = _f
               await addField(id, rid, fid!, f)
               toast({
-                title: 'フィールドを作成しました',
+                title: t('createdField'),
                 status: 'success',
                 duration: 2000
               })

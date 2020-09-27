@@ -11,6 +11,7 @@ import {
 } from '@chakra-ui/core'
 import { ResourceSchema } from '~/hooks/app'
 import { Confirm } from '~/components/molecules/Confirm'
+import { useI18n } from '~/hooks/i18n'
 
 type Values = ResourceSchema & { id?: string }
 
@@ -35,6 +36,7 @@ export const SchemaForm: React.FC<Props> = ({
   })
 
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const { t } = useI18n()
 
   return (
     <Stack onSubmit={handleSubmit(onSubmit)} as="form" spacing={8} {...props}>
@@ -48,7 +50,7 @@ export const SchemaForm: React.FC<Props> = ({
             onClose()
           }}
         >
-          削除しますか？
+          {t('confirmDelete')}
         </Confirm>
       )}
       <Stack spacing={4}>
@@ -69,7 +71,7 @@ export const SchemaForm: React.FC<Props> = ({
           </FormControl>
         )}
         <FormControl isInvalid={!!errors.name} isRequired={!isNew}>
-          <FormLabel htmlFor="name">表示名</FormLabel>
+          <FormLabel htmlFor="name">{t('displayName')}</FormLabel>
           <Input
             name="name"
             id="name"
@@ -87,11 +89,11 @@ export const SchemaForm: React.FC<Props> = ({
           isLoading={formState.isSubmitting}
           type="submit"
         >
-          {isNew ? '作成' : '保存'}
+          {isNew ? t('create') : t('save')}
         </Button>
         {onRemove && (
           <Button variantColor="red" ml={4} onClick={onOpen}>
-            削除
+            {t('delete')}
           </Button>
         )}
       </Stack>

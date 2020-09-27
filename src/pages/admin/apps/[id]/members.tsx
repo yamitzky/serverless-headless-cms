@@ -1,14 +1,15 @@
 import React from 'react'
 import { AdminTemplate } from '~/components/templates/AdminTemplate'
-import { fieldTypeLabel, useAppContext } from '~/hooks/app'
+import { useAppContext } from '~/hooks/app'
 import { useRouter } from 'next/router'
 import { Sidebar } from '~/components/organisms/Sidebar'
 import { Section } from '~/components/molecules/Section'
-import { Box, Button, Heading, Stack, useToast } from '@chakra-ui/core'
+import { Box, Button, Stack, useToast } from '@chakra-ui/core'
 import { ListItem } from '~/components/molecules/ListItem'
 import { EmptyCard } from '~/components/atoms/EmptyCard'
 import { Link } from '~/components/atoms/Link'
 import { useMemberActions, useMembers } from '~/hooks/member'
+import { useI18n } from '~/hooks/i18n'
 
 const AdminMembersPage: React.FC = () => {
   const router = useRouter()
@@ -17,30 +18,31 @@ const AdminMembersPage: React.FC = () => {
   const { members, loading, error } = useMembers(id)
   const { remove } = useMemberActions()
   const toast = useToast()
+  const { t } = useI18n()
 
   return (
     <AdminTemplate
       sidebar={<Sidebar />}
       breadcrumbs={[
         {
-          title: 'ホーム',
+          title: t('home'),
           href: `/admin/apps/${id}`
         },
         {
-          title: 'ユーザー管理'
+          title: t('userManagement')
         }
       ]}
     >
       <Section
         title={
           <Stack direction="row" justifyContent="space-between">
-            <Box flex={1}>ユーザー管理</Box>
+            <Box flex={1}>{t('userManagement')}</Box>
             <Button
               variant="outline"
               variantColor="cyan"
               onClick={() => router.push(`/admin/apps/${id}/members/new`)}
             >
-              招待
+              {t('invitation')}
             </Button>
           </Stack>
         }
@@ -57,7 +59,7 @@ const AdminMembersPage: React.FC = () => {
                   onRemove={async () => {
                     await remove(id, mem.id)
                     toast({
-                      title: '削除しました',
+                      title: t('deleted'),
                       status: 'success',
                       duration: 2000
                     })
@@ -66,12 +68,14 @@ const AdminMembersPage: React.FC = () => {
               ))
             ) : (
               <EmptyCard>
-                まだ「{app?.name}」に誰も招待していないようです。
-                共同編集するには、
-                <Link href={`/admin/apps/${id}/members/new`}>
-                  他のユーザーを招待
-                </Link>
-                してみましょう。
+                {t('noInvitation', {
+                  name: app?.name,
+                  link: (
+                    <Link href={`/admin/apps/${id}/members/new`}>
+                      {t('inviteOther')}
+                    </Link>
+                  )
+                })}
               </EmptyCard>
             ))}
         </Stack>

@@ -6,33 +6,34 @@ import { Section } from '~/components/molecules/Section'
 import { useToast } from '@chakra-ui/core'
 import { AppForm } from '~/components/organisms/AppForm'
 import { useAuthContext } from '~/hooks/auth'
+import { useI18n } from '~/hooks/i18n'
 
 const AdminSchemaNewPage: React.FC = () => {
   const router = useRouter()
+  const { t } = useI18n()
 
   const { add } = useAppActions()
-  const { user } = useAuthContext()
   const toast = useToast()
 
   return (
     <AdminTemplate
       breadcrumbs={[
         {
-          title: 'プロジェクト一覧',
+          title: t('projectList'),
           href: `/admin`
         },
         {
-          title: '作成'
+          title: t('create')
         }
       ]}
     >
-      <Section title="新規プロジェクト">
+      <Section title={t('projectCreation')}>
         <AppForm
           isNew
           onSubmit={async (app) => {
             const id = await add(app)
             toast({
-              title: '保存しました',
+              title: t('saved'),
               status: 'success',
               duration: 2000
             })

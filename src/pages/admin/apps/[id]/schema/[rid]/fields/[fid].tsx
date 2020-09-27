@@ -6,6 +6,7 @@ import { Sidebar } from '~/components/organisms/Sidebar'
 import { Section } from '~/components/molecules/Section'
 import { useToast } from '@chakra-ui/core'
 import { FieldForm } from '~/components/organisms/FieldForm'
+import { useI18n } from '~/hooks/i18n'
 
 const AdminFieldEditPage: React.FC = () => {
   const router = useRouter()
@@ -17,17 +18,18 @@ const AdminFieldEditPage: React.FC = () => {
 
   const { updateField } = useAppActions()
   const toast = useToast()
+  const { t } = useI18n()
 
   return (
     <AdminTemplate
       sidebar={<Sidebar />}
       breadcrumbs={[
         {
-          title: 'ホーム',
+          title: t('home'),
           href: `/admin/apps/${id}`
         },
         {
-          title: 'スキーマ管理'
+          title: t('schemaManagement')
         },
         {
           title: schema?.name || '',
@@ -49,7 +51,7 @@ const AdminFieldEditPage: React.FC = () => {
             onSubmit={async (f) => {
               await updateField(id, rid, fid, f)
               toast({
-                title: '保存しました',
+                title: t('saved'),
                 status: 'success',
                 duration: 2000
               })
