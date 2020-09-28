@@ -1,6 +1,7 @@
 import React from 'react'
 import Head from 'next/head'
 import {
+  AspectRatioBox,
   Box,
   Button,
   Divider,
@@ -49,12 +50,13 @@ const Home: React.FC = () => {
       <TopTemplate>
         <Box py={[0, '80px']}>
           <Stack alignItems="center">
-            <Stack flexDirection={['column', 'row']} spacing={10}>
-              <Text
-                fontSize={['3xl', '40px']}
-                fontWeight="bold"
-                alignSelf="center"
-              >
+            <Flex
+              flexDirection={['column', 'row']}
+              alignItems="center"
+              justifyContent="center"
+              w="100%"
+            >
+              <Text fontSize={['3xl', '3xl', '40px']} fontWeight="bold">
                 <Strong>Less</Strong> is more.
                 <br />
                 {t('topLead0', (t: string) => (
@@ -65,14 +67,22 @@ const Home: React.FC = () => {
                   <Strong>{t}</Strong>
                 ))}
               </Text>
-              <Box>
+              <AspectRatioBox
+                ml={[0, 8]}
+                mt={[6, 0]}
+                maxW={480}
+                ratio={480 / 290}
+                flex={1}
+                borderRadius={4}
+              >
                 <Image
                   boxShadow="sm"
                   borderWidth={1}
+                  objectFit="cover"
                   src="https://user-images.githubusercontent.com/623449/94364347-87372580-0103-11eb-80fd-341231ebe19c.gif"
                 />
-              </Box>
-            </Stack>
+              </AspectRatioBox>
+            </Flex>
             <Flex direction="row" marginTop={10}>
               <NextLink href="/admin" passHref>
                 <Button size="lg" variantColor="cyan" as="a">
