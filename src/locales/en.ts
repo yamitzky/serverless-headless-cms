@@ -52,6 +52,7 @@ export default {
   richtext: 'Rich text',
   reference: 'Reference',
   number: 'Number',
+  unknown: 'Unknown',
   visibility: 'Visibility',
   public: 'Public',
   private: 'Private',
@@ -104,9 +105,9 @@ export default {
   and other serverless solutions are planned.
   `,
   topConceptCustomizableMessage: `
-  Open source software! Fork and customize it as you like. A
-  more flexible plugin system will be implemented to fit to
-  existing operations and databases.
+  You can customize Firestore's pathes or use your favorite databases
+  to fit to existing operations. Plugin system for UI will be also implemented.
+  Of course, you can fork and edit it as you like becase it is an OSS!
   `,
   topConceptI18nMessage: `
   English and Japanese are supported.
