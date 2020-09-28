@@ -125,8 +125,7 @@ const Home: React.FC = () => {
               )}
             </Text>
             <List fontWeight="bold" styleType="disc">
-              <ListItem>Plugin system</ListItem>
-              <ListItem>Internationalization(i18n)</ListItem>
+              <ListItem>Plugin system(In progress)</ListItem>
               <ListItem>AWS support(Cognito, DynamoDB, S3)</ListItem>
               <ListItem>More field types(date, datetime, file)</ListItem>
               <ListItem>Flexible permissions</ListItem>
