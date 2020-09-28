@@ -91,6 +91,7 @@ export const Header: React.FC<Props> = ({ action, ...props }) => {
               variant="ghost"
               variantColor="cyan"
               size="sm"
+              p={[0, null]}
               onClick={() => router.push('/login')}
             >
               {t('login')}
