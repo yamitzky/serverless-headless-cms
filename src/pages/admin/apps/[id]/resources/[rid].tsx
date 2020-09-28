@@ -98,7 +98,7 @@ const AdminResourcesPage: React.FC = () => {
                     : null}
                   <Stack direction="row">
                     <Box w={40}>{t('visibility')}</Box>
-                    <Box flex={1}>{t(res.visibility)}</Box>
+                    <Box flex={1}>{t(res.visibility || 'unknwon')}</Box>
                   </Stack>
                 </ListItem>
               ))

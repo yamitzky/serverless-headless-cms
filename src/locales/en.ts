@@ -52,6 +52,7 @@ export default {
   richtext: 'Rich text',
   reference: 'Reference',
   number: 'Number',
+  unknown: 'Unknown',
   visibility: 'Visibility',
   public: 'Public',
   private: 'Private',

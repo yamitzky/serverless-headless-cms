@@ -4,6 +4,7 @@ import {
   useCollectionData,
   useDocumentData
 } from 'react-firebase-hooks/firestore'
+import { config } from '~/config'
 import { firebase } from '~/firebase'
 import { App, AppHooks, Field, ResourceSchema } from '~/hooks/app'
 import { useAppSelectors } from '~/hooks/app-selector'
@@ -18,29 +19,31 @@ export const useAppActions: AppHooks['useAppActions'] = () => {
     async (app: App) => {
       const { id } = await getApps().add({
         ...app,
-        created: firebase.firestore.FieldValue.serverTimestamp(),
-        schemaOrder: ['articles'],
-        schema: {
-          articles: {
-            name: t('article'),
-            fieldOrder: ['title', 'body'],
-            fields: {
-              title: {
-                name: t('title'),
-                type: 'text',
-                required: true
-              },
-              body: {
-                name: t('body'),
-                type: 'richtext'
+        [config.createdField]: firebase.firestore.FieldValue.serverTimestamp(),
+        schemaOrder: config.disableAppDefault ? [] : ['articles'],
+        schema: config.disableAppDefault
+          ? {}
+          : {
+              articles: {
+                name: t('article'),
+                fieldOrder: ['title', 'body'],
+                fields: {
+                  title: {
+                    name: t('title'),
+                    type: 'text',
+                    required: true
+                  },
+                  body: {
+                    name: t('body'),
+                    type: 'richtext'
+                  }
+                }
               }
-            }
-          }
-        },
+            },
         owner: user?.uid
       } as App)
       await getUserApp(id, user!.uid).set({
-        created: firebase.firestore.FieldValue.serverTimestamp()
+        [config.createdField]: firebase.firestore.FieldValue.serverTimestamp()
       })
       return id
     },

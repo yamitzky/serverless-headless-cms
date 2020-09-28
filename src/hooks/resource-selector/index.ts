@@ -4,7 +4,8 @@ import { firebase } from '~/firebase'
 export type ResourceSelectors = {
   getResources: (
     id: string,
-    rid: string
+    rid: string,
+    order?: string
   ) => firebase.firestore.CollectionReference<firebase.firestore.DocumentData>
   getResource: (
     id: string,

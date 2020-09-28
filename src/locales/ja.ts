@@ -51,6 +51,7 @@ export default {
   richtext: 'リッチテキスト',
   reference: '参照',
   number: '数字',
+  unknown: '不明',
   visibility: '公開設定',
   public: '公開',
   private: '非公開',

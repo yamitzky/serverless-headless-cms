@@ -3,7 +3,9 @@ import {
   useCollectionData,
   useDocumentData
 } from 'react-firebase-hooks/firestore'
+import { config } from '~/config'
 import { firebase } from '~/firebase'
+import { useAuthContext } from '~/hooks/auth'
 import { Resource, ResourceHooks } from '~/hooks/resource'
 import { useResourceSelectors } from '~/hooks/resource-selector'
 
@@ -27,6 +29,7 @@ export const useResource: ResourceHooks['useResource'] = (
 }
 
 export const useResourceActions: ResourceHooks['useResourceActions'] = () => {
+  const { user } = useAuthContext()
   const { getResource, getResources } = useResourceSelectors()
   const fetch = useCallback(
     async (id: string, rid: string, iid: string) => {
@@ -37,7 +40,7 @@ export const useResourceActions: ResourceHooks['useResourceActions'] = () => {
   )
   const fetchAll = useCallback(
     async (id: string, rid: string) => {
-      const ref = await getResources(id, rid).orderBy('published', 'desc').get()
+      const ref = await getResources(id, rid, config.publishedField).get()
       return ref.docs.map((doc) => ({ ...doc.data(), id: doc.id } as Resource))
     },
     [getResources]
@@ -48,21 +51,24 @@ export const useResourceActions: ResourceHooks['useResourceActions'] = () => {
         .doc()
         .set({
           ...res,
-          created: firebase.firestore.FieldValue.serverTimestamp(),
-          published: firebase.firestore.FieldValue.serverTimestamp(), // FIXME
-          updated: firebase.firestore.FieldValue.serverTimestamp()
+          [config.createdField]: firebase.firestore.FieldValue.serverTimestamp(),
+          [config.createdByField]: user?.uid,
+          [config.publishedField]: firebase.firestore.FieldValue.serverTimestamp(), // FIXME
+          [config.updatedField]: firebase.firestore.FieldValue.serverTimestamp(),
+          [config.updatedByField]: user?.uid
         })
     },
-    [getResources]
+    [getResources, user]
   )
   const update = useCallback(
     async (id: string, rid: string, iid: string, res: Resource) => {
       await getResource(id, rid, iid).update({
         ...res,
-        updated: firebase.firestore.FieldValue.serverTimestamp()
+        [config.updatedField]: firebase.firestore.FieldValue.serverTimestamp(),
+        [config.updatedByField]: user?.uid
       })
     },
-    [getResource]
+    [getResource, user]
   )
 
   return {
@@ -79,7 +85,7 @@ export const useResources: ResourceHooks['useResources'] = (
 ) => {
   const { getResources } = useResourceSelectors()
   const [resources, loading, error] = useCollectionData<Resource>(
-    id && rid ? getResources(id, rid).orderBy('published', 'desc') : null,
+    id && rid ? getResources(id, rid, config.publishedField) : null,
     {
       idField: 'id'
     }

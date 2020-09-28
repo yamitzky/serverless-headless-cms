@@ -7,17 +7,23 @@ import { AuthContext, useAuth } from '~/hooks/auth'
 import { useRouter } from 'next/router'
 import 'react-quill/dist/quill.snow.css'
 import { I18n } from '~/hooks/i18n'
+import { AppSelectorsContext } from '~/hooks/app-selector'
+import { AuthHooksContext } from '~/hooks/auth'
+import { MemberHooksContext } from '~/hooks/member'
+import { ResourceHooksContext } from '~/hooks/resource'
+import { ResourceSelectorsContext } from '~/hooks/resource-selector'
+import * as authHooks from '~/hooks/auth/firebase'
+import * as memberHooks from '~/hooks/member/firebase'
+import * as resourceHooks from '~/hooks/resource/firebase'
+import * as resourceSelectors from '~/hooks/resource-selector/firebase'
 import * as appHooks from '~/hooks/app/firebase'
 import * as appSelectors from '~/hooks/app-selector/firebase'
-import { AppSelectorsContext } from '~/hooks/app-selector'
-import * as authHooks from '~/hooks/auth/firebase'
-import { AuthHooksContext } from '~/hooks/auth'
-import * as memberHooks from '~/hooks/member/firebase'
-import { MemberHooksContext } from '~/hooks/member'
-import * as resourceHooks from '~/hooks/resource/firebase'
-import { ResourceHooksContext } from '~/hooks/resource'
-import * as resourceSelectors from '~/hooks/resource-selector/firebase'
-import { ResourceSelectorsContext } from '~/hooks/resource-selector'
+
+let plugins: any = null
+if (process.env.NEXT_PUBLIC_ENABLE_PLUGINS) {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  plugins = require('../../plugins')
+}
 
 const Wrapper: React.FC = ({ children }) => {
   const router = useRouter()
@@ -36,12 +42,24 @@ const Wrapper: React.FC = ({ children }) => {
 function App({ Component, pageProps }: AppProps): React.ReactNode {
   return (
     <I18n locale={pageProps.lng}>
-      <ResourceSelectorsContext.Provider value={resourceSelectors}>
-        <ResourceHooksContext.Provider value={resourceHooks}>
-          <MemberHooksContext.Provider value={memberHooks}>
-            <AuthHooksContext.Provider value={authHooks}>
-              <AppSelectorsContext.Provider value={appSelectors}>
-                <AppHooksContext.Provider value={appHooks}>
+      <ResourceSelectorsContext.Provider
+        value={{ ...resourceSelectors, ...plugins?.resourceSelectors }}
+      >
+        <ResourceHooksContext.Provider
+          value={{ ...resourceHooks, ...plugins?.resourceHooks }}
+        >
+          <MemberHooksContext.Provider
+            value={{ ...memberHooks, ...plugins?.memberHooks }}
+          >
+            <AuthHooksContext.Provider
+              value={{ ...authHooks, ...plugins?.authHooks }}
+            >
+              <AppSelectorsContext.Provider
+                value={{ ...appSelectors, ...plugins?.appSelectors }}
+              >
+                <AppHooksContext.Provider
+                  value={{ ...appHooks, ...plugins?.appHooks }}
+                >
                   <Wrapper>
                     <ThemeProvider theme={theme}>
                       <CSSReset />

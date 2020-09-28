@@ -3,6 +3,7 @@ import {
   useCollectionData,
   useDocumentData
 } from 'react-firebase-hooks/firestore'
+import { config } from '~/config'
 import { firebase } from '~/firebase'
 import { useAppSelectors } from '~/hooks/app-selector'
 import { Member, MemberHooks } from '~/hooks/member'
@@ -31,10 +32,10 @@ export const useMemberActions: MemberHooks['useMemberActions'] = () => {
     async (id: string, uid: string, mem: Omit<Member, 'id'>) => {
       await getMembership(id, uid).set({
         ...mem,
-        created: firebase.firestore.FieldValue.serverTimestamp()
+        [config.createdField]: firebase.firestore.FieldValue.serverTimestamp()
       })
       await getUserApp(id, uid).set({
-        created: firebase.firestore.FieldValue.serverTimestamp()
+        [config.createdField]: firebase.firestore.FieldValue.serverTimestamp()
       })
     },
     [getMembership, getUserApp]
@@ -63,7 +64,7 @@ export const useMemberActions: MemberHooks['useMemberActions'] = () => {
 export const useMembers: MemberHooks['useMembers'] = (id: string) => {
   const { getMemberships } = useAppSelectors()
   const [members, loading, error] = useCollectionData<Member>(
-    id ? getMemberships(id).orderBy('created', 'desc') : null,
+    id ? getMemberships(id).orderBy(config.createdField, 'desc') : null,
     {
       idField: 'id'
     }

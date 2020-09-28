@@ -1,38 +1,37 @@
 import { useCallback } from 'react'
 import { firebase } from '~/firebase'
 import { AppSelectors } from '~/hooks/app-selector'
+import templite from 'templite'
+import { config } from '~/config'
 
 export function useAppSelectors(): AppSelectors {
   const getMemberships = useCallback(
     (id: string) =>
-      firebase
-        .firestore()
-        .collection('memberships')
-        .doc(id)
-        .collection('users'),
+      firebase.firestore().collection(templite(config.membershipsPath, { id })),
     []
   )
   const getMembership = useCallback(
-    (id: string, uid: string) => getMemberships(id).doc(uid),
-    [getMemberships]
-  )
-  const getApps = useCallback(
-    () => firebase.firestore().collection('applications'),
+    (id: string, uid: string) =>
+      firebase.firestore().doc(templite(config.membershipPath, { id, uid })),
     []
   )
-  const getApp = useCallback((id: string) => getApps().doc(id), [getApps])
+  const getApps = useCallback(
+    () => firebase.firestore().collection(config.appsPath),
+    []
+  )
+  const getApp = useCallback(
+    (id: string) => firebase.firestore().doc(templite(config.appPath, { id })),
+    []
+  )
   const getUserApps = useCallback(
     (uid: string) =>
-      firebase
-        .firestore()
-        .collection('users')
-        .doc(uid)
-        .collection('applications'),
+      firebase.firestore().collection(templite(config.userAppsPath, { uid })),
     []
   )
   const getUserApp = useCallback(
-    (id: string, uid: string) => getUserApps(uid).doc(id),
-    [getUserApps]
+    (id: string, uid: string) =>
+      firebase.firestore().doc(templite(config.userAppPath, { id, uid })),
+    []
   )
   const getAppsByIds = useCallback(
     (appIds: string[]) =>
