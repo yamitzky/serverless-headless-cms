@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import React from 'react'
 import { ThemeProvider, CSSReset } from '@chakra-ui/core'
 import { AppProps } from 'next/app'
@@ -18,12 +19,7 @@ import * as resourceHooks from '~/hooks/resource/firebase'
 import * as resourceSelectors from '~/hooks/resource-selector/firebase'
 import * as appHooks from '~/hooks/app/firebase'
 import * as appSelectors from '~/hooks/app-selector/firebase'
-
-let plugins: any = null
-if (process.env.NEXT_PUBLIC_ENABLE_PLUGINS) {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  plugins = require('../../plugins')
-}
+const plugins = require('@plugins')
 
 const Wrapper: React.FC = ({ children }) => {
   const router = useRouter()
