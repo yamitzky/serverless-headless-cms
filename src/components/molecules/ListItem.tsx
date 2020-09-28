@@ -3,6 +3,7 @@ import {
   CloseButton,
   Heading,
   Stack,
+  StackProps,
   useDisclosure
 } from '@chakra-ui/core'
 import React from 'react'
@@ -15,7 +16,7 @@ type Props = {
   subtitle?: React.ReactNode
   href?: string
   onRemove?: () => void
-}
+} & StackProps
 
 export const ListItem: React.FC<Props> = ({
   title,

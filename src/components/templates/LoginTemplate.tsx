@@ -16,7 +16,7 @@ export const LoginTemplate: React.FC<Props> = ({ children, title }) => {
       overflow="scroll"
       color="gray.700"
     >
-      <Stack spacing={4} maxW={600} w="100%" mx="auto" py={8}>
+      <Stack spacing={4} maxW={600} w="100%" mx="auto" py={8} px={2}>
         <Heading as="h1" textAlign="center">
           <Link href="/" textDecor="none">
             Serverless Headless CMS

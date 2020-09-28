@@ -59,7 +59,7 @@ const AdminResourcesPage: React.FC = () => {
       <Section
         title={
           <Stack direction="row" justifyContent="space-between">
-            <Box>{t('listOf', schema?.name)}</Box>
+            <Box>{t('listOf', schema?.name || '')}</Box>
             <Button
               variant="outline"
               variantColor="cyan"
@@ -85,7 +85,7 @@ const AdminResourcesPage: React.FC = () => {
                   {schema
                     ? schema.fieldOrder.map((fid) => (
                         <Stack key={fid} direction="row">
-                          <Box w={40}>{schema.fields[fid].name}</Box>
+                          <Box w={[20, 40]}>{schema.fields[fid].name}</Box>
                           <Box flex={1} maxH={150} overflow="scroll">
                             {schema.fields[fid].type === 'richtext'
                               ? (res[fid] as string)?.replace(/<[^>]+>/g, ' ')
@@ -97,7 +97,7 @@ const AdminResourcesPage: React.FC = () => {
                       ))
                     : null}
                   <Stack direction="row">
-                    <Box w={40}>{t('visibility')}</Box>
+                    <Box w={[20, 40]}>{t('visibility')}</Box>
                     <Box flex={1}>{t(res.visibility || 'unknwon')}</Box>
                   </Stack>
                 </ListItem>

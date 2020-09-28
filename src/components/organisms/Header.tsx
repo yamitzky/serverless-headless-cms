@@ -4,7 +4,6 @@ import {
   Button,
   Flex,
   FlexProps,
-  Icon,
   Link as ChakraLink,
   Menu,
   MenuButton,
@@ -21,7 +20,11 @@ import NextLink from 'next/link'
 import { useRouter } from 'next/router'
 import { useI18n } from '~/hooks/i18n'
 
-export const Header: React.FC<FlexProps> = ({ ...props }) => {
+type Props = {
+  action?: React.ReactNode
+} & FlexProps
+
+export const Header: React.FC<Props> = ({ action, ...props }) => {
   const { t } = useI18n()
   const router = useRouter()
   const { user, loading } = useAuthContext()
@@ -31,7 +34,12 @@ export const Header: React.FC<FlexProps> = ({ ...props }) => {
   return (
     <Flex bg="gray.50" alignItems="center" py={2} px={4} {...props}>
       <Box flex="1" fontWeight="bold">
-        <Link href="/admin" textDecor="none">
+        {action && <Box display={['block', 'none']}>{action}</Box>}
+        <Link
+          href="/admin"
+          textDecor="none"
+          display={[action ? 'none' : 'block', 'block']}
+        >
           Serverless Headless CMS
         </Link>
       </Box>
@@ -61,7 +69,7 @@ export const Header: React.FC<FlexProps> = ({ ...props }) => {
                   size="sm"
                 />
               </MenuButton>
-              <MenuList>
+              <MenuList placement="bottom-end">
                 <MenuItem onClick={() => router.push('/admin')}>
                   {t('projectList')}
                 </MenuItem>
@@ -83,6 +91,7 @@ export const Header: React.FC<FlexProps> = ({ ...props }) => {
               variant="ghost"
               variantColor="cyan"
               size="sm"
+              p={[0, null]}
               onClick={() => router.push('/login')}
             >
               {t('login')}

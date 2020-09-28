@@ -45,7 +45,10 @@ const AdminHomePage: React.FC = () => {
         }
       >
         {uloading || loading ? (
-          <Grid templateColumns="repeat(3, 1fr)" gap={6}>
+          <Grid
+            templateColumns={['repeat(1, 1fr)', 'repeat(3, 1fr)']}
+            gap={[3, 6]}
+          >
             {[0, 1, 2].map((i) => (
               <Box
                 key={i}
@@ -62,7 +65,10 @@ const AdminHomePage: React.FC = () => {
             ))}
           </Grid>
         ) : apps.length ? (
-          <Grid templateColumns="repeat(3, 1fr)" gap={6}>
+          <Grid
+            templateColumns={['repeat(1, 1fr)', 'repeat(3, 1fr)']}
+            gap={[3, 6]}
+          >
             {apps.map((app) => (
               <Link
                 textDecor="none"
