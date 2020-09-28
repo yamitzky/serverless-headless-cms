@@ -47,10 +47,14 @@ const Home: React.FC = () => {
       </Head>
 
       <TopTemplate>
-        <Box py="80px">
+        <Box py={[0, '80px']}>
           <Stack alignItems="center">
-            <Stack direction="row" spacing={10}>
-              <Text fontSize="40px" fontWeight="bold" alignSelf="center">
+            <Stack flexDirection={['column', 'row']} spacing={10}>
+              <Text
+                fontSize={['3xl', '40px']}
+                fontWeight="bold"
+                alignSelf="center"
+              >
                 <Strong>Less</Strong> is more.
                 <br />
                 {t('topLead0', (t: string) => (
@@ -89,10 +93,14 @@ const Home: React.FC = () => {
               </Button>
             </Flex>
           </Stack>
-          <Divider my={20} />
+          <Divider my={[10, 20]} />
           <Stack alignItems="center" spacing={8}>
             <Heading color="cyan.600">Concept</Heading>
-            <Grid templateColumns="repeat(3, 1fr)" gap={10} maxW={960}>
+            <Grid
+              templateColumns={['repeat(1, 1fr)', 'repeat(3, 1fr)']}
+              gap={10}
+              maxW={960}
+            >
               <Stack minW="280px">
                 <Heading as="h3" size="lg" color="cyan.800">
                   Serverless
@@ -113,7 +121,7 @@ const Home: React.FC = () => {
               </Stack>
             </Grid>
           </Stack>
-          <Divider my={20} />
+          <Divider my={[10, 20]} />
           <Stack alignItems="center" spacing={8}>
             <Heading color="cyan.600">Roadmap</Heading>
             <Text>

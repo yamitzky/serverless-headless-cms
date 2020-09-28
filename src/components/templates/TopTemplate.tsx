@@ -8,7 +8,14 @@ export const TopTemplate: React.FC<Props> = ({ children, ...props }) => {
   return (
     <Flex h="100vh" direction="column" color="gray.700" {...props}>
       <Header boxShadow="md" zIndex={'sticky' as any} />
-      <Box flex={1} h="100%" overflow="scroll" py={6} px={8}>
+      <Box
+        flex={1}
+        h="100%"
+        overflow="scroll"
+        py={[4, 6]}
+        px={[4, 8]}
+        pb={[10, 6]}
+      >
         {children}
       </Box>
     </Flex>

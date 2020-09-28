@@ -11,11 +11,11 @@ export const Section: React.FC<Props> = ({ children, title, ...props }) => {
       bg="white"
       shadow="md"
       borderWidth="1px"
-      p={6}
-      spacing={8}
+      p={[3, 6]}
+      spacing={[4, 8]}
       {...props}
     >
-      {title && <Heading>{title}</Heading>}
+      {title && <Heading fontSize={['2xl', '3xl']}>{title}</Heading>}
       <Box>{children}</Box>
     </Stack>
   )
