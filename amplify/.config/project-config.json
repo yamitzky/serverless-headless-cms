@@ -1,0 +1,17 @@
+{
+  "projectName": "serverlessheadlesscm",
+  "version": "3.0",
+  "frontend": "javascript",
+  "javascript": {
+    "framework": "react",
+    "config": {
+      "SourceDir": "src",
+      "DistributionDir": "out",
+      "BuildCommand": "yarn build:export",
+      "StartCommand": "yarn start"
+    }
+  },
+  "providers": [
+    "awscloudformation"
+  ]
+}

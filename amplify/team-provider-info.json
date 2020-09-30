@@ -1,0 +1,22 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-serverlessheadlesscm-dev-63511-authRole",
+      "UnauthRoleArn": "arn:aws:iam::210324442282:role/amplify-serverlessheadlesscm-dev-63511-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::210324442282:role/amplify-serverlessheadlesscm-dev-63511-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-serverlessheadlesscm-dev-63511-deployment",
+      "UnauthRoleName": "amplify-serverlessheadlesscm-dev-63511-unauthRole",
+      "StackName": "amplify-serverlessheadlesscm-dev-63511",
+      "StackId": "arn:aws:cloudformation:us-east-1:210324442282:stack/amplify-serverlessheadlesscm-dev-63511/d3ea4250-0364-11eb-a566-0a9564c9a859",
+      "AmplifyAppId": "d3kxaiym1tmx7l"
+    },
+    "categories": {
+      "auth": {
+        "serverlessheadlesscm6cda132f": {
+          "hostedUIProviderCreds": "[{\"ProviderName\":\"Google\",\"client_id\":\"632282628233-qujsni4kshvdfjsgtf6gslvfiskfrba7.apps.googleusercontent.com\",\"client_secret\":\"Zuyt2u1rZAX4vs8JFIpgBxz3\"}]"
+        }
+      }
+    }
+  }
+}

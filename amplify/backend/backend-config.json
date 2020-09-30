@@ -1,0 +1,10 @@
+{
+  "auth": {
+    "serverlessheadlesscm6cda132f": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false
+    }
+  }
+}
