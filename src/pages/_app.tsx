@@ -13,12 +13,18 @@ import { AuthHooksContext } from '~/hooks/auth'
 import { MemberHooksContext } from '~/hooks/member'
 import { ResourceHooksContext } from '~/hooks/resource'
 import { ResourceSelectorsContext } from '~/hooks/resource-selector'
-import * as authHooks from '~/hooks/auth/firebase'
+// import * as authHooks from '~/hooks/auth/firebase'
+import * as authHooks from '~/hooks/auth/amplify'
 import * as memberHooks from '~/hooks/member/firebase'
 import * as resourceHooks from '~/hooks/resource/firebase'
 import * as resourceSelectors from '~/hooks/resource-selector/firebase'
 import * as appHooks from '~/hooks/app/firebase'
 import * as appSelectors from '~/hooks/app-selector/firebase'
+
+import awsconfig from '~/aws-exports'
+import Amplify from 'aws-amplify'
+Amplify.configure(awsconfig)
+
 const plugins = require('@plugins')
 
 const Wrapper: React.FC = ({ children }) => {

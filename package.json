@@ -13,6 +13,7 @@
     "@chakra-ui/core": "^0.8.0",
     "@emotion/core": "^10.0.35",
     "@emotion/styled": "^10.0.27",
+    "aws-amplify": "^3.3.2",
     "emotion-theming": "^10.0.27",
     "firebase": "^7.21.0",
     "next": "9.5.3",

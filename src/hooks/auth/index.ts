@@ -1,7 +1,6 @@
 import React, { useContext } from 'react'
 
 type Error = {
-  code: string
   message: string
 }
 
