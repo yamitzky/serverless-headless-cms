@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 // Welcome contribution!!!!!!!!!!!!!!!!!
 export default {
+  createdAt: 'Created At',
+  updatedAt: 'Updated At',
   home: 'Home',
   cancel: 'Cancel',
   delete: 'Delete',

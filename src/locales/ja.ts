@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 export default {
+  createdAt: '作成日',
+  updatedAt: '更新日',
   home: 'ホーム',
   cancel: 'キャンセル',
   delete: '削除',
