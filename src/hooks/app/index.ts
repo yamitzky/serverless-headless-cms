@@ -1,12 +1,13 @@
 import React, { useContext } from 'react'
 
-// TODO: richtext, number, date, datetime, select, boolean, etc...
+// TODO: date, datetime, select, boolean, etc...
 export const fieldTypes = [
   'text',
   'longtext',
   'richtext',
   'reference',
-  'number'
+  'number',
+  'file'
 ] as const
 export type FieldType = typeof fieldTypes[number]
 

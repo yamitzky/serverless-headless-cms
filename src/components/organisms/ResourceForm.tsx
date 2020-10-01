@@ -16,6 +16,7 @@ import { Resource, visibilities } from '~/hooks/resource'
 import dynamic from 'next/dynamic'
 import { InputNumber } from '~/components/atoms/InputNumber'
 import { useI18n } from '~/hooks/i18n'
+import { InputFile } from '~/components/atoms/InputFile'
 const ReactQuill = dynamic(import('react-quill'), {
   ssr: false
 })
@@ -143,6 +144,16 @@ export const ResourceForm: React.FC<Props> = ({
                   required: field.required,
                   min: field.min,
                   max: field.max
+                }}
+              />
+            ) : field.type === 'file' ? (
+              <InputFile
+                name={field.id}
+                id={field.id}
+                control={control}
+                defaultValue={values?.[field.id] || ''}
+                rules={{
+                  required: field.required
                 }}
               />
             ) : (

@@ -19,7 +19,8 @@ import * as resourceHooks from '~/hooks/resource/firebase'
 import * as resourceSelectors from '~/hooks/resource-selector/firebase'
 import * as appHooks from '~/hooks/app/firebase'
 import * as appSelectors from '~/hooks/app-selector/firebase'
-import { config } from '~/config'
+import * as fileHooks from '~/hooks/file/firebase'
+import { FileHooksContext } from '~/hooks/file'
 const plugins = require('@plugins')
 
 const Wrapper: React.FC = ({ children }) => {
@@ -39,36 +40,40 @@ const Wrapper: React.FC = ({ children }) => {
 function App({ Component, pageProps }: AppProps): React.ReactNode {
   return (
     <I18n locale={pageProps.lng}>
-      <ResourceSelectorsContext.Provider
-        value={{ ...resourceSelectors, ...plugins?.resourceSelectors }}
+      <FileHooksContext.Provider
+        value={{ ...fileHooks, ...plugins?.fileHooks }}
       >
-        <ResourceHooksContext.Provider
-          value={{ ...resourceHooks, ...plugins?.resourceHooks }}
+        <ResourceSelectorsContext.Provider
+          value={{ ...resourceSelectors, ...plugins?.resourceSelectors }}
         >
-          <MemberHooksContext.Provider
-            value={{ ...memberHooks, ...plugins?.memberHooks }}
+          <ResourceHooksContext.Provider
+            value={{ ...resourceHooks, ...plugins?.resourceHooks }}
           >
-            <AuthHooksContext.Provider
-              value={{ ...authHooks, ...plugins?.authHooks }}
+            <MemberHooksContext.Provider
+              value={{ ...memberHooks, ...plugins?.memberHooks }}
             >
-              <AppSelectorsContext.Provider
-                value={{ ...appSelectors, ...plugins?.appSelectors }}
+              <AuthHooksContext.Provider
+                value={{ ...authHooks, ...plugins?.authHooks }}
               >
-                <AppHooksContext.Provider
-                  value={{ ...appHooks, ...plugins?.appHooks }}
+                <AppSelectorsContext.Provider
+                  value={{ ...appSelectors, ...plugins?.appSelectors }}
                 >
-                  <Wrapper>
-                    <ThemeProvider theme={theme}>
-                      <CSSReset />
-                      <Component {...pageProps} />
-                    </ThemeProvider>
-                  </Wrapper>
-                </AppHooksContext.Provider>
-              </AppSelectorsContext.Provider>
-            </AuthHooksContext.Provider>
-          </MemberHooksContext.Provider>
-        </ResourceHooksContext.Provider>
-      </ResourceSelectorsContext.Provider>
+                  <AppHooksContext.Provider
+                    value={{ ...appHooks, ...plugins?.appHooks }}
+                  >
+                    <Wrapper>
+                      <ThemeProvider theme={theme}>
+                        <CSSReset />
+                        <Component {...pageProps} />
+                      </ThemeProvider>
+                    </Wrapper>
+                  </AppHooksContext.Provider>
+                </AppSelectorsContext.Provider>
+              </AuthHooksContext.Provider>
+            </MemberHooksContext.Provider>
+          </ResourceHooksContext.Provider>
+        </ResourceSelectorsContext.Provider>
+      </FileHooksContext.Provider>
     </I18n>
   )
 }
