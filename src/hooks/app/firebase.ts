@@ -20,22 +20,43 @@ export const useAppActions: AppHooks['useAppActions'] = () => {
       const { id } = await getApps().add({
         ...app,
         [config.createdField]: firebase.firestore.FieldValue.serverTimestamp(),
-        schemaOrder: config.disableAppDefault ? [] : ['articles'],
+        schemaOrder: config.disableAppDefault ? [] : ['articles', 'files'],
         schema: config.disableAppDefault
           ? {}
           : {
               articles: {
                 name: t('article'),
-                fieldOrder: ['title', 'body'],
+                fieldOrder: ['title', 'thumbnail', 'body'],
                 fields: {
                   title: {
                     name: t('title'),
                     type: 'text',
                     required: true
                   },
+                  thumbnail: {
+                    name: t('thumbnail'),
+                    type: 'file',
+                    required: true
+                  },
                   body: {
                     name: t('body'),
                     type: 'richtext'
+                  }
+                }
+              },
+              files: {
+                name: t('file'),
+                fieldOrder: ['displayName', 'file'],
+                fields: {
+                  displayName: {
+                    name: t('displayName'),
+                    type: 'text',
+                    required: true
+                  },
+                  file: {
+                    name: t('file'),
+                    type: 'file',
+                    required: true
                   }
                 }
               }

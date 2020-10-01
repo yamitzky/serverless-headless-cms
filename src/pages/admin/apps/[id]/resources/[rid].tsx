@@ -5,11 +5,12 @@ import { Resource, useResourceActions, useResources } from '~/hooks/resource'
 import { useRouter } from 'next/router'
 import { Sidebar } from '~/components/organisms/Sidebar'
 import { Section } from '~/components/molecules/Section'
-import { Box, Button, Skeleton, Spinner, Stack } from '@chakra-ui/core'
+import { Box, Button, Image, Skeleton, Spinner, Stack } from '@chakra-ui/core'
 import { ListItem } from '~/components/molecules/ListItem'
 import { EmptyCard } from '~/components/atoms/EmptyCard'
 import { Link } from '~/components/atoms/Link'
 import { useI18n } from '~/hooks/i18n'
+import { ExternalLink } from '~/components/molecules/ExternalLink'
 
 const AdminResourcesPage: React.FC = () => {
   const router = useRouter()
@@ -96,11 +97,18 @@ const AdminResourcesPage: React.FC = () => {
                       <Stack key={fid} direction="row">
                         <Box w={[20, 40]}>{schema.fields[fid].name}</Box>
                         <Box flex={1} maxH={150} overflow="scroll">
-                          {schema.fields[fid].type === 'richtext'
-                            ? (res[fid] as string)?.replace(/<[^>]+>/g, ' ')
-                            : schema.fields[fid].type === 'reference'
-                            ? reference[res[fid]] || res[fid]
-                            : res[fid]}
+                          {schema.fields[fid].type === 'richtext' ? (
+                            (res[fid] as string)?.replace(/<[^>]+>/g, ' ')
+                          ) : schema.fields[fid].type === 'reference' ? (
+                            reference[res[fid]] || res[fid]
+                          ) : schema.fields[fid].type === 'file' ? (
+                            <Box>
+                              <Image src={res[fid]} maxH={100} w="auto" />
+                              <ExternalLink href={res[fid]}>URL</ExternalLink>
+                            </Box>
+                          ) : (
+                            res[fid]
+                          )}
                         </Box>
                       </Stack>
                     ))
