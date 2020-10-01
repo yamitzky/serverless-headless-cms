@@ -11,6 +11,8 @@ import { EmptyCard } from '~/components/atoms/EmptyCard'
 import { Link } from '~/components/atoms/Link'
 import { useI18n } from '~/hooks/i18n'
 import { ExternalLink } from '~/components/molecules/ExternalLink'
+import { format } from 'date-fns'
+import { config } from '~/config'
 
 const AdminResourcesPage: React.FC = () => {
   const router = useRouter()
@@ -116,6 +118,16 @@ const AdminResourcesPage: React.FC = () => {
                 <Stack direction="row">
                   <Box w={[20, 40]}>{t('visibility')}</Box>
                   <Box flex={1}>{t(res.visibility || 'unknwon')}</Box>
+                </Stack>
+                <Stack isInline fontSize="sm" color="gray.500" mt={2}>
+                  <Box>
+                    {t('updatedAt')}:
+                    {format(res[config.updatedField], 'yyyy-MM-dd H:mm')}
+                  </Box>
+                  <Box>
+                    {t('createdAt')}:
+                    {format(res[config.createdField], 'yyyy-MM-dd H:mm')}
+                  </Box>
                 </Stack>
               </ListItem>
             ))

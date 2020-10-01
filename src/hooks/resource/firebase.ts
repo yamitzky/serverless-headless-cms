@@ -22,7 +22,14 @@ export const useResource: ResourceHooks['useResource'] = (
     }
   )
   return {
-    resource,
+    resource: resource
+      ? {
+          ...resource,
+          [config.createdField]: resource[config.createdField]?.toDate(),
+          [config.updatedField]: resource[config.updatedField]?.toDate(),
+          [config.publishedField]: resource[config.publishedField]?.toDate()
+        }
+      : undefined,
     loading,
     error
   }
@@ -91,7 +98,13 @@ export const useResources: ResourceHooks['useResources'] = (
     }
   )
   return {
-    resources: resources || [],
+    resources:
+      resources?.map((r) => ({
+        ...r,
+        [config.createdField]: r[config.createdField]?.toDate(),
+        [config.updatedField]: r[config.updatedField]?.toDate(),
+        [config.publishedField]: r[config.publishedField]?.toDate()
+      })) || [],
     loading,
     error
   }
