@@ -102,7 +102,11 @@ const AdminSchemaEditPage: React.FC = () => {
                         )}
                         {schema.fields[fid].pattern && (
                           <Tag>
-                            {t('pattern')}: /{schema.fields[fid].pattern}/
+                            {t('pattern')}: /
+                            <Box display="inline" color="cyan.700">
+                              {schema.fields[fid].pattern}
+                            </Box>
+                            /
                           </Tag>
                         )}
                         {schema.fields[fid].min != null && (
@@ -115,8 +119,24 @@ const AdminSchemaEditPage: React.FC = () => {
                             {t('max')}: {schema.fields[fid].max}
                           </Tag>
                         )}
+                        {schema.fields[fid].minLength != null && (
+                          <Tag>
+                            {t('minLength')}: {schema.fields[fid].minLength}
+                          </Tag>
+                        )}
+                        {schema.fields[fid].maxLength != null && (
+                          <Tag>
+                            {t('maxLength')}: {schema.fields[fid].maxLength}
+                          </Tag>
+                        )}
                       </Stack>
                     </Stack>
+                    {schema.fields[fid].placeholder && (
+                      <Stack direction="row">
+                        <Box w={40}>{t('placeholder')}</Box>
+                        <Box>{schema.fields[fid].placeholder}</Box>
+                      </Stack>
+                    )}
                     {schema.fields[fid].description && (
                       <Stack direction="row">
                         <Box w={40}>{t('description')}</Box>

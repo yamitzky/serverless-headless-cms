@@ -5,7 +5,7 @@ import { Resource, useResourceActions, useResources } from '~/hooks/resource'
 import { useRouter } from 'next/router'
 import { Sidebar } from '~/components/organisms/Sidebar'
 import { Section } from '~/components/molecules/Section'
-import { Box, Button, Stack } from '@chakra-ui/core'
+import { Box, Button, Skeleton, Spinner, Stack } from '@chakra-ui/core'
 import { ListItem } from '~/components/molecules/ListItem'
 import { EmptyCard } from '~/components/atoms/EmptyCard'
 import { Link } from '~/components/atoms/Link'
@@ -73,47 +73,56 @@ const AdminResourcesPage: React.FC = () => {
         }
       >
         <Stack spacing={4}>
-          {!loading &&
-            (resources.length ? (
-              resources.map((res) => (
-                <ListItem
-                  title={res[schema?.fieldOrder[0]!] || res.id}
-                  subtitle={!!res[schema?.fieldOrder[0]!] && `ID: ${res.id}`}
-                  href={`/admin/apps/${id}/resources/${rid}/${res.id}`}
-                  key={res.id}
-                >
-                  {schema
-                    ? schema.fieldOrder.map((fid) => (
-                        <Stack key={fid} direction="row">
-                          <Box w={[20, 40]}>{schema.fields[fid].name}</Box>
-                          <Box flex={1} maxH={150} overflow="scroll">
-                            {schema.fields[fid].type === 'richtext'
-                              ? (res[fid] as string)?.replace(/<[^>]+>/g, ' ')
-                              : schema.fields[fid].type === 'reference'
-                              ? reference[res[fid]] || res[fid]
-                              : res[fid]}
-                          </Box>
-                        </Stack>
-                      ))
-                    : null}
-                  <Stack direction="row">
-                    <Box w={[20, 40]}>{t('visibility')}</Box>
-                    <Box flex={1}>{t(res.visibility || 'unknwon')}</Box>
-                  </Stack>
-                </ListItem>
-              ))
-            ) : (
-              <EmptyCard>
-                {t('emptyContent', {
-                  name: schema?.name,
-                  link: (
-                    <Link href={`/admin/apps/${id}/resources/${rid}/new`}>
-                      {t('createNew', schema?.name)}
-                    </Link>
-                  )
-                })}
-              </EmptyCard>
-            ))}
+          {loading ? (
+            [0, 1, 2].map((i) => (
+              <ListItem
+                title={(<Skeleton height="20px" width="200px" />) as any}
+                key={i}
+              >
+                <Skeleton height="20px" />
+                <Skeleton height="20px" />
+              </ListItem>
+            ))
+          ) : resources.length ? (
+            resources.map((res) => (
+              <ListItem
+                title={res[schema?.fieldOrder[0]!] || res.id}
+                subtitle={!!res[schema?.fieldOrder[0]!] && `ID: ${res.id}`}
+                href={`/admin/apps/${id}/resources/${rid}/${res.id}`}
+                key={res.id}
+              >
+                {schema
+                  ? schema.fieldOrder.map((fid) => (
+                      <Stack key={fid} direction="row">
+                        <Box w={[20, 40]}>{schema.fields[fid].name}</Box>
+                        <Box flex={1} maxH={150} overflow="scroll">
+                          {schema.fields[fid].type === 'richtext'
+                            ? (res[fid] as string)?.replace(/<[^>]+>/g, ' ')
+                            : schema.fields[fid].type === 'reference'
+                            ? reference[res[fid]] || res[fid]
+                            : res[fid]}
+                        </Box>
+                      </Stack>
+                    ))
+                  : null}
+                <Stack direction="row">
+                  <Box w={[20, 40]}>{t('visibility')}</Box>
+                  <Box flex={1}>{t(res.visibility || 'unknwon')}</Box>
+                </Stack>
+              </ListItem>
+            ))
+          ) : (
+            <EmptyCard>
+              {t('emptyContent', {
+                name: schema?.name,
+                link: (
+                  <Link href={`/admin/apps/${id}/resources/${rid}/new`}>
+                    {t('createNew', schema?.name)}
+                  </Link>
+                )
+              })}
+            </EmptyCard>
+          )}
         </Stack>
       </Section>
     </AdminTemplate>

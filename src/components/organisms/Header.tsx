@@ -19,6 +19,7 @@ import { FaGithub } from 'react-icons/fa'
 import NextLink from 'next/link'
 import { useRouter } from 'next/router'
 import { useI18n } from '~/hooks/i18n'
+import { config } from '~/config'
 
 type Props = {
   action?: React.ReactNode
@@ -40,20 +41,22 @@ export const Header: React.FC<Props> = ({ action, ...props }) => {
           textDecor="none"
           display={[action ? 'none' : 'block', 'block']}
         >
-          Serverless Headless CMS
+          {config.title}
         </Link>
       </Box>
       <Stack direction="row" alignItems="center" spacing={3} h="40px">
-        <Box color="gray.500">
-          <NextLink
-            href="https://github.com/yamitzky/serverless-headless-cms"
-            passHref
-          >
-            <ChakraLink isExternal>
-              <Box as={FaGithub} size="32px" />
-            </ChakraLink>
-          </NextLink>
-        </Box>
+        {!config.hideGitHubLogo && (
+          <Box color="gray.500">
+            <NextLink
+              href="https://github.com/yamitzky/serverless-headless-cms"
+              passHref
+            >
+              <ChakraLink isExternal>
+                <Box as={FaGithub} size="32px" />
+              </ChakraLink>
+            </NextLink>
+          </Box>
+        )}
         {!loading &&
           (user ? (
             <Menu>
@@ -70,9 +73,11 @@ export const Header: React.FC<Props> = ({ action, ...props }) => {
                 />
               </MenuButton>
               <MenuList placement="bottom-end">
-                <MenuItem onClick={() => router.push('/admin')}>
-                  {t('projectList')}
-                </MenuItem>
+                {!config.singleProject && (
+                  <MenuItem onClick={() => router.push('/admin')}>
+                    {t('projectList')}
+                  </MenuItem>
+                )}
                 <MenuItem
                   onClick={async () => {
                     await logout()

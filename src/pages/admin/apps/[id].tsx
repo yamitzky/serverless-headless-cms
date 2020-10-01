@@ -7,10 +7,14 @@ import { Box, List, ListItem, Stack } from '@chakra-ui/core'
 import { EmptyCard } from '~/components/atoms/EmptyCard'
 import { Link } from '~/components/atoms/Link'
 import { useI18n } from '~/hooks/i18n'
+import { useAuthContext } from '~/hooks/auth'
+import { config } from '~/config'
 
 const AdminAppPage: React.FC = () => {
   const { app, loading, error } = useAppContext()
   const { t } = useI18n()
+  const { user } = useAuthContext()
+
   return (
     <AdminTemplate
       sidebar={<Sidebar />}
@@ -41,9 +45,12 @@ const AdminAppPage: React.FC = () => {
                     >
                       {t('list')}
                     </Link>
-                    <Link href={`/admin/apps/${app.id}/schema/${rid}`} ml={2}>
-                      {t('schemaManagement')}
-                    </Link>
+                    {(config.schemaPermission === 'everyone' ||
+                      (user && app?.owner === user?.uid)) && (
+                      <Link href={`/admin/apps/${app.id}/schema/${rid}`} ml={2}>
+                        {t('schemaManagement')}
+                      </Link>
+                    )}
                   </ListItem>
                 ))}
               </List>

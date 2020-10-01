@@ -73,10 +73,13 @@ export const ResourceForm: React.FC<Props> = ({
             <FormLabel htmlFor={field.id}>{field.name}</FormLabel>
             {field.type === 'longtext' ? (
               <Textarea
+                placeholder={field.placeholder}
                 name={field.id}
                 id={field.id}
                 ref={register({
-                  required: field.required
+                  required: field.required,
+                  minLength: field.minLength,
+                  maxLength: field.maxLength
                 })}
                 defaultValue={values?.[field.id] || ''}
               />
@@ -86,6 +89,7 @@ export const ResourceForm: React.FC<Props> = ({
                 as={ReactQuill}
                 theme="snow"
                 name={field.id}
+                placeholder={field.placeholder}
                 id={field.id}
                 modules={{
                   toolbar: [
@@ -132,6 +136,7 @@ export const ResourceForm: React.FC<Props> = ({
               <InputNumber
                 name={field.id}
                 id={field.id}
+                placeholder={field.placeholder}
                 control={control}
                 defaultValue={values?.[field.id] || ''}
                 rules={{
@@ -144,9 +149,14 @@ export const ResourceForm: React.FC<Props> = ({
               <Input
                 name={field.id}
                 id={field.id}
+                placeholder={field.placeholder}
                 ref={register({
                   required: field.required,
-                  pattern: field.pattern ? new RegExp(field.pattern) : undefined
+                  pattern: field.pattern
+                    ? new RegExp(field.pattern)
+                    : undefined,
+                  minLength: field.minLength,
+                  maxLength: field.maxLength
                 })}
                 defaultValue={values?.[field.id] || ''}
               />

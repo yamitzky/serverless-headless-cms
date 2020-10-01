@@ -140,7 +140,7 @@ export const FieldForm: React.FC<Props> = ({
               control={control}
               name="min"
               id="min"
-              defaultValue={values?.min}
+              defaultValue={values?.min ?? null}
             />
             <FormErrorMessage>{errors.min?.message}</FormErrorMessage>
           </FormControl>
@@ -152,11 +152,45 @@ export const FieldForm: React.FC<Props> = ({
               control={control}
               name="max"
               id="max"
-              defaultValue={values?.max}
+              defaultValue={values?.max ?? null}
             />
             <FormErrorMessage>{errors.max?.message}</FormErrorMessage>
           </FormControl>
         )}
+        {(type === 'text' || type === 'longtext') && (
+          <FormControl isInvalid={!!errors.minLength}>
+            <FormLabel htmlFor="minLength">{t('minLength')}</FormLabel>
+            <InputNumber
+              control={control}
+              name="minLength"
+              id="minLength"
+              defaultValue={values?.minLength ?? null}
+            />
+            <FormErrorMessage>{errors.minLength?.message}</FormErrorMessage>
+          </FormControl>
+        )}
+        {(type === 'text' || type === 'longtext') && (
+          <FormControl isInvalid={!!errors.maxLength}>
+            <FormLabel htmlFor="maxLength">{t('maxLength')}</FormLabel>
+            <InputNumber
+              control={control}
+              name="maxLength"
+              id="maxLength"
+              defaultValue={values?.maxLength ?? null}
+            />
+            <FormErrorMessage>{errors.maxLength?.message}</FormErrorMessage>
+          </FormControl>
+        )}
+        <FormControl isInvalid={!!errors.placeholder}>
+          <FormLabel htmlFor="placeholder">{t('placeholder')}</FormLabel>
+          <Input
+            name="placeholder"
+            id="placeholder"
+            ref={register()}
+            defaultValue={values?.placeholder}
+          />
+          <FormErrorMessage>{errors.placeholder?.message}</FormErrorMessage>
+        </FormControl>
         <FormControl isInvalid={!!errors.description}>
           <FormLabel htmlFor="description">{t('description')}</FormLabel>
           <Input
@@ -165,7 +199,7 @@ export const FieldForm: React.FC<Props> = ({
             ref={register()}
             defaultValue={values?.description}
           />
-          <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
+          <FormErrorMessage>{errors.description?.message}</FormErrorMessage>
         </FormControl>
       </Stack>
       <Stack direction="row">
