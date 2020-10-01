@@ -7,13 +7,18 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
-
+      - name: Cache
+        id: cache
+        uses: actions/cache@v2
+        with:
+          key: _
+          path: node_modules
+      - name: Install
+        run: yarn
       - name: Build
         run: yarn build:export
-
       - name: Archive
         uses: actions/upload-artifact@master
         with:
