@@ -17,6 +17,7 @@ export type Field = {
   description?: string
   required?: boolean
   pattern?: string
+  placeholder?: string
 
   // for reference
   referTo?: string
@@ -24,6 +25,10 @@ export type Field = {
   // for number
   max?: number
   min?: number
+
+  // for text
+  minLength?: number
+  maxLength?: number
 }
 
 export type ResourceSchema = {
@@ -35,6 +40,7 @@ export type ResourceSchema = {
 export type App = {
   id: string
   name: string
+  owner: string
   schemaOrder: string[]
   schema: Record<string, ResourceSchema>
 }

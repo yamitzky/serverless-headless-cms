@@ -12,7 +12,24 @@ const defaultConfig = {
   appPath: 'applications/{{id}}',
   userAppsPath: 'users/{{uid}}/applications',
   userAppPath: 'users/{{uid}}/applications/{{id}}',
-  disableAppDefault: false
+  disableAppDefault: false,
+  title: 'Serverless Headless CMS',
+  hideGitHubLogo: false,
+  hideLandingPage: false,
+  authMethods: [
+    'google',
+    'facebook',
+    'twitter',
+    'github',
+    'email',
+    'phone',
+    'anonymous'
+  ],
+  singleProject: false,
+
+  // TODO: should be these fields project-level config?
+  schemaPermission: 'everyone',
+  securityPermission: 'everyone'
 }
 
 export type Config = Partial<typeof defaultConfig>

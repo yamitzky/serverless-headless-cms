@@ -19,6 +19,7 @@ import * as resourceHooks from '~/hooks/resource/firebase'
 import * as resourceSelectors from '~/hooks/resource-selector/firebase'
 import * as appHooks from '~/hooks/app/firebase'
 import * as appSelectors from '~/hooks/app-selector/firebase'
+import { config } from '~/config'
 const plugins = require('@plugins')
 
 const Wrapper: React.FC = ({ children }) => {

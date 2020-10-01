@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Head from 'next/head'
 import {
   AspectRatioBox,
@@ -21,6 +21,8 @@ import { FaGithub } from 'react-icons/fa'
 import { ExternalLink } from '~/components/molecules/ExternalLink'
 import { languages, defaultLanguage, useI18n } from '~/hooks/i18n'
 import { GetStaticPaths, GetStaticProps } from 'next'
+import { useRouter } from 'next/router'
+import { config as _config } from '~/config'
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   return {
@@ -39,6 +41,16 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 const Home: React.FC = () => {
   const { t } = useI18n()
+
+  const router = useRouter()
+  useEffect(() => {
+    if (_config.hideLandingPage) {
+      router.push('/admin')
+    }
+  })
+  if (_config.hideLandingPage) {
+    return <div />
+  }
 
   return (
     <div>
