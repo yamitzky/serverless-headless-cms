@@ -19,6 +19,8 @@ jobs:
         run: yarn
       - name: Build
         run: yarn build:export
+        env:
+          NEXT_PUBLIC_FIREBASE_CONFIG: ${{ secrets.NEXT_PUBLIC_FIREBASE_CONFIG }}
       - name: Archive
         uses: actions/upload-artifact@master
         with:
