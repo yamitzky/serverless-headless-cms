@@ -98,7 +98,7 @@ const AdminResourcesPage: React.FC = () => {
                   ? schema.fieldOrder.map((fid) => (
                       <Stack key={fid} direction="row">
                         <Box w={[20, 40]}>{schema.fields[fid].name}</Box>
-                        <Box flex={1} maxH={150} overflow="scroll">
+                        <Box flex={1} maxH={150} overflow="auto">
                           {schema.fields[fid].type === 'richtext' ? (
                             (res[fid] as string)?.replace(/<[^>]+>/g, ' ')
                           ) : schema.fields[fid].type === 'reference' ? (
@@ -115,10 +115,6 @@ const AdminResourcesPage: React.FC = () => {
                       </Stack>
                     ))
                   : null}
-                <Stack direction="row">
-                  <Box w={[20, 40]}>{t('visibility')}</Box>
-                  <Box flex={1}>{t(res.visibility || 'unknwon')}</Box>
-                </Stack>
                 <Stack isInline fontSize="sm" color="gray.500" mt={2}>
                   <Box>
                     {t('updatedAt')}:

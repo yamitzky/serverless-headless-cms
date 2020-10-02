@@ -11,7 +11,8 @@ import {
   Checkbox,
   InputGroup,
   InputLeftElement,
-  InputRightElement
+  InputRightElement,
+  Textarea
 } from '@chakra-ui/core'
 import { Field, fieldTypes, ResourceSchema } from '~/hooks/app'
 import { InputNumber } from '~/components/atoms/InputNumber'
@@ -90,6 +91,20 @@ export const FieldForm: React.FC<Props> = ({
           </Select>
           <FormErrorMessage>{errors.type?.message}</FormErrorMessage>
         </FormControl>
+        {type === 'select' && (
+          <FormControl isInvalid={!!errors.referTo} isRequired>
+            <FormLabel htmlFor="options">{t('options')}</FormLabel>
+            <Textarea
+              name="options"
+              id="options"
+              ref={register({
+                required: true
+              })}
+              defaultValue={values?.options}
+            />
+            <FormErrorMessage>{errors.options?.message}</FormErrorMessage>
+          </FormControl>
+        )}
         {type === 'reference' && (
           <FormControl isInvalid={!!errors.referTo} isRequired>
             <FormLabel htmlFor="referTo">{t('referTo')}</FormLabel>

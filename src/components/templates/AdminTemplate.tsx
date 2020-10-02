@@ -55,7 +55,7 @@ export const AdminTemplate: React.FC<Props> = ({
               >
                 <DrawerOverlay>
                   <DrawerContent>
-                    <DrawerBody p={0} overflow="scroll">
+                    <DrawerBody p={0} overflow="auto">
                       {sidebar}
                     </DrawerBody>
                   </DrawerContent>
@@ -73,7 +73,7 @@ export const AdminTemplate: React.FC<Props> = ({
             display={['none', 'block']}
             w={240}
             h="100%"
-            overflow="scroll"
+            overflow="auto"
             bg="gray.100"
             borderRightWidth={1}
           >
@@ -84,7 +84,7 @@ export const AdminTemplate: React.FC<Props> = ({
           bg="gray.50"
           flex={1}
           h="100%"
-          overflow="scroll"
+          overflow="auto"
           py={[3, 6]}
           px={[3, 8]}
         >

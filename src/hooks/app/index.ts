@@ -5,6 +5,7 @@ export const fieldTypes = [
   'text',
   'longtext',
   'richtext',
+  'select',
   'reference',
   'number',
   'file'
@@ -22,6 +23,9 @@ export type Field = {
 
   // for reference
   referTo?: string
+
+  // for select
+  options?: string
 
   // for number
   max?: number

@@ -11,7 +11,7 @@ export const TopTemplate: React.FC<Props> = ({ children, ...props }) => {
       <Box
         flex={1}
         h="100%"
-        overflow="scroll"
+        overflow="auto"
         py={[4, 6]}
         px={[4, 8]}
         pb={[10, 6]}
