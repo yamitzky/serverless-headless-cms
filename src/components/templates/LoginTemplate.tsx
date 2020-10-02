@@ -10,13 +10,7 @@ type Props = {
 
 export const LoginTemplate: React.FC<Props> = ({ children, title }) => {
   return (
-    <Box
-      h="100vh"
-      bg="gray.100"
-      width="100vw"
-      overflow="scroll"
-      color="gray.700"
-    >
+    <Box h="100vh" bg="gray.100" width="100vw" overflow="auto" color="gray.700">
       <Stack spacing={4} maxW={600} w="100%" mx="auto" py={8} px={2}>
         <Heading as="h1" textAlign="center">
           <Link href="/" textDecor="none">

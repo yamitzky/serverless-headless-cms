@@ -12,7 +12,7 @@ import {
   FormHelperText
 } from '@chakra-ui/core'
 import { Field, ResourceSchema } from '~/hooks/app'
-import { Resource, visibilities } from '~/hooks/resource'
+import { Resource } from '~/hooks/resource'
 import dynamic from 'next/dynamic'
 import { InputNumber } from '~/components/atoms/InputNumber'
 import { useI18n } from '~/hooks/i18n'
@@ -112,6 +112,22 @@ export const ResourceForm: React.FC<Props> = ({
                 }}
                 defaultValue={values?.[field.id] || ''}
               />
+            ) : field.type === 'select' ? (
+              <Select
+                name={field.id}
+                id={field.id}
+                ref={register({
+                  required: field.required
+                })}
+                defaultValue={values?.[field.id]}
+              >
+                <option value="">{t('pleaseSelect')}</option>
+                {field.options?.split('\n').map((o) => (
+                  <option value={o} key={o}>
+                    {o}
+                  </option>
+                ))}
+              </Select>
             ) : field.type === 'reference' ? (
               <Select
                 name={field.id}
@@ -178,22 +194,6 @@ export const ResourceForm: React.FC<Props> = ({
             <FormErrorMessage>{errors[field.id]?.message}</FormErrorMessage>
           </FormControl>
         ))}
-        <FormControl isInvalid={!!errors.visibility}>
-          <FormLabel htmlFor="visibility">{t('visibility')}</FormLabel>
-          <Select
-            name="visibility"
-            id="visibility"
-            ref={register()}
-            defaultValue={values?.visibility || 'public'}
-          >
-            {visibilities.map((v) => (
-              <option key={v} value={v}>
-                {t(v)}
-              </option>
-            ))}
-          </Select>
-          <FormErrorMessage>{errors.visibility?.message}</FormErrorMessage>
-        </FormControl>
       </Stack>
       <Stack direction="row">
         <Button

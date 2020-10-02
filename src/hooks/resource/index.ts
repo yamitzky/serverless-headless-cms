@@ -1,6 +1,4 @@
 import React, { useContext } from 'react'
-export const visibilities = ['private', 'public'] as const
-export type Visibility = typeof visibilities[number]
 
 type Context = {
   loading: boolean
@@ -41,7 +39,6 @@ export function useResourceActions(): ResourceActions {
 
 export type Resource = {
   id: string
-  visibility: Visibility
 } & Record<string, any>
 
 export function useResources(
