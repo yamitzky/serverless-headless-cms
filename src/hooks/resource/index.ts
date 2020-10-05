@@ -31,6 +31,7 @@ type ResourceActions = {
   fetchAll: (id: string, rid: string) => Promise<Resource[]>
   add: (id: string, rid: string, res: Resource) => Promise<void>
   update: (id: string, rid: string, iid: string, res: Resource) => Promise<void>
+  remove: (id: string, rid: string, iid: string) => Promise<void>
 }
 
 export function useResourceActions(): ResourceActions {

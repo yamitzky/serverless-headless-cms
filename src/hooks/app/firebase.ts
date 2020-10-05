@@ -35,8 +35,7 @@ export const useAppActions: AppHooks['useAppActions'] = () => {
                   },
                   thumbnail: {
                     name: t('thumbnail'),
-                    type: 'file',
-                    required: true
+                    type: 'file'
                   },
                   body: {
                     name: t('body'),

@@ -18,7 +18,7 @@ const AdminResourceEditPage: React.FC = () => {
   const schema = app?.schema[rid]
   const { resource, loading, error } = useResource(id, rid, iid)
 
-  const { update, fetchAll } = useResourceActions()
+  const { update, fetchAll, remove } = useResourceActions()
   const toast = useToast()
   const { t } = useI18n()
 
@@ -45,6 +45,14 @@ const AdminResourceEditPage: React.FC = () => {
             allSchema={app.schema}
             fetchReference={(rid) => fetchAll(id, rid)}
             values={resource}
+            onRemove={async () => {
+              await remove(id, rid, iid)
+              toast({
+                title: t('deleted'),
+                status: 'success'
+              })
+              router.push(`/admin/apps/${id}/resources/${rid}`)
+            }}
             onSubmit={async (res) => {
               await update(id, rid, iid, res)
               toast({
