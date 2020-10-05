@@ -121,5 +121,7 @@ export default {
   English and Japanese are supported.
   The project owner is a Japanese speaker, so your language support is very welcome.
   `,
-  topRoadmapMessage: (link: any) => ['The roadmap is maintained on ', link]
+  topRoadmapMessage: (link: any) => ['The roadmap is maintained on ', link],
+  asc: 'Ascendant',
+  desc: 'Descendant'
 }
