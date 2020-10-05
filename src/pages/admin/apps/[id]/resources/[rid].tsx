@@ -5,7 +5,18 @@ import { Resource, useResourceActions, useResources } from '~/hooks/resource'
 import { useRouter } from 'next/router'
 import { Sidebar } from '~/components/organisms/Sidebar'
 import { Section } from '~/components/molecules/Section'
-import { Box, Button, Image, Skeleton, Spinner, Stack } from '@chakra-ui/core'
+import {
+  Box,
+  Button,
+  Image,
+  Menu,
+  MenuButton,
+  MenuDivider,
+  MenuItem,
+  MenuList,
+  Skeleton,
+  Stack
+} from '@chakra-ui/core'
 import { ListItem } from '~/components/molecules/ListItem'
 import { EmptyCard } from '~/components/atoms/EmptyCard'
 import { Link } from '~/components/atoms/Link'
@@ -13,17 +24,30 @@ import { useI18n } from '~/hooks/i18n'
 import { ExternalLink } from '~/components/molecules/ExternalLink'
 import { format } from 'date-fns'
 import { config } from '~/config'
+import { Order } from '~/hooks/resource-selector'
+
+const orders = ['desc', 'asc'] as const
 
 const AdminResourcesPage: React.FC = () => {
   const router = useRouter()
+  const { t } = useI18n()
   const { app, loading: appLoading, error: appError } = useAppContext()
   const rid = router.query.rid as string
   const id = router.query.id as string
   const schema = app?.schema[rid]
-  const { resources, loading, error } = useResources(id, rid)
+
+  const [sort, setSort] = useState<[string, Order, string]>([
+    config.createdField,
+    'desc',
+    'createdAt' // label
+  ])
+  const { resources, loading, error } = useResources(id, rid, [
+    sort[0],
+    sort[1]
+  ])
+
   const { fetch } = useResourceActions()
   const [reference, setReference] = useState<Record<string, Resource>>({})
-  const { t } = useI18n()
 
   useEffect(() => {
     ;(async () => {
@@ -63,15 +87,47 @@ const AdminResourcesPage: React.FC = () => {
         title={
           <Stack direction="row" justifyContent="space-between">
             <Box>{t('listOf', schema?.name || '')}</Box>
-            <Button
-              variant="outline"
-              variantColor="cyan"
-              onClick={() =>
-                router.push(`/admin/apps/${id}/resources/${rid}/new`)
-              }
-            >
-              {t('create')}
-            </Button>
+            <Stack isInline>
+              <Button
+                variant="outline"
+                variantColor="cyan"
+                onClick={() =>
+                  router.push(`/admin/apps/${id}/resources/${rid}/new`)
+                }
+              >
+                {t('create')}
+              </Button>
+              <Menu>
+                {/* TODO: more sort key */}
+                <MenuButton
+                  as={Button}
+                  // @ts-expect-error
+                  rightIcon="chevron-down"
+                >
+                  {t(sort[2] as any)}({t(sort[1])})
+                </MenuButton>
+                <MenuList fontSize="md">
+                  {[
+                    [config.createdField, 'createdAt'],
+                    [config.updatedField, 'updatedAt']
+                  ].map(([key, label], i) => (
+                    <React.Fragment key={key}>
+                      {!!i && <MenuDivider />}
+                      {orders.map((order) => (
+                        <MenuItem
+                          key={order}
+                          onClick={() => {
+                            setSort([key, order, label as any])
+                          }}
+                        >
+                          {t(label as any)}({t(order as any)})
+                        </MenuItem>
+                      ))}
+                    </React.Fragment>
+                  ))}
+                </MenuList>
+              </Menu>
+            </Stack>
           </Stack>
         }
       >

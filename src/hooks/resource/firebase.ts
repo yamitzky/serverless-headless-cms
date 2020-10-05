@@ -7,7 +7,7 @@ import { config } from '~/config'
 import { firebase } from '~/firebase'
 import { useAuthContext } from '~/hooks/auth'
 import { Resource, ResourceHooks } from '~/hooks/resource'
-import { useResourceSelectors } from '~/hooks/resource-selector'
+import { Order, useResourceSelectors } from '~/hooks/resource-selector'
 
 export const useResource: ResourceHooks['useResource'] = (
   id: string,
@@ -37,7 +37,11 @@ export const useResource: ResourceHooks['useResource'] = (
 
 export const useResourceActions: ResourceHooks['useResourceActions'] = () => {
   const { user } = useAuthContext()
-  const { getResource, getResources } = useResourceSelectors()
+  const {
+    getResource,
+    getResources,
+    getSortedResources
+  } = useResourceSelectors()
   const fetch = useCallback(
     async (id: string, rid: string, iid: string) => {
       const doc = await getResource(id, rid, iid).get()
@@ -47,10 +51,13 @@ export const useResourceActions: ResourceHooks['useResourceActions'] = () => {
   )
   const fetchAll = useCallback(
     async (id: string, rid: string) => {
-      const ref = await getResources(id, rid, config.publishedField).get()
+      const ref = await getSortedResources(id, rid, [
+        config.createdField,
+        'desc'
+      ]).get()
       return ref.docs.map((doc) => ({ ...doc.data(), id: doc.id } as Resource))
     },
-    [getResources]
+    [getSortedResources]
   )
   const add = useCallback(
     async (id: string, rid: string, res: Resource) => {
@@ -95,11 +102,16 @@ export const useResourceActions: ResourceHooks['useResourceActions'] = () => {
 
 export const useResources: ResourceHooks['useResources'] = (
   id: string,
-  rid: string
+  rid: string,
+  sort?: [string, Order]
 ) => {
-  const { getResources } = useResourceSelectors()
+  const { getResources, getSortedResources } = useResourceSelectors()
   const [resources, loading, error] = useCollectionData<Resource>(
-    id && rid ? getResources(id, rid, config.publishedField) : null,
+    id && rid
+      ? sort
+        ? getSortedResources(id, rid, sort)
+        : getResources(id, rid)
+      : null,
     {
       idField: 'id'
     }

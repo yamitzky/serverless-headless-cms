@@ -1,4 +1,5 @@
 import React, { useContext } from 'react'
+import { Order } from '~/hooks/resource-selector'
 
 type Context = {
   loading: boolean
@@ -12,7 +13,11 @@ export type ResourceHooks = {
     iid: string
   ): Context & { resource?: Resource }
   useResourceActions(): ResourceActions
-  useResources(id: string, rid: string): Context & { resources: Resource[] }
+  useResources(
+    id: string,
+    rid: string,
+    sort?: [string, Order]
+  ): Context & { resources: Resource[] }
 }
 export const ResourceHooksContext = React.createContext<ResourceHooks>(
   null as any
@@ -44,7 +49,8 @@ export type Resource = {
 
 export function useResources(
   id: string,
-  rid: string
+  rid: string,
+  sort: [string, Order]
 ): Context & { resources: Resource[] } {
-  return useContext(ResourceHooksContext).useResources(id, rid)
+  return useContext(ResourceHooksContext).useResources(id, rid, sort)
 }
