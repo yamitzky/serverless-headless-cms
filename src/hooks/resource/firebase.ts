@@ -77,12 +77,19 @@ export const useResourceActions: ResourceHooks['useResourceActions'] = () => {
     },
     [getResource, user]
   )
+  const remove = useCallback(
+    async (id: string, rid: string, iid: string) => {
+      await getResource(id, rid, iid).delete()
+    },
+    [getResource]
+  )
 
   return {
     fetch,
     fetchAll,
     add,
-    update
+    update,
+    remove
   }
 }
 

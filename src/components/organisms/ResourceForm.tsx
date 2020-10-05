@@ -9,7 +9,8 @@ import {
   Input,
   Select,
   Textarea,
-  FormHelperText
+  FormHelperText,
+  useDisclosure
 } from '@chakra-ui/core'
 import { Field, ResourceSchema } from '~/hooks/app'
 import { Resource } from '~/hooks/resource'
@@ -17,6 +18,7 @@ import dynamic from 'next/dynamic'
 import { InputNumber } from '~/components/atoms/InputNumber'
 import { useI18n } from '~/hooks/i18n'
 import { InputFile } from '~/components/atoms/InputFile'
+import { Confirm } from '~/components/molecules/Confirm'
 const ReactQuill = dynamic(import('react-quill'), {
   ssr: false
 })
@@ -29,6 +31,7 @@ type Props = {
   allSchema: Record<string, ResourceSchema>
   fields: (Field & { id: string })[]
   onSubmit: (values: Values) => void
+  onRemove?: () => void
   fetchReference: (rid: string) => Promise<Resource[]>
 }
 
@@ -39,6 +42,7 @@ export const ResourceForm: React.FC<Props> = ({
   fetchReference,
   allSchema,
   fields,
+  onRemove,
   ...props
 }) => {
   const { t } = useI18n()
@@ -47,6 +51,8 @@ export const ResourceForm: React.FC<Props> = ({
   >({
     defaultValues: values
   })
+
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   const [reference, setReference] = useState<Record<string, Resource[]>>({})
   const handleFetch = useCallback(
@@ -64,6 +70,19 @@ export const ResourceForm: React.FC<Props> = ({
 
   return (
     <Stack onSubmit={handleSubmit(onSubmit)} as="form" spacing={8} {...props}>
+      {onRemove && (
+        <Confirm
+          type="delete"
+          isOpen={isOpen}
+          onCancel={onClose}
+          onConfirm={() => {
+            onRemove()
+            onClose()
+          }}
+        >
+          {t('confirmDelete')}
+        </Confirm>
+      )}
       <Stack spacing={4}>
         {fields.map((field) => (
           <FormControl
@@ -203,6 +222,11 @@ export const ResourceForm: React.FC<Props> = ({
         >
           {isNew ? t('create') : t('save')}
         </Button>
+        {onRemove && (
+          <Button variantColor="red" ml={4} onClick={onOpen}>
+            {t('delete')}
+          </Button>
+        )}
       </Stack>
     </Stack>
   )
