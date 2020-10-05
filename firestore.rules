@@ -13,7 +13,7 @@ service cloud.firestore {
       allow read, update: if request.auth.uid == resource.data.owner || isMember(id);
       
       match /{resource}/{rid} {
-        allow read, create, update: if isOwner(id) || isMember(id);
+        allow read, create, update, delete: if isOwner(id) || isMember(id);
       }
     }
     match /users/{uid} {
