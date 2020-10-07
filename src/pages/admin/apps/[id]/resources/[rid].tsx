@@ -174,11 +174,13 @@ const AdminResourcesPage: React.FC = () => {
                 <Stack isInline fontSize="sm" color="gray.500" mt={2}>
                   <Box>
                     {t('updatedAt')}:
-                    {format(res[config.updatedField], 'yyyy-MM-dd H:mm')}
+                    {res[config.updatedField] &&
+                      format(res[config.updatedField], 'yyyy-MM-dd H:mm')}
                   </Box>
                   <Box>
                     {t('createdAt')}:
-                    {format(res[config.createdField], 'yyyy-MM-dd H:mm')}
+                    {res[config.createdField] &&
+                      format(res[config.createdField], 'yyyy-MM-dd H:mm')}
                   </Box>
                 </Stack>
               </ListItem>
