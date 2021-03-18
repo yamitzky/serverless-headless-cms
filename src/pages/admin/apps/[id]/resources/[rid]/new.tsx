@@ -42,7 +42,7 @@ const AdminResourceNewPage: React.FC = () => {
           <ResourceForm
             isNew
             allSchema={app.schema}
-            fetchReference={(rid) => fetchAll(id, rid)}
+            fetchAllReference={(rid) => fetchAll(id, rid)}
             onSubmit={async (res) => {
               await add(id, rid, res)
               toast({

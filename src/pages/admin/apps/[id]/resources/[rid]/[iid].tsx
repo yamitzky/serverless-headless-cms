@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { AdminTemplate } from '~/components/templates/AdminTemplate'
 import { useAppContext } from '~/hooks/app'
 import { useResource, useResourceActions } from '~/hooks/resource'
@@ -18,9 +18,14 @@ const AdminResourceEditPage: React.FC = () => {
   const schema = app?.schema[rid]
   const { resource, loading, error } = useResource(id, rid, iid)
 
-  const { update, fetchAll, remove } = useResourceActions()
+  const { update, fetchAll, fetch, remove } = useResourceActions()
   const toast = useToast()
   const { t } = useI18n()
+
+  const fetchReference = useCallback((rid, iid) => fetch(id, rid, iid), [
+    fetch,
+    id
+  ])
 
   return (
     <AdminTemplate
@@ -43,7 +48,8 @@ const AdminResourceEditPage: React.FC = () => {
         {app && schema && resource && (
           <ResourceForm
             allSchema={app.schema}
-            fetchReference={(rid) => fetchAll(id, rid)}
+            fetchAllReference={(rid) => fetchAll(id, rid)}
+            fetchReference={fetchReference}
             values={resource}
             onRemove={async () => {
               await remove(id, rid, iid)

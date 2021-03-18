@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import {
   FormControl,
@@ -32,13 +32,15 @@ type Props = {
   fields: (Field & { id: string })[]
   onSubmit: (values: Values) => void
   onRemove?: () => void
-  fetchReference: (rid: string) => Promise<Resource[]>
+  fetchAllReference: (rid: string) => Promise<Resource[]>
+  fetchReference?: (rid: string, iid: string) => Promise<Resource>
 }
 
 export const ResourceForm: React.FC<Props> = ({
   isNew,
   values,
   onSubmit,
+  fetchAllReference,
   fetchReference,
   allSchema,
   fields,
@@ -55,18 +57,52 @@ export const ResourceForm: React.FC<Props> = ({
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const [reference, setReference] = useState<Record<string, Resource[]>>({})
+  const [allFetched, setAllFetched] = useState<Record<string, boolean>>({})
+  const [loading, setLoading] = useState<
+    Record<string, Record<string, boolean>>
+  >({})
   const handleFetch = useCallback(
     async (rid: string) => {
-      if (reference[rid] == null) {
-        const refs = await fetchReference(rid)
+      if (!allFetched[rid]) {
+        const refs = await fetchAllReference(rid)
         setReference((curr) => ({
           ...curr,
           [rid]: refs
         }))
+        setAllFetched((curr) => ({
+          ...curr,
+          [rid]: true
+        }))
       }
     },
-    [fetchReference, reference]
+    [fetchAllReference, allFetched]
   )
+  useEffect(() => {
+    ;(async () => {
+      if (values) {
+        for (const field of fields) {
+          if (field.type === 'reference') {
+            const rid = field.referTo!
+            const iid = values[field.id]
+            if (!loading[rid]?.[iid]) {
+              setLoading((curr) => ({
+                ...curr,
+                [rid]: {
+                  ...curr[rid],
+                  [iid]: true
+                }
+              }))
+              const ref = await fetchReference?.(rid, iid)
+              setReference((curr) => ({
+                ...curr,
+                [rid]: [...(curr[rid] || []), ref!]
+              }))
+            }
+          }
+        }
+      }
+    })()
+  }, [fields, values, fetchReference, loading])
 
   return (
     <Stack onSubmit={handleSubmit(onSubmit)} as="form" spacing={8} {...props}>
@@ -148,26 +184,30 @@ export const ResourceForm: React.FC<Props> = ({
                 ))}
               </Select>
             ) : field.type === 'reference' ? (
-              <Select
-                name={field.id}
-                id={field.id}
-                ref={register({
-                  required: field.required
-                })}
-                defaultValue={values?.[field.id]}
-                onClick={() => handleFetch(field.referTo!)}
-              >
-                <option value="">{t('pleaseSelect')}</option>
-                {reference[field.referTo!]?.map((res) => (
-                  <option value={res.id} key={res.id}>
-                    {res[allSchema[field.referTo!]?.fieldOrder[0]] || res.id}
-                  </option>
-                )) || (
-                  <option value={values?.[field.id]}>
-                    {values?.[field.id]}
-                  </option>
-                )}
-              </Select>
+              reference[field.referTo!]?.some(
+                (f) => f.id === values?.[field.id]
+              ) && (
+                <Select
+                  name={field.id}
+                  id={field.id}
+                  ref={register({
+                    required: field.required
+                  })}
+                  defaultValue={values?.[field.id]}
+                  onClick={() => handleFetch(field.referTo!)}
+                >
+                  <option value="">{t('pleaseSelect')}</option>
+                  {reference[field.referTo!]?.map((res) => (
+                    <option value={res.id} key={res.id}>
+                      {res[allSchema[field.referTo!]?.fieldOrder[0]] || res.id}
+                    </option>
+                  )) || (
+                    <option value={values?.[field.id]}>
+                      {values?.[field.id]}
+                    </option>
+                  )}
+                </Select>
+              )
             ) : field.type === 'number' ? (
               <InputNumber
                 name={field.id}
