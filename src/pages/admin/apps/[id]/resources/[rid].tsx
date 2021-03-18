@@ -162,7 +162,9 @@ const AdminResourcesPage: React.FC = () => {
                           ) : schema.fields[fid].type === 'file' ? (
                             <Box>
                               <Image src={res[fid]} maxH={100} w="auto" />
-                              <ExternalLink href={res[fid]}>URL</ExternalLink>
+                              {res[fid] && (
+                                <ExternalLink href={res[fid]}>URL</ExternalLink>
+                              )}
                             </Box>
                           ) : (
                             res[fid]
