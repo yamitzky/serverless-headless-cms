@@ -1,13 +1,13 @@
-import React from 'react'
-import { AdminTemplate } from '~/components/templates/AdminTemplate'
-import { useAppActions, useAppContext } from '~/hooks/app'
-import { useRouter } from 'next/router'
-import { Sidebar } from '~/components/organisms/Sidebar'
-import { Section } from '~/components/molecules/Section'
 import { Box, Button, Heading, Stack, Tag, useToast } from '@chakra-ui/core'
-import { ListItem } from '~/components/molecules/ListItem'
+import { useRouter } from 'next/router'
+import React from 'react'
 import { EmptyCard } from '~/components/atoms/EmptyCard'
 import { Link } from '~/components/atoms/Link'
+import { ListItem } from '~/components/molecules/ListItem'
+import { Section } from '~/components/molecules/Section'
+import { Sidebar } from '~/components/organisms/Sidebar'
+import { AdminTemplate } from '~/components/templates/AdminTemplate'
+import { useAppActions, useAppContext } from '~/hooks/app'
 import { useI18n } from '~/hooks/i18n'
 
 const AdminSchemaEditPage: React.FC = () => {
@@ -38,17 +38,24 @@ const AdminSchemaEditPage: React.FC = () => {
     >
       <Section
         title={
-          <Stack direction="row" justifyContent="space-between">
-            <Box flex={1}>{schema?.name || '　'}</Box>
-            <Button
-              variant="outline"
-              variantColor="cyan"
-              onClick={() =>
-                router.push(`/admin/apps/${id}/schema/${rid}/edit`)
-              }
-            >
-              {t('edit')}
-            </Button>
+          <Stack>
+            <Stack direction="row" justifyContent="space-between">
+              <Box flex={1}>{schema?.name || '　'}</Box>
+              <Button
+                variant="outline"
+                variantColor="cyan"
+                onClick={() =>
+                  router.push(`/admin/apps/${id}/schema/${rid}/edit`)
+                }
+              >
+                {t('edit')}
+              </Button>
+            </Stack>
+            {schema?.description && (
+              <Box fontSize="md" fontWeight="normal">
+                {schema.description}
+              </Box>
+            )}
           </Stack>
         }
       >

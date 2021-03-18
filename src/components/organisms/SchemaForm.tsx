@@ -82,6 +82,16 @@ export const SchemaForm: React.FC<Props> = ({
           />
           <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
         </FormControl>
+        <FormControl isInvalid={!!errors.description}>
+          <FormLabel htmlFor="description">{t('description')}</FormLabel>
+          <Input
+            name="description"
+            id="description"
+            ref={register}
+            defaultValue={values?.description}
+          />
+          <FormErrorMessage>{errors.description?.message}</FormErrorMessage>
+        </FormControl>
       </Stack>
       <Stack direction="row">
         <Button

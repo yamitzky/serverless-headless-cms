@@ -38,6 +38,7 @@ export type Field = {
 
 export type ResourceSchema = {
   name: string
+  description?: string
   fieldOrder: string[]
   fields: Record<string, Field>
 }

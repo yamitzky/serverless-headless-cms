@@ -85,49 +85,56 @@ const AdminResourcesPage: React.FC = () => {
     >
       <Section
         title={
-          <Stack direction="row" justifyContent="space-between">
-            <Box>{t('listOf', schema?.name || '')}</Box>
-            <Stack isInline>
-              <Button
-                variant="outline"
-                variantColor="cyan"
-                onClick={() =>
-                  router.push(`/admin/apps/${id}/resources/${rid}/new`)
-                }
-              >
-                {t('create')}
-              </Button>
-              <Menu>
-                {/* TODO: more sort key */}
-                <MenuButton
-                  as={Button}
-                  // @ts-expect-error
-                  rightIcon="chevron-down"
+          <Stack>
+            <Stack direction="row" justifyContent="space-between">
+              <Box>{t('listOf', schema?.name || '')}</Box>
+              <Stack isInline>
+                <Button
+                  variant="outline"
+                  variantColor="cyan"
+                  onClick={() =>
+                    router.push(`/admin/apps/${id}/resources/${rid}/new`)
+                  }
                 >
-                  {t(sort[2] as any)}({t(sort[1])})
-                </MenuButton>
-                <MenuList fontSize="md">
-                  {[
-                    [config.createdField, 'createdAt'],
-                    [config.updatedField, 'updatedAt']
-                  ].map(([key, label], i) => (
-                    <React.Fragment key={key}>
-                      {!!i && <MenuDivider />}
-                      {orders.map((order) => (
-                        <MenuItem
-                          key={order}
-                          onClick={() => {
-                            setSort([key, order, label as any])
-                          }}
-                        >
-                          {t(label as any)}({t(order as any)})
-                        </MenuItem>
-                      ))}
-                    </React.Fragment>
-                  ))}
-                </MenuList>
-              </Menu>
+                  {t('create')}
+                </Button>
+                <Menu>
+                  {/* TODO: more sort key */}
+                  <MenuButton
+                    as={Button}
+                    // @ts-expect-error
+                    rightIcon="chevron-down"
+                  >
+                    {t(sort[2] as any)}({t(sort[1])})
+                  </MenuButton>
+                  <MenuList fontSize="md">
+                    {[
+                      [config.createdField, 'createdAt'],
+                      [config.updatedField, 'updatedAt']
+                    ].map(([key, label], i) => (
+                      <React.Fragment key={key}>
+                        {!!i && <MenuDivider />}
+                        {orders.map((order) => (
+                          <MenuItem
+                            key={order}
+                            onClick={() => {
+                              setSort([key, order, label as any])
+                            }}
+                          >
+                            {t(label as any)}({t(order as any)})
+                          </MenuItem>
+                        ))}
+                      </React.Fragment>
+                    ))}
+                  </MenuList>
+                </Menu>
+              </Stack>
             </Stack>
+            {schema?.description && (
+              <Box fontSize="md" fontWeight="normal">
+                {schema.description}
+              </Box>
+            )}
           </Stack>
         }
       >
