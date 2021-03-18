@@ -19,3 +19,13 @@ yarn dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Deployment
+
+```bash
+git clone https://github.com/yamitzky/serverless-headless-cms.git
+cd serverless-headless-cms
+
+yarn install
+yarn firebase login
+yarn firebase deploy
+```
