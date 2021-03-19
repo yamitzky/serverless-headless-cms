@@ -84,7 +84,7 @@ export const ResourceForm: React.FC<Props> = ({
           if (field.type === 'reference') {
             const rid = field.referTo!
             const iid = values[field.id]
-            if (!loading[rid]?.[iid]) {
+            if (rid && iid && !loading[rid]?.[iid] && !allFetched[rid]) {
               setLoading((curr) => ({
                 ...curr,
                 [rid]: {
@@ -102,7 +102,7 @@ export const ResourceForm: React.FC<Props> = ({
         }
       }
     })()
-  }, [fields, values, fetchReference, loading])
+  }, [fields, values, fetchReference, loading, allFetched])
 
   return (
     <Stack onSubmit={handleSubmit(onSubmit)} as="form" spacing={8} {...props}>
@@ -184,30 +184,24 @@ export const ResourceForm: React.FC<Props> = ({
                 ))}
               </Select>
             ) : field.type === 'reference' ? (
-              reference[field.referTo!]?.some(
-                (f) => f.id === values?.[field.id]
-              ) && (
-                <Select
-                  name={field.id}
-                  id={field.id}
-                  ref={register({
-                    required: field.required
-                  })}
-                  defaultValue={values?.[field.id]}
-                  onClick={() => handleFetch(field.referTo!)}
-                >
+              <Select
+                name={field.id}
+                id={field.id}
+                ref={register({
+                  required: field.required
+                })}
+                defaultValue={values?.[field.id]}
+                onClick={() => handleFetch(field.referTo!)}
+              >
+                {!values?.[field.id] && (
                   <option value="">{t('pleaseSelect')}</option>
-                  {reference[field.referTo!]?.map((res) => (
-                    <option value={res.id} key={res.id}>
-                      {res[allSchema[field.referTo!]?.fieldOrder[0]] || res.id}
-                    </option>
-                  )) || (
-                    <option value={values?.[field.id]}>
-                      {values?.[field.id]}
-                    </option>
-                  )}
-                </Select>
-              )
+                )}
+                {reference[field.referTo!]?.map((res) => (
+                  <option value={res.id} key={res.id}>
+                    {res[allSchema[field.referTo!]?.fieldOrder[0]] || res.id}
+                  </option>
+                ))}
+              </Select>
             ) : field.type === 'number' ? (
               <InputNumber
                 name={field.id}
