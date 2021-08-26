@@ -1,4 +1,4 @@
-# Serverless Headless CMS powered by Firebase
+# Serverless Headless CMS using Firebase
 
 ![demo](https://user-images.githubusercontent.com/623449/94364347-87372580-0103-11eb-80fd-341231ebe19c.gif)
 
