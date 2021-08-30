@@ -1,7 +1,7 @@
 {
   "name": "serverless-headless-cms",
-  "version": "0.1.0",
-  "private": true,
+  "version": "1.1.0",
+  "private": false,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -60,5 +60,17 @@
       "prettier --write",
       "git add"
     ]
-  }
+  },
+  "description": "![demo](https://user-images.githubusercontent.com/623449/94364347-87372580-0103-11eb-80fd-341231ebe19c.gif)",
+  "main": "next.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yamitzky/serverless-headless-cms.git"
+  },
+  "author": "Mitsuki Ogasahara <negiga@gmail.com> (https://github.com/yamitzky/serverless-headless-cms)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yamitzky/serverless-headless-cms/issues"
+  },
+  "homepage": "https://github.com/yamitzky/serverless-headless-cms#readme"
 }
