@@ -46,6 +46,7 @@ jobs:
         with:
           args: target:apply hosting cms $FIREBASE_PROJECT
         env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           FIREBASE_PROJECT: ${{ secrets.FIREBASE_PROJECT }}
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
