@@ -25,18 +25,13 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 git clone https://github.com/yamitzky/serverless-headless-cms.git
 cd serverless-headless-cms
 
-# setup firebase
-yarn install
-yarn firebase login
-yarn firebase use {project_id}
-
 # create and edit .env, or set environment variable
 NEXT_PUBLIC_FIREBASE_CONFIG={"apiKey":"AIzaSy..."}
 # Optional: configure CMS
 NEXT_PUBLIC_CMS_CONFIG={"resourcesPath":"{{rid}}","resourcePath":"{{rid}}/{{iid}}","userAppsPath":"users/_/applications","userAppPath":"users/_/applications/{{id}}","title":"Your CMS","hideGitHubLogo":true,"hideLandingPage":true,"authMethods":["google"],"singleProject":true,"schemaPermission":"owner","securityPermission":"owner"}
 
-# build and deploy
-yarn build
-yarn export
-yarn firebase deploy
+# deploy to firebase
+yarn install
+yarn deploy --project {project_id}
+# yarn deploy --project {project_id} --site {site_id}
 ```

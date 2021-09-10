@@ -2,7 +2,11 @@
   "name": "serverless-headless-cms",
   "version": "0.1.0",
   "private": false,
+  "bin": {
+    "serverless-headless-cms": "./bin/deploy.mjs"
+  },
   "scripts": {
+    "deploy": "./bin/deploy.mjs",
     "dev": "next dev",
     "build": "next build",
     "build:export": "next build && next export",
@@ -44,7 +48,8 @@
     "lint-staged": "^10.4.0",
     "prettier": "^2.1.2",
     "prettier-eslint": "^11.0.0",
-    "typescript": "^4.0.3"
+    "typescript": "^4.0.3",
+    "zx": "^4.2.0"
   },
   "husky": {
     "hooks": {
