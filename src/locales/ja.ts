@@ -16,6 +16,8 @@ export default {
   save: '保存',
   saved: '保存しました',
   edit: '編集',
+  fields: 'フィールド',
+  fieldOrder: 'フィールド順',
   field: 'フィールド',
   fieldCreation: 'フィールド作成',
   projectCreation: 'プロジェクト作成',
@@ -132,5 +134,9 @@ export default {
   errorRequired: '入力してください',
   errorMinLength: (obj?: number) => `${obj}文字以上入力してください`,
   errorMaxLength: (obj?: number) => `${obj}文字以内で入力してください`,
-  errorPattern: (obj?: string) => `${obj} のパターンに合致しません`
+  errorPattern: (obj?: string) => `${obj} のパターンに合致しません`,
+  advanced: '高度な操作',
+  danger: '注意して編集してください',
+  commaSeparated: 'コンマ区切り',
+  validJson: '正しいJSON形式'
 }

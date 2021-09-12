@@ -17,6 +17,8 @@ export default {
   save: 'Save',
   saved: 'Saved',
   edit: 'Edit',
+  fields: 'Fields',
+  fieldOrder: 'Field Order',
   field: 'Field',
   fieldCreation: 'Create Field',
   projectCreation: 'Create Project',
@@ -127,5 +129,9 @@ export default {
   errorRequired: 'This field is required.',
   errorMinLength: (obj?: number) => `Min length is ${obj}`,
   errorMaxLength: (obj?: number) => `Max length is ${obj}`,
-  errorPattern: (obj?: string) => `Valid pattern is ${obj}`
+  errorPattern: (obj?: string) => `Valid pattern is ${obj}`,
+  advanced: 'Advanced',
+  danger: 'Please edit carefully.',
+  commaSeparated: 'Comma-separated',
+  validJson: 'Valid JSON format'
 }
