@@ -1,11 +1,5 @@
-import {
-  Box,
-  Icon,
-  Link,
-  LinkProps,
-  PseudoBox,
-  useTheme
-} from '@chakra-ui/core'
+import { Box, Icon, Link, LinkProps, useTheme } from '@chakra-ui/react'
+import { FaExternalLinkAlt } from 'react-icons/fa'
 import React from 'react'
 
 type Props = LinkProps
@@ -14,7 +8,7 @@ export const ExternalLink: React.FC<Props> = ({ children, ...props }) => {
   const theme = useTheme()
   return (
     <Link {...props} isExternal>
-      <PseudoBox
+      <Box
         as="span"
         textDecoration={`underline ${theme.colors.gray[400]}`}
         _hover={{
@@ -22,8 +16,8 @@ export const ExternalLink: React.FC<Props> = ({ children, ...props }) => {
         }}
       >
         {children}
-      </PseudoBox>
-      <Icon name="external-link" ml={1} />
+      </Box>
+      <Icon as={FaExternalLinkAlt} ml={1} />
     </Link>
   )
 }

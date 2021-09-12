@@ -1,4 +1,4 @@
-import { Box, Button, Heading, Stack, Tag, useToast } from '@chakra-ui/core'
+import { Box, Button, Heading, Stack, Tag, useToast } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import React from 'react'
 import { EmptyCard } from '~/components/atoms/EmptyCard'
@@ -43,7 +43,7 @@ const AdminSchemaEditPage: React.FC = () => {
               <Box flex={1}>{schema?.name || '　'}</Box>
               <Button
                 variant="outline"
-                variantColor="cyan"
+                colorScheme="cyan"
                 onClick={() =>
                   router.push(`/admin/apps/${id}/schema/${rid}/edit`)
                 }
@@ -65,7 +65,7 @@ const AdminSchemaEditPage: React.FC = () => {
               <Heading size="lg">{t('field')}</Heading>
               <Button
                 variant="outline"
-                variantColor="cyan"
+                colorScheme="cyan"
                 size="sm"
                 onClick={() =>
                   router.push(`/admin/apps/${id}/schema/${rid}/fields/new`)

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import Head from 'next/head'
 import {
-  AspectRatioBox,
+  AspectRatio,
   Box,
   Button,
   Divider,
@@ -13,7 +13,7 @@ import {
   ListItem,
   Stack,
   Text
-} from '@chakra-ui/core'
+} from '@chakra-ui/react'
 import { TopTemplate } from '~/components/templates/TopTemplate'
 import { Strong } from '~/components/atoms/Strong'
 import NextLink from 'next/link'
@@ -79,7 +79,7 @@ const Home: React.FC = () => {
                   <Strong>{t}</Strong>
                 ))}
               </Text>
-              <AspectRatioBox
+              <AspectRatio
                 ml={[0, 8]}
                 mt={[6, 0]}
                 maxW={480}
@@ -93,11 +93,11 @@ const Home: React.FC = () => {
                   objectFit="cover"
                   src="https://user-images.githubusercontent.com/623449/94364347-87372580-0103-11eb-80fd-341231ebe19c.gif"
                 />
-              </AspectRatioBox>
+              </AspectRatio>
             </Flex>
             <Flex direction="row" marginTop={10}>
               <NextLink href="/admin" passHref>
-                <Button size="lg" variantColor="cyan" as="a">
+                <Button size="lg" colorScheme="cyan" as="a">
                   {t('demo')}
                 </Button>
               </NextLink>
@@ -154,7 +154,7 @@ const Home: React.FC = () => {
                 </ExternalLink>
               )}
             </Text>
-            <List fontWeight="bold" styleType="disc">
+            <List fontWeight="bold" styleType="disc" stylePosition="inside">
               <ListItem>Plugin system(In progress)</ListItem>
               <ListItem>AWS support(Cognito, DynamoDB, S3)</ListItem>
               <ListItem>More field types(date, datetime, file)</ListItem>

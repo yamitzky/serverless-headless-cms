@@ -14,22 +14,22 @@
     "export": "next export"
   },
   "dependencies": {
-    "@chakra-ui/core": "^0.8.0",
-    "@emotion/core": "^10.0.35",
-    "@emotion/styled": "^10.0.27",
-    "date-fns": "^2.16.1",
-    "emotion-theming": "^10.0.27",
-    "firebase": "^7.21.0",
-    "next": "9.5.3",
-    "react": "16.13.1",
-    "react-dom": "16.13.1",
-    "react-firebase-hooks": "^2.2.0",
-    "react-firebaseui": "^4.1.0",
-    "react-hook-form": "^6.8.3",
-    "react-icons": "^3.11.0",
-    "react-quill": "^2.0.0-beta.2",
+    "@chakra-ui/react": "^1.6.7",
+    "@emotion/react": "^11.4.1",
+    "@emotion/styled": "^11.3.0",
+    "date-fns": "^2.23.0",
+    "firebase": "^8.10.0",
+    "framer-motion": "^4.1.17",
+    "next": "^11.1.2",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-firebase-hooks": "^3.0.4",
+    "react-firebaseui": "^5.0.2",
+    "react-hook-form": "^7.15.3",
+    "react-icons": "^4.2.0",
+    "react-quill": "^2.0.0-beta.4",
     "rosetta": "^1.1.0",
-    "uuid": "^8.3.0"
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@types/node": "^14.11.2",
@@ -48,7 +48,7 @@
     "lint-staged": "^10.4.0",
     "prettier": "^2.1.2",
     "prettier-eslint": "^11.0.0",
-    "typescript": "^4.0.3",
+    "typescript": "^4.4.3",
     "zx": "^4.2.0"
   },
   "husky": {

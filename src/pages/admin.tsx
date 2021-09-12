@@ -1,12 +1,4 @@
-import {
-  Box,
-  Button,
-  Code,
-  Grid,
-  PseudoBox,
-  Skeleton,
-  Stack
-} from '@chakra-ui/core'
+import { Box, Button, Code, Grid, Skeleton, Stack } from '@chakra-ui/react'
 import React from 'react'
 import { AdminTemplate } from '~/components/templates/AdminTemplate'
 import { useApps } from '~/hooks/app'
@@ -17,7 +9,6 @@ import { useAuthContext } from '~/hooks/auth'
 import { useRouter } from 'next/router'
 import { useI18n } from '~/hooks/i18n'
 import { config } from '~/config'
-import { app } from 'firebase'
 
 const AdminHomePage: React.FC = () => {
   const router = useRouter()
@@ -49,7 +40,7 @@ const AdminHomePage: React.FC = () => {
               <Box flex={1}>{t('projectList')}</Box>
               <Button
                 variant="outline"
-                variantColor="cyan"
+                colorScheme="cyan"
                 onClick={() => router.push(`/admin/apps/new`)}
               >
                 {t('create')}
@@ -95,7 +86,7 @@ const AdminHomePage: React.FC = () => {
                   borderRadius={8}
                   fontWeight="bold"
                 >
-                  <PseudoBox>{app.name}</PseudoBox>
+                  <Box>{app.name}</Box>
                 </Link>
               ))}
             </Grid>

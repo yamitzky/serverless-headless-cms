@@ -5,7 +5,7 @@ import { useResource, useResourceActions } from '~/hooks/resource'
 import { useRouter } from 'next/router'
 import { Sidebar } from '~/components/organisms/Sidebar'
 import { Section } from '~/components/molecules/Section'
-import { useToast } from '@chakra-ui/core'
+import { useToast } from '@chakra-ui/react'
 import { ResourceForm } from '~/components/organisms/ResourceForm'
 import { useI18n } from '~/hooks/i18n'
 
@@ -22,10 +22,10 @@ const AdminResourceEditPage: React.FC = () => {
   const toast = useToast()
   const { t } = useI18n()
 
-  const fetchReference = useCallback((rid, iid) => fetch(id, rid, iid), [
-    fetch,
-    id
-  ])
+  const fetchReference = useCallback(
+    (rid, iid) => fetch(id, rid, iid),
+    [fetch, id]
+  )
 
   return (
     <AdminTemplate

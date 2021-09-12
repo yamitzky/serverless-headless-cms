@@ -8,7 +8,7 @@ import {
   Stack,
   Input,
   useDisclosure
-} from '@chakra-ui/core'
+} from '@chakra-ui/react'
 import { ResourceSchema } from '~/hooks/app'
 import { Confirm } from '~/components/molecules/Confirm'
 import { useI18n } from '~/hooks/i18n'
@@ -31,9 +31,10 @@ export const SchemaForm: React.FC<Props> = ({
   onRemove,
   ...props
 }) => {
-  const { handleSubmit, errors, formState, register } = useForm<Values>({
+  const { handleSubmit, formState, register } = useForm<Values>({
     defaultValues: values
   })
+  const { errors } = formState
 
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { t } = useI18n()
@@ -58,12 +59,11 @@ export const SchemaForm: React.FC<Props> = ({
           <FormControl isInvalid={!!errors.id} isRequired>
             <FormLabel htmlFor="id">ID</FormLabel>
             <Input
-              name="id"
               id="id"
-              ref={register({
+              {...register('id', {
                 required: true,
                 pattern: /[a-zA-Z0-9_-]+/,
-                validate: (v) => !currentIds || !currentIds.includes(v)
+                validate: (v) => !currentIds || !v || !currentIds.includes(v)
               })}
               defaultValue={values?.id}
             />
@@ -73,9 +73,8 @@ export const SchemaForm: React.FC<Props> = ({
         <FormControl isInvalid={!!errors.name} isRequired={!isNew}>
           <FormLabel htmlFor="name">{t('displayName')}</FormLabel>
           <Input
-            name="name"
             id="name"
-            ref={register({
+            {...register('name', {
               required: !isNew
             })}
             defaultValue={values?.name}
@@ -85,9 +84,8 @@ export const SchemaForm: React.FC<Props> = ({
         <FormControl isInvalid={!!errors.description}>
           <FormLabel htmlFor="description">{t('description')}</FormLabel>
           <Input
-            name="description"
             id="description"
-            ref={register}
+            {...register('description')}
             defaultValue={values?.description}
           />
           <FormErrorMessage>{errors.description?.message}</FormErrorMessage>
@@ -95,14 +93,14 @@ export const SchemaForm: React.FC<Props> = ({
       </Stack>
       <Stack direction="row">
         <Button
-          variantColor="cyan"
+          colorScheme="cyan"
           isLoading={formState.isSubmitting}
           type="submit"
         >
           {isNew ? t('create') : t('save')}
         </Button>
         {onRemove && (
-          <Button variantColor="red" ml={4} onClick={onOpen}>
+          <Button colorScheme="red" ml={4} onClick={onOpen}>
             {t('delete')}
           </Button>
         )}

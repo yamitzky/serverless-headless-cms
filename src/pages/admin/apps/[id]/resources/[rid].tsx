@@ -16,7 +16,7 @@ import {
   MenuList,
   Skeleton,
   Stack
-} from '@chakra-ui/core'
+} from '@chakra-ui/react'
 import { ListItem } from '~/components/molecules/ListItem'
 import { EmptyCard } from '~/components/atoms/EmptyCard'
 import { Link } from '~/components/atoms/Link'
@@ -25,6 +25,7 @@ import { ExternalLink } from '~/components/molecules/ExternalLink'
 import { format } from 'date-fns'
 import { config } from '~/config'
 import { Order } from '~/hooks/resource-selector'
+import { FaChevronDown } from 'react-icons/fa'
 
 const orders = ['desc', 'asc'] as const
 
@@ -91,7 +92,7 @@ const AdminResourcesPage: React.FC = () => {
               <Stack isInline>
                 <Button
                   variant="outline"
-                  variantColor="cyan"
+                  colorScheme="cyan"
                   onClick={() =>
                     router.push(`/admin/apps/${id}/resources/${rid}/new`)
                   }
@@ -100,11 +101,7 @@ const AdminResourcesPage: React.FC = () => {
                 </Button>
                 <Menu>
                   {/* TODO: more sort key */}
-                  <MenuButton
-                    as={Button}
-                    // @ts-expect-error
-                    rightIcon="chevron-down"
-                  >
+                  <MenuButton as={Button} rightIcon={<FaChevronDown />}>
                     {t(sort[2] as any)}({t(sort[1])})
                   </MenuButton>
                   <MenuList fontSize="md">

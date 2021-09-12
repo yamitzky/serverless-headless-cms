@@ -13,7 +13,7 @@ type User = {
 }
 
 type AuthContext = {
-  user?: User
+  user?: User | null
   loading: boolean
   error?: Error
 }

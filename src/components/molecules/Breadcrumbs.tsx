@@ -4,7 +4,8 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   Icon
-} from '@chakra-ui/core'
+} from '@chakra-ui/react'
+import { FaChevronRight } from 'react-icons/fa'
 import React from 'react'
 import NextLink from 'next/link'
 
@@ -20,7 +21,7 @@ type Props = {
 export const Breadcrumbs: React.FC<Props> = ({ items, ...props }) => {
   return (
     <Breadcrumb
-      separator={<Icon color="gray.300" name="chevron-right" />}
+      separator={<Icon color="gray.300" as={FaChevronRight} />}
       {...props}
     >
       {items.map(({ title, href }, i) => (

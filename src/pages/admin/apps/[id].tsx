@@ -3,7 +3,7 @@ import { AdminTemplate } from '~/components/templates/AdminTemplate'
 import { useAppContext } from '~/hooks/app'
 import { Sidebar } from '~/components/organisms/Sidebar'
 import { Section } from '~/components/molecules/Section'
-import { Box, List, ListItem, Stack } from '@chakra-ui/core'
+import { Box, List, ListItem, Stack } from '@chakra-ui/react'
 import { EmptyCard } from '~/components/atoms/EmptyCard'
 import { Link } from '~/components/atoms/Link'
 import { useI18n } from '~/hooks/i18n'
@@ -29,7 +29,7 @@ const AdminAppPage: React.FC = () => {
           (app.schemaOrder.length ? (
             <Stack spacing={4}>
               <Box>{t('welcomeCMS', app.name)}</Box>
-              <List styleType="disc" ml={4} spacing={3}>
+              <List styleType="disc" ml={4} spacing={3} stylePosition="inside">
                 {app.schemaOrder.map((rid) => (
                   <ListItem key={rid}>
                     {t('manage', app.schema[rid].name)}

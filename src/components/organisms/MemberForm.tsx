@@ -8,7 +8,7 @@ import {
   Stack,
   Input,
   FormHelperText
-} from '@chakra-ui/core'
+} from '@chakra-ui/react'
 import { Member } from '~/hooks/member'
 import { Link } from '~/components/atoms/Link'
 import { useI18n } from '~/hooks/i18n'
@@ -30,9 +30,10 @@ export const MemberForm: React.FC<Props> = ({
   ...props
 }) => {
   const { t } = useI18n()
-  const { handleSubmit, errors, formState, register } = useForm<Values>({
+  const { handleSubmit, formState, register } = useForm<Values>({
     defaultValues: values
   })
+  const { errors } = formState
 
   return (
     <Stack onSubmit={handleSubmit(onSubmit)} as="form" spacing={8} {...props}>
@@ -41,9 +42,8 @@ export const MemberForm: React.FC<Props> = ({
           <FormControl isInvalid={!!errors.id} isRequired>
             <FormLabel htmlFor="id">{t('userId')}</FormLabel>
             <Input
-              name="id"
               id="id"
-              ref={register({
+              {...register('id', {
                 required: true,
                 pattern: /[a-zA-Z0-9_-]+/,
                 validate: (v) => !currentIds || !currentIds.includes(v)
@@ -62,9 +62,8 @@ export const MemberForm: React.FC<Props> = ({
         <FormControl isInvalid={!!errors.name} isRequired>
           <FormLabel htmlFor="name">{t('displayName')}</FormLabel>
           <Input
-            name="name"
             id="name"
-            ref={register({ required: true })}
+            {...register('name', { required: true })}
             defaultValue={values?.name}
           />
           <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
@@ -72,7 +71,7 @@ export const MemberForm: React.FC<Props> = ({
       </Stack>
       <Stack direction="row">
         <Button
-          variantColor="cyan"
+          colorScheme="cyan"
           isLoading={formState.isSubmitting}
           type="submit"
         >

@@ -1,6 +1,6 @@
 import {
   Modal,
-  IModal,
+  ModalProps,
   ModalOverlay,
   ModalContent,
   ModalBody,
@@ -8,7 +8,7 @@ import {
   ModalFooter,
   Button,
   ModalHeader
-} from '@chakra-ui/core'
+} from '@chakra-ui/react'
 import React from 'react'
 import { useI18n } from '~/hooks/i18n'
 
@@ -16,7 +16,7 @@ type Props = {
   onConfirm: () => void
   onCancel: () => void
   type: 'delete'
-} & IModal
+} & Omit<ModalProps, 'onClose'>
 
 export const Confirm: React.FC<Props> = ({
   children,
@@ -36,7 +36,7 @@ export const Confirm: React.FC<Props> = ({
         <ModalFooter>
           <Button onClick={onCancel}>{t('cancel')}</Button>
           {type === 'delete' && (
-            <Button onClick={onConfirm} variantColor="red" ml={4}>
+            <Button onClick={onConfirm} colorScheme="red" ml={4}>
               {t('delete')}
             </Button>
           )}

@@ -7,8 +7,9 @@ import {
   DrawerBody,
   DrawerContent,
   DrawerOverlay,
-  useDisclosure
-} from '@chakra-ui/core'
+  useDisclosure,
+  useColorModeValue
+} from '@chakra-ui/react'
 import { useRouter } from 'next/dist/client/router'
 import React from 'react'
 import { Header } from '~/components/organisms/Header'
@@ -34,15 +35,19 @@ export const AdminTemplate: React.FC<Props> = ({
   }
   const { isOpen, onClose, onToggle } = useDisclosure()
 
+  const textColor = useColorModeValue('gray.700', 'whiteAlpha.900')
+  const bgSidebar = useColorModeValue('gray.100', 'gray.800')
+  const bgColor = useColorModeValue('gray.50', 'gray.900')
+
   return (
-    <Flex h="100vh" direction="column" color="gray.700">
+    <Flex h="100vh" direction="column" color={textColor}>
       <Header
         action={
           sidebar ? (
             <>
               <IconButton
                 aria-label="Show menu"
-                icon={FaBars}
+                icon={<FaBars />}
                 variant="ghost"
                 p={0}
                 onClick={onToggle}
@@ -74,14 +79,14 @@ export const AdminTemplate: React.FC<Props> = ({
             w={240}
             h="100%"
             overflow="auto"
-            bg="gray.100"
+            bg={bgSidebar}
             borderRightWidth={1}
           >
             {sidebar}
           </Box>
         )}
         <Box
-          bg="gray.50"
+          bg={bgColor}
           flex={1}
           h="100%"
           overflow="auto"
