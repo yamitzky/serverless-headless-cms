@@ -4,7 +4,7 @@ import { useAppContext, useAppActions } from '~/hooks/app'
 import { useRouter } from 'next/router'
 import { Sidebar } from '~/components/organisms/Sidebar'
 import { Section } from '~/components/molecules/Section'
-import { useToast } from '@chakra-ui/core'
+import { useToast } from '@chakra-ui/react'
 import { FieldForm } from '~/components/organisms/FieldForm'
 import { useI18n } from '~/hooks/i18n'
 

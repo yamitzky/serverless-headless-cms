@@ -4,7 +4,7 @@ import { useAppContext } from '~/hooks/app'
 import { useRouter } from 'next/router'
 import { Sidebar } from '~/components/organisms/Sidebar'
 import { Section } from '~/components/molecules/Section'
-import { Box, Button, Stack, useToast } from '@chakra-ui/core'
+import { Box, Button, Stack, useToast } from '@chakra-ui/react'
 import { ListItem } from '~/components/molecules/ListItem'
 import { EmptyCard } from '~/components/atoms/EmptyCard'
 import { Link } from '~/components/atoms/Link'
@@ -39,7 +39,7 @@ const AdminMembersPage: React.FC = () => {
             <Box flex={1}>{t('userManagement')}</Box>
             <Button
               variant="outline"
-              variantColor="cyan"
+              colorScheme="cyan"
               onClick={() => router.push(`/admin/apps/${id}/members/new`)}
             >
               {t('invitation')}

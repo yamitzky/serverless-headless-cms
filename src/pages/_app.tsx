@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import React from 'react'
-import { ThemeProvider, CSSReset } from '@chakra-ui/core'
+import { ChakraProvider } from '@chakra-ui/react'
 import { AppProps } from 'next/app'
 import { theme } from '~/theme'
 import { AppContext, AppHooksContext, useApp } from '~/hooks/app'
@@ -62,10 +62,9 @@ function App({ Component, pageProps }: AppProps): React.ReactNode {
                     value={{ ...appHooks, ...plugins?.appHooks }}
                   >
                     <Wrapper>
-                      <ThemeProvider theme={theme}>
-                        <CSSReset />
+                      <ChakraProvider theme={theme} resetCSS>
                         <Component {...pageProps} />
-                      </ThemeProvider>
+                      </ChakraProvider>
                     </Wrapper>
                   </AppHooksContext.Provider>
                 </AppSelectorsContext.Provider>

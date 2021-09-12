@@ -5,7 +5,7 @@ import {
   Stack,
   StackProps,
   useDisclosure
-} from '@chakra-ui/core'
+} from '@chakra-ui/react'
 import React from 'react'
 import { Link } from '~/components/atoms/Link'
 import { Confirm } from '~/components/molecules/Confirm'

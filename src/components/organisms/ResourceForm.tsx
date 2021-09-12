@@ -11,7 +11,7 @@ import {
   Textarea,
   FormHelperText,
   useDisclosure
-} from '@chakra-ui/core'
+} from '@chakra-ui/react'
 import { Field, ResourceSchema } from '~/hooks/app'
 import { Resource } from '~/hooks/resource'
 import dynamic from 'next/dynamic'
@@ -48,11 +48,10 @@ export const ResourceForm: React.FC<Props> = ({
   ...props
 }) => {
   const { t } = useI18n()
-  const { handleSubmit, errors, formState, register, control } = useForm<
-    Values
-  >({
+  const { handleSubmit, formState, register, control } = useForm<Values>({
     defaultValues: values
   })
+  const { errors } = formState
 
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -120,144 +119,147 @@ export const ResourceForm: React.FC<Props> = ({
         </Confirm>
       )}
       <Stack spacing={4}>
-        {fields.map((field) => (
-          <FormControl
-            key={field.id}
-            isInvalid={!!errors[field.id]}
-            isRequired={field.required}
-          >
-            <FormLabel htmlFor={field.id}>{field.name}</FormLabel>
-            {field.type === 'longtext' ? (
-              <Textarea
-                placeholder={field.placeholder}
-                name={field.id}
-                id={field.id}
-                ref={register({
-                  required: field.required,
-                  minLength: field.minLength,
-                  maxLength: field.maxLength
-                })}
-                defaultValue={values?.[field.id] || ''}
-              />
-            ) : field.type === 'richtext' ? (
-              <Controller
-                control={control}
-                as={ReactQuill}
-                theme="snow"
-                name={field.id}
-                placeholder={field.placeholder}
-                id={field.id}
-                modules={{
-                  toolbar: [
-                    [{ header: [1, 2, 3, 4, 5, 6, false] }],
-                    ['bold', 'italic', 'underline', 'strike'],
-                    [{ color: [] }, { background: [] }],
-                    [{ script: 'super' }, { script: 'sub' }],
-                    ['blockquote', 'code-block'],
-                    [
-                      { list: 'ordered' },
-                      { list: 'bullet' },
-                      { indent: '-1' },
-                      { indent: '+1' }
-                    ],
-                    ['link', 'image', 'video'],
-                    [{ align: [] }, 'direction'],
-                    ['clean']
-                  ]
-                }}
-                defaultValue={values?.[field.id] || ''}
-              />
-            ) : field.type === 'select' ? (
-              <Select
-                name={field.id}
-                id={field.id}
-                ref={register({
-                  required: field.required
-                })}
-                defaultValue={values?.[field.id]}
-              >
-                <option value="">{t('pleaseSelect')}</option>
-                {field.options?.split('\n').map((o) => (
-                  <option value={o} key={o}>
-                    {o}
-                  </option>
-                ))}
-              </Select>
-            ) : field.type === 'reference' ? (
-              <Select
-                name={field.id}
-                id={field.id}
-                ref={register({
-                  required: field.required
-                })}
-                defaultValue={values?.[field.id]}
-                onClick={() => handleFetch(field.referTo!)}
-              >
-                {!values?.[field.id] && (
+        {fields.map((field) => {
+          const rules = {
+            required: field.required ? t('errorRequired') : undefined,
+            minLength: field.minLength
+              ? {
+                  value: field.minLength,
+                  message: t('errorMinLength', field.minLength)
+                }
+              : undefined,
+            maxLength: field.maxLength
+              ? {
+                  value: field.maxLength,
+                  message: t('errorMaxLength', field.maxLength)
+                }
+              : undefined,
+            pattern: field.pattern
+              ? {
+                  value: new RegExp(field.pattern),
+                  message: t('errorPattern', field.pattern)
+                }
+              : undefined
+          }
+          return (
+            <FormControl
+              key={field.id}
+              isInvalid={!!errors[field.id]}
+              isRequired={field.required}
+            >
+              <FormLabel htmlFor={field.id}>{field.name}</FormLabel>
+              {field.type === 'longtext' ? (
+                <Textarea
+                  placeholder={field.placeholder}
+                  id={field.id}
+                  {...register(field.id, rules)}
+                  defaultValue={values?.[field.id] || ''}
+                />
+              ) : field.type === 'richtext' ? (
+                <Controller
+                  control={control}
+                  rules={rules}
+                  render={({ field: props }) => (
+                    <ReactQuill
+                      theme="snow"
+                      id={field.id}
+                      placeholder={field.placeholder}
+                      modules={{
+                        toolbar: [
+                          [{ header: [1, 2, 3, 4, 5, 6, false] }],
+                          ['bold', 'italic', 'underline', 'strike'],
+                          [{ color: [] }, { background: [] }],
+                          [{ script: 'super' }, { script: 'sub' }],
+                          ['blockquote', 'code-block'],
+                          [
+                            { list: 'ordered' },
+                            { list: 'bullet' },
+                            { indent: '-1' },
+                            { indent: '+1' }
+                          ],
+                          ['link', 'image', 'video'],
+                          [{ align: [] }, 'direction'],
+                          ['clean']
+                        ]
+                      }}
+                      {...props}
+                    />
+                  )}
+                  name={field.id}
+                  defaultValue={values?.[field.id] || ''}
+                />
+              ) : field.type === 'select' ? (
+                <Select
+                  id={field.id}
+                  {...register(field.id, rules)}
+                  defaultValue={values?.[field.id]}
+                >
                   <option value="">{t('pleaseSelect')}</option>
-                )}
-                {reference[field.referTo!]?.map((res) => (
-                  <option value={res.id} key={res.id}>
-                    {res[allSchema[field.referTo!]?.fieldOrder[0]] || res.id}
-                  </option>
-                ))}
-              </Select>
-            ) : field.type === 'number' ? (
-              <InputNumber
-                name={field.id}
-                id={field.id}
-                placeholder={field.placeholder}
-                control={control}
-                defaultValue={values?.[field.id] || ''}
-                rules={{
-                  required: field.required,
-                  min: field.min,
-                  max: field.max
-                }}
-              />
-            ) : field.type === 'file' ? (
-              <InputFile
-                name={field.id}
-                id={field.id}
-                control={control}
-                defaultValue={values?.[field.id] || ''}
-                rules={{
-                  required: field.required
-                }}
-              />
-            ) : (
-              <Input
-                name={field.id}
-                id={field.id}
-                placeholder={field.placeholder}
-                ref={register({
-                  required: field.required,
-                  pattern: field.pattern
-                    ? new RegExp(field.pattern)
-                    : undefined,
-                  minLength: field.minLength,
-                  maxLength: field.maxLength
-                })}
-                defaultValue={values?.[field.id] || ''}
-              />
-            )}
-            {field.description && (
-              <FormHelperText>{field.description}</FormHelperText>
-            )}
-            <FormErrorMessage>{errors[field.id]?.message}</FormErrorMessage>
-          </FormControl>
-        ))}
+                  {field.options?.split('\n').map((o) => (
+                    <option value={o} key={o}>
+                      {o}
+                    </option>
+                  ))}
+                </Select>
+              ) : field.type === 'reference' ? (
+                <Select
+                  id={field.id}
+                  {...register(field.id, rules)}
+                  defaultValue={values?.[field.id]}
+                  onClick={() => handleFetch(field.referTo!)}
+                >
+                  {!values?.[field.id] && (
+                    <option value="">{t('pleaseSelect')}</option>
+                  )}
+                  {reference[field.referTo!]?.map((res) => (
+                    <option value={res.id} key={res.id}>
+                      {res[allSchema[field.referTo!]?.fieldOrder[0]] || res.id}
+                    </option>
+                  ))}
+                </Select>
+              ) : field.type === 'number' ? (
+                <InputNumber
+                  name={field.id}
+                  id={field.id}
+                  placeholder={field.placeholder}
+                  control={control}
+                  defaultValue={values?.[field.id] || ''}
+                  rules={rules}
+                />
+              ) : field.type === 'file' ? (
+                <InputFile
+                  name={field.id}
+                  id={field.id}
+                  control={control}
+                  defaultValue={values?.[field.id] || ''}
+                  rules={rules}
+                />
+              ) : (
+                <Input
+                  id={field.id}
+                  placeholder={field.placeholder}
+                  {...register(field.id, rules)}
+                  defaultValue={values?.[field.id] || ''}
+                />
+              )}
+              {field.description && (
+                <FormHelperText>{field.description}</FormHelperText>
+              )}
+              <FormErrorMessage>{errors[field.id]?.message}</FormErrorMessage>
+            </FormControl>
+          )
+        })}
       </Stack>
       <Stack direction="row">
         <Button
-          variantColor="cyan"
+          colorScheme="cyan"
           isLoading={formState.isSubmitting}
           type="submit"
         >
           {isNew ? t('create') : t('save')}
         </Button>
         {onRemove && (
-          <Button variantColor="red" ml={4} onClick={onOpen}>
+          <Button colorScheme="red" ml={4} onClick={onOpen}>
             {t('delete')}
           </Button>
         )}

@@ -10,16 +10,15 @@ import {
   MenuList,
   Skeleton,
   Stack
-} from '@chakra-ui/core'
+} from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { useApps, useAppContext } from '~/hooks/app'
 import { SidebarGroup } from '~/components/molecules/SidebarGroup'
 import { SidebarItem } from '~/components/molecules/SidebarItem'
-import { FaEdit, FaLock, FaTable } from 'react-icons/fa'
+import { FaChevronDown, FaEdit, FaLock, FaPlus, FaTable } from 'react-icons/fa'
 import { useAuthContext } from '~/hooks/auth'
 import { useI18n } from '~/hooks/i18n'
 import { config } from '~/config'
-import { auth } from 'firebase'
 
 export const Sidebar: React.FC = ({ ...props }) => {
   const { t } = useI18n()
@@ -38,15 +37,18 @@ export const Sidebar: React.FC = ({ ...props }) => {
             mb={6}
             as={Button}
             fontWeight="normal"
-            justifyContent="space-between"
             borderBottomWidth={1}
             borderBottomColor="gray.300"
             pl={1}
             pr={2}
             onClick={() => setFetchApps(true)}
+            rightIcon={<FaChevronDown />}
           >
-            {app ? <Box>{app.name}</Box> : <Skeleton h="1.5em" w="100%" />}
-            <Icon name="chevron-down" />
+            {app ? (
+              <Box textAlign="left">{app.name}</Box>
+            ) : (
+              <Skeleton h="1.5em" w="100%" />
+            )}
           </MenuButton>
           <MenuList>
             {appsLoading ? (
@@ -81,7 +83,7 @@ export const Sidebar: React.FC = ({ ...props }) => {
                 href={`/admin/apps/${app.id}/resources/${id}`}
                 action={
                   <IconButton
-                    icon="add"
+                    icon={<FaPlus />}
                     aria-label={t('create')}
                     size="xs"
                     isRound
@@ -103,7 +105,7 @@ export const Sidebar: React.FC = ({ ...props }) => {
           icon={FaTable}
           action={
             <IconButton
-              icon="add"
+              icon={<FaPlus />}
               aria-label={t('create')}
               size="xs"
               isRound
@@ -130,7 +132,7 @@ export const Sidebar: React.FC = ({ ...props }) => {
             href={`/admin/apps/${app?.id}/members`}
             action={
               <IconButton
-                icon="add"
+                icon={<FaPlus />}
                 aria-label={t('invitation')}
                 size="xs"
                 isRound

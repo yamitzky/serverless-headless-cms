@@ -1,7 +1,7 @@
 // TODO: Remove dependency to Firebase
 
 import React from 'react'
-import { Stack } from '@chakra-ui/core'
+import { Stack } from '@chakra-ui/react'
 import { auth as firebaseui } from 'firebaseui'
 import { firebase } from '~/firebase'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'

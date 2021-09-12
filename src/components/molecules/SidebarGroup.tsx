@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, Stack } from '@chakra-ui/core'
+import { Box, Flex, Heading, Stack, useColorModeValue } from '@chakra-ui/react'
 import React from 'react'
 import { IconType } from 'react-icons'
 
@@ -15,12 +15,13 @@ export const SidebarGroup: React.FC<Props> = ({
   children,
   ...props
 }) => {
+  const headingColor = useColorModeValue('gray.600', 'whiteAlpha.700')
   return (
     <Stack {...props}>
       <Flex alignItems="center">
         <Flex alignItems="center" flex={1}>
-          <Box as={icon} mr={2} size="20px" />
-          <Heading fontSize="md" color="gray.600">
+          <Box as={icon} mr={2} boxSize="20px" />
+          <Heading fontSize="md" color={headingColor}>
             {title}
           </Heading>
         </Flex>

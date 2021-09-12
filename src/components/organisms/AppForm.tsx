@@ -7,7 +7,7 @@ import {
   FormErrorMessage,
   Stack,
   Input
-} from '@chakra-ui/core'
+} from '@chakra-ui/react'
 import { App } from '~/hooks/app'
 import { useI18n } from '~/hooks/i18n'
 
@@ -25,9 +25,10 @@ export const AppForm: React.FC<Props> = ({
   onSubmit,
   ...props
 }) => {
-  const { handleSubmit, errors, formState, register } = useForm<Values>({
+  const { handleSubmit, formState, register } = useForm<Values>({
     defaultValues: values
   })
+  const { errors } = formState
   const { t } = useI18n()
 
   return (
@@ -36,9 +37,8 @@ export const AppForm: React.FC<Props> = ({
         <FormControl isInvalid={!!errors.name} isRequired>
           <FormLabel htmlFor="name">{t('displayName')}</FormLabel>
           <Input
-            name="name"
             id="name"
-            ref={register({ required: true })}
+            {...register('name', { required: true })}
             defaultValue={values?.name}
           />
           <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
@@ -46,7 +46,7 @@ export const AppForm: React.FC<Props> = ({
       </Stack>
       <Stack direction="row">
         <Button
-          variantColor="cyan"
+          colorScheme="cyan"
           isLoading={formState.isSubmitting}
           type="submit"
         >

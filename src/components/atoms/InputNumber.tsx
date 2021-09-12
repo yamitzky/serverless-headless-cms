@@ -1,19 +1,34 @@
-import { Input } from '@chakra-ui/core'
-import React from 'react'
+import { Input } from '@chakra-ui/react'
+import React, { ComponentProps } from 'react'
 import { Controller, ControllerProps } from 'react-hook-form'
 
-type Props = Omit<ControllerProps<'input'>, 'render'>
+type Props = Omit<ControllerProps<any>, 'render'> &
+  Omit<ComponentProps<typeof Input>, 'defaultValue'> & {
+    defaultValue?: number | null
+  }
 
-export const InputNumber: React.FC<Props> = ({ as, ...rest }) => {
+export const InputNumber: React.FC<Props> = ({
+  name,
+  rules,
+  shouldUnregister,
+  defaultValue,
+  control,
+  ...rest
+}) => {
   return (
     <Controller
-      {...rest}
-      render={(props) => (
+      name={name}
+      rules={rules}
+      shouldUnregister={shouldUnregister}
+      control={control}
+      defaultValue={defaultValue}
+      render={({ field }) => (
         <Input
-          {...props}
+          {...rest}
+          {...field}
           type="number"
           onChange={(e: any) =>
-            props.onChange(e.target.value ? Number(e.target.value) : null)
+            field.onChange(e.target.value ? Number(e.target.value) : null)
           }
         />
       )}

@@ -4,18 +4,22 @@ import {
   Button,
   Flex,
   FlexProps,
+  IconButton,
   Link as ChakraLink,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
   Stack,
+  useColorMode,
+  useColorModePreference,
+  useColorModeValue,
   useToast
-} from '@chakra-ui/core'
+} from '@chakra-ui/react'
 import React from 'react'
 import { useAuthActions, useAuthContext } from '~/hooks/auth'
 import { Link } from '~/components/atoms/Link'
-import { FaGithub } from 'react-icons/fa'
+import { FaGithub, FaMoon, FaSun } from 'react-icons/fa'
 import NextLink from 'next/link'
 import { useRouter } from 'next/router'
 import { useI18n } from '~/hooks/i18n'
@@ -32,8 +36,11 @@ export const Header: React.FC<Props> = ({ action, ...props }) => {
   const { logout } = useAuthActions()
   const toast = useToast()
 
+  const bgColor = useColorModeValue('gray.50', 'gray.800')
+  const { colorMode, toggleColorMode } = useColorMode()
+
   return (
-    <Flex bg="gray.50" alignItems="center" py={2} px={4} {...props}>
+    <Flex bg={bgColor} alignItems="center" py={2} px={4} {...props}>
       <Box flex="1" fontWeight="bold">
         {action && <Box display={['block', 'none']}>{action}</Box>}
         <Link
@@ -52,11 +59,19 @@ export const Header: React.FC<Props> = ({ action, ...props }) => {
               passHref
             >
               <ChakraLink isExternal>
-                <Box as={FaGithub} size="32px" />
+                <Box as={FaGithub} boxSize="32px" />
               </ChakraLink>
             </NextLink>
           </Box>
         )}
+        <Box color="gray.500">
+          <IconButton
+            icon={colorMode === 'dark' ? <FaSun /> : <FaMoon />}
+            aria-label={`Color mode: ${colorMode}`}
+            borderRadius="full"
+            onClick={toggleColorMode}
+          />
+        </Box>
         {!loading &&
           (user ? (
             <Menu>
@@ -94,7 +109,7 @@ export const Header: React.FC<Props> = ({ action, ...props }) => {
           ) : (
             <Button
               variant="ghost"
-              variantColor="cyan"
+              colorScheme="cyan"
               size="sm"
               p={[0, null]}
               onClick={() => router.push('/login')}

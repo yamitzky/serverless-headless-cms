@@ -1,23 +1,35 @@
-import { Box, Image, Spinner } from '@chakra-ui/core'
-import React, { useState } from 'react'
+import { Box, Image, Spinner } from '@chakra-ui/react'
+import React, { InputHTMLAttributes, useState } from 'react'
 import { Controller, ControllerProps } from 'react-hook-form'
 import { ExternalLink } from '~/components/molecules/ExternalLink'
 import { useFileActions } from '~/hooks/file'
 
-type Props = Omit<ControllerProps<'input'>, 'render'> & {
+type Props = Omit<ControllerProps<any>, 'render'> & {
   onChange?: (v: string) => void
   value?: string
-}
+} & InputHTMLAttributes<any>
 
-export const InputFile: React.FC<Props> = ({ as, ...rest }) => {
+export const InputFile: React.FC<Props> = ({
+  name,
+  rules,
+  shouldUnregister,
+  defaultValue,
+  control,
+  ...rest
+}) => {
   const { upload } = useFileActions()
   const [loading, setLoading] = useState(false)
   return (
     <Controller
-      {...rest}
-      render={(props) => (
+      name={name}
+      rules={rules}
+      shouldUnregister={shouldUnregister}
+      control={control}
+      defaultValue={defaultValue}
+      render={({ field }) => (
         <Box>
           <input
+            {...rest}
             type="file"
             onChange={async (e: any) => {
               const file = e.target.files?.[0]
@@ -25,7 +37,7 @@ export const InputFile: React.FC<Props> = ({ as, ...rest }) => {
                 setLoading(true)
                 try {
                   const url = await upload(file)
-                  props.onChange?.(url)
+                  field.onChange?.(url)
                 } finally {
                   setLoading(false)
                 }
@@ -36,10 +48,10 @@ export const InputFile: React.FC<Props> = ({ as, ...rest }) => {
             <Box mt={2}>
               <Spinner />
             </Box>
-          ) : props.value ? (
+          ) : field.value ? (
             <Box mt={2}>
-              <Image src={props.value} maxH={200} w="auto" />
-              <ExternalLink href={props.value}>URL</ExternalLink>
+              <Image src={field.value} maxH={200} w="auto" />
+              <ExternalLink href={field.value}>URL</ExternalLink>
             </Box>
           ) : null}
         </Box>

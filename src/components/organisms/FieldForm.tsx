@@ -13,7 +13,7 @@ import {
   InputLeftElement,
   InputRightElement,
   Textarea
-} from '@chakra-ui/core'
+} from '@chakra-ui/react'
 import { Field, fieldTypes, ResourceSchema } from '~/hooks/app'
 import { InputNumber } from '~/components/atoms/InputNumber'
 import { useI18n } from '~/hooks/i18n'
@@ -37,11 +37,12 @@ export const FieldForm: React.FC<Props> = ({
   ...props
 }) => {
   const { t } = useI18n()
-  const { handleSubmit, errors, formState, register, watch, control } = useForm<
-    Values
-  >({
-    defaultValues: values
-  })
+  const { handleSubmit, formState, register, watch, control } = useForm<Values>(
+    {
+      defaultValues: values
+    }
+  )
+  const { errors } = formState
   const { type } = watch()
 
   return (
@@ -51,12 +52,11 @@ export const FieldForm: React.FC<Props> = ({
           <FormControl isInvalid={!!errors.id} isRequired>
             <FormLabel htmlFor="id">ID</FormLabel>
             <Input
-              name="id"
               id="id"
-              ref={register({
+              {...register('id', {
                 required: true,
                 pattern: /[a-zA-Z0-9_-]+/,
-                validate: (v) => !currentIds || !currentIds.includes(v)
+                validate: (v) => !currentIds || !v || !currentIds.includes(v)
               })}
               defaultValue={values?.id}
             />
@@ -65,20 +65,14 @@ export const FieldForm: React.FC<Props> = ({
         )}
         <FormControl isInvalid={!!errors.name}>
           <FormLabel htmlFor="name">{t('displayName')}</FormLabel>
-          <Input
-            name="name"
-            id="name"
-            ref={register()}
-            defaultValue={values?.name}
-          />
+          <Input id="name" {...register('name')} defaultValue={values?.name} />
           <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
         </FormControl>
         <FormControl isInvalid={!!errors.type} isRequired>
           <FormLabel htmlFor="type">{t('type')}</FormLabel>
           <Select
-            name="type"
             id="type"
-            ref={register({
+            {...register('type', {
               required: true
             })}
             defaultValue={values?.type || 'text'}
@@ -95,9 +89,8 @@ export const FieldForm: React.FC<Props> = ({
           <FormControl isInvalid={!!errors.referTo} isRequired>
             <FormLabel htmlFor="options">{t('options')}</FormLabel>
             <Textarea
-              name="options"
               id="options"
-              ref={register({
+              {...register('options', {
                 required: true
               })}
               defaultValue={values?.options}
@@ -109,9 +102,8 @@ export const FieldForm: React.FC<Props> = ({
           <FormControl isInvalid={!!errors.referTo} isRequired>
             <FormLabel htmlFor="referTo">{t('referTo')}</FormLabel>
             <Select
-              name="referTo"
               id="referTo"
-              ref={register({
+              {...register('referTo', {
                 required: true
               })}
               defaultValue={values?.referTo}
@@ -127,7 +119,7 @@ export const FieldForm: React.FC<Props> = ({
           </FormControl>
         )}
         <FormControl isInvalid={!!errors.required}>
-          <Checkbox name="required" id="required" ref={register()}>
+          <Checkbox id="required" {...register('required')}>
             {t('required')}
           </Checkbox>
           <FormErrorMessage>{errors.type?.message}</FormErrorMessage>
@@ -138,9 +130,8 @@ export const FieldForm: React.FC<Props> = ({
             <InputGroup>
               <InputLeftElement>/</InputLeftElement>
               <Input
-                name="pattern"
                 id="pattern"
-                ref={register()}
+                {...register('pattern')}
                 defaultValue={values?.pattern}
               />
               <InputRightElement>/</InputRightElement>
@@ -199,9 +190,8 @@ export const FieldForm: React.FC<Props> = ({
         <FormControl isInvalid={!!errors.placeholder}>
           <FormLabel htmlFor="placeholder">{t('placeholder')}</FormLabel>
           <Input
-            name="placeholder"
             id="placeholder"
-            ref={register()}
+            {...register('placeholder')}
             defaultValue={values?.placeholder}
           />
           <FormErrorMessage>{errors.placeholder?.message}</FormErrorMessage>
@@ -209,9 +199,8 @@ export const FieldForm: React.FC<Props> = ({
         <FormControl isInvalid={!!errors.description}>
           <FormLabel htmlFor="description">{t('description')}</FormLabel>
           <Input
-            name="description"
             id="description"
-            ref={register()}
+            {...register('description')}
             defaultValue={values?.description}
           />
           <FormErrorMessage>{errors.description?.message}</FormErrorMessage>
@@ -219,7 +208,7 @@ export const FieldForm: React.FC<Props> = ({
       </Stack>
       <Stack direction="row">
         <Button
-          variantColor="cyan"
+          colorScheme="cyan"
           isLoading={formState.isSubmitting}
           type="submit"
         >
