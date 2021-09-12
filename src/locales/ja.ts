@@ -128,5 +128,9 @@ export default {
     ' で管理しています。'
   ],
   asc: '昇順',
-  desc: '降順'
+  desc: '降順',
+  errorRequired: '入力してください',
+  errorMinLength: (obj?: number) => `${obj}文字以上入力してください`,
+  errorMaxLength: (obj?: number) => `${obj}文字以内で入力してください`,
+  errorPattern: (obj?: string) => `${obj} のパターンに合致しません`
 }

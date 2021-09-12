@@ -120,6 +120,27 @@ export const ResourceForm: React.FC<Props> = ({
       )}
       <Stack spacing={4}>
         {fields.map((field) => {
+          const rules = {
+            required: field.required ? t('errorRequired') : undefined,
+            minLength: field.minLength
+              ? {
+                  value: field.minLength,
+                  message: t('errorMinLength', field.minLength)
+                }
+              : undefined,
+            maxLength: field.maxLength
+              ? {
+                  value: field.maxLength,
+                  message: t('errorMaxLength', field.maxLength)
+                }
+              : undefined,
+            pattern: field.pattern
+              ? {
+                  value: new RegExp(field.pattern),
+                  message: t('errorPattern', field.pattern)
+                }
+              : undefined
+          }
           return (
             <FormControl
               key={field.id}
@@ -131,16 +152,13 @@ export const ResourceForm: React.FC<Props> = ({
                 <Textarea
                   placeholder={field.placeholder}
                   id={field.id}
-                  {...register(field.id, {
-                    required: field.required,
-                    minLength: field.minLength,
-                    maxLength: field.maxLength
-                  })}
+                  {...register(field.id, rules)}
                   defaultValue={values?.[field.id] || ''}
                 />
               ) : field.type === 'richtext' ? (
                 <Controller
                   control={control}
+                  rules={rules}
                   render={({ field: props }) => (
                     <ReactQuill
                       theme="snow"
@@ -173,9 +191,7 @@ export const ResourceForm: React.FC<Props> = ({
               ) : field.type === 'select' ? (
                 <Select
                   id={field.id}
-                  {...register(field.id, {
-                    required: field.required
-                  })}
+                  {...register(field.id, rules)}
                   defaultValue={values?.[field.id]}
                 >
                   <option value="">{t('pleaseSelect')}</option>
@@ -188,9 +204,7 @@ export const ResourceForm: React.FC<Props> = ({
               ) : field.type === 'reference' ? (
                 <Select
                   id={field.id}
-                  {...register(field.id, {
-                    required: field.required
-                  })}
+                  {...register(field.id, rules)}
                   defaultValue={values?.[field.id]}
                   onClick={() => handleFetch(field.referTo!)}
                 >
@@ -210,11 +224,7 @@ export const ResourceForm: React.FC<Props> = ({
                   placeholder={field.placeholder}
                   control={control}
                   defaultValue={values?.[field.id] || ''}
-                  rules={{
-                    required: field.required,
-                    min: field.min,
-                    max: field.max
-                  }}
+                  rules={rules}
                 />
               ) : field.type === 'file' ? (
                 <InputFile
@@ -222,22 +232,13 @@ export const ResourceForm: React.FC<Props> = ({
                   id={field.id}
                   control={control}
                   defaultValue={values?.[field.id] || ''}
-                  rules={{
-                    required: field.required
-                  }}
+                  rules={rules}
                 />
               ) : (
                 <Input
                   id={field.id}
                   placeholder={field.placeholder}
-                  {...register(field.id, {
-                    required: field.required,
-                    pattern: field.pattern
-                      ? new RegExp(field.pattern)
-                      : undefined,
-                    minLength: field.minLength,
-                    maxLength: field.maxLength
-                  })}
+                  {...register(field.id, rules)}
                   defaultValue={values?.[field.id] || ''}
                 />
               )}

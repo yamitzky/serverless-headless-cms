@@ -123,5 +123,9 @@ export default {
   `,
   topRoadmapMessage: (link: any) => ['The roadmap is maintained on ', link],
   asc: 'Ascendant',
-  desc: 'Descendant'
+  desc: 'Descendant',
+  errorRequired: 'This field is required.',
+  errorMinLength: (obj?: number) => `Min length is ${obj}`,
+  errorMaxLength: (obj?: number) => `Max length is ${obj}`,
+  errorPattern: (obj?: string) => `Valid pattern is ${obj}`
 }
